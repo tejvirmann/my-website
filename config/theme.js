@@ -136,8 +136,8 @@ module.exports = {
   //   ],
     copyright: `© ${new Date().getFullYear()} Tejvir S. Mann`,
   },
-  image: 'img/pcc-archive-soc.jpg',
-  metadata: [{ name: 'twitter:card', content: 'summary_large_image' }],
+  // image: 'img/pcc-archive-soc.jpg',
+  // metadata: [{ name: 'twitter:card', content: 'summary_large_image' }],
   prism: {
     theme: lightCodeTheme,
     darkTheme: darkCodeTheme,

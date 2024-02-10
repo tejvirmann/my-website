@@ -27,7 +27,7 @@ export const Resources: Resource[] = [
     title: 'Website (PCC Official)',
     description: 'Official PCC Medium account',
     image: 'discord.jpg',
-    website: 'https://purrnelope.medium.com/',
+    website: '/',
     tags: ['official'],
   },
   {

@@ -31,8 +31,8 @@ export default function Home() {
 
   return (
     <Layout
-      title={`Welcome to ${siteConfig.title}`}
-      description="A place to learn and find information about the Purrnelope's Country Club project"
+      // title={`${siteConfig.title}`}
+      description="The official website of Tejvir S. Mann."
     >
       <LayoutTw>
 
@@ -81,7 +81,7 @@ export default function Home() {
               <div className="max-w-7xl px-3 sm:px-6 mx-auto">
                 <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
                   <h2>Favorites</h2>
-                  <span>💜</span>
+                  <span></span>
                   <SearchBar />
                 </div>
                 <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>

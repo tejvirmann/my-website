@@ -107,7 +107,7 @@ function ShowcaseHeader() {
       <p className="text-lg">{DESCRIPTION}</p>
       <p>
         <Link href="https://github.com/CuratorCat/pcc-archive.org/blob/main/src/data/resources/data.ts">
-          <span className="underline hover:text-violet-500 rounded px-1 py-0.5 ">add a new resource</span>
+          <span className="underline hover:text-black-500 rounded px-1 py-0.5 ">add a new resource</span>
         </Link>
       </p>
     </section>
@@ -207,7 +207,7 @@ export function ShowcaseCards() {
           <div className="max-w-7xl px-3 sm:px-6 mx-auto">
             <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
               <h2>Favorites</h2>
-              <span>💜</span>
+              <span></span>
               <SearchBar />
             </div>
             <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>
@@ -250,7 +250,7 @@ export default function Showcase(): JSX.Element {
   return (
     <Layout title={TITLE} description={DESCRIPTION}>
       <LayoutTw>
-        <main className="bg-violet-200 dark:bg-violet-900/50">
+        <main className="bg-#ffffff dark:bg-#101010">
           <ShowcaseHeader />
           <ShowcaseFilters />
           <ShowcaseCards />

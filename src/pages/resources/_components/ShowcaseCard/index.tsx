@@ -48,7 +48,7 @@ function ShowcaseCard({ resource }: { resource: Resource }) {
       <li
         key={resource.title}
         className={
-          'flex flex-col justify-between rounded-xl bg-white/50 sm:hover:scale-105 transition-all duration-150 dark:bg-black/50 border border-slate-500/10 dark:border-slate-500/0 overflow-hidden group ' +
+          'flex flex-col justify-between rounded-md bg-white/50 sm:hover:scale-105 transition-all duration-150 dark:bg-black/50 border border-slate-500/10 dark:border-slate-500/0 overflow-hidden group ' +
           styles.showcaseCard
         }
       >
