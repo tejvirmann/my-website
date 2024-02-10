@@ -147,7 +147,7 @@ module.exports = {
     disableSwitch: false,
     respectPrefersColorScheme: true,
   },
-  announcementBar: require('./announcementBar'),
+  // announcementBar: require('./announcementBar'),
   metadata: [
     {
       name: 'viewport',

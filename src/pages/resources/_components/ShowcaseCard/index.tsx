@@ -88,4 +88,48 @@ function ShowcaseCard({ resource }: { resource: Resource }) {
   )
 }
 
+// Another look for Showcase Card
+// function ShowcaseCard({ resource }: { resource: Resource }) {
+//   return (
+//     <Link href={resource.website} className={styles.showcaseCardLink}>
+//       <li
+//         key={resource.title}
+//         className={
+//           'relative flex flex-col justify-between rounded-xl bg-white/50 sm:hover:scale-105 transition-all duration-150 dark:bg-black/50 border border-slate-500/10 dark:border-slate-500/0 overflow-hidden group ' +
+//           styles.showcaseCard
+//         }
+//       >
+//         <div className={`${styles.showcaseCardImage} relative h-[200px] overflow-hidden`}>
+//           <img
+//             src={require('../../../../data/resources/img/' + resource.image).default}
+//             alt={resource.title}
+//             className="w-full h-full object-cover"
+//           />
+//         </div>
+//         <div className="absolute inset-0 flex flex-col justify-end px-3 py-1 backdrop-blur-[5px] z-10">
+//           <div className={clsx(styles.showcaseCardHeader)}>
+//             <h4 className={styles.showcaseCardTitle}>
+//               <Link href={resource.website} className={styles.showcaseCardLink}>
+//                 {resource.title}
+//               </Link>
+//             </h4>
+//             {resource.source && (
+//               <Link
+//                 href={resource.website}
+//                 className={clsx('button button--secondary button--sm', styles.showcaseCardSrcBtn)}
+//               >
+//                 Source
+//               </Link>
+//             )}
+//           </div>
+//           <p className={`${styles.showcaseCardBody} mb-2`}>{resource.description}</p>
+//           <ul className={` ${styles.cardFooter} mt-auto`}>
+//             <ShowcaseCardTag tags={resource.tags} />
+//           </ul>
+//         </div>
+//       </li>
+//     </Link>
+//   );
+// }
+
 export default React.memo(ShowcaseCard)
