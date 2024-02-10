@@ -40,8 +40,8 @@ Please read claim description on https://store.purrnelopescountryclub.com/produc
 
 ### 1. Redeem for Merch Coupon
 
-- 5 [Model Cat NFTs](../collections/kittyvault-purrks/3-model-cat.md) will be required to redeem 1 coupon for 1 Physical Cat Model.
-- Burn your Model Cat NFTs for Merch Coupon: https://www.purrnelopescountryclub.com/purrks
+<!-- - 5 [Model Cat NFTs](../collections/kittyvault-purrks/3-model-cat.md) will be required to redeem 1 coupon for 1 Physical Cat Model.
+- Burn your Model Cat NFTs for Merch Coupon: https://www.purrnelopescountryclub.com/purrks -->
 
   ![](assets/pcc-model-cat/pcc-model-cat-burn.jpg)
 
@@ -85,7 +85,7 @@ Unboxing Video by katie.pcc.eth
 
 ### Photos
 
-- First Batch started to shipping to holders in July 2022. [See photos](/welovethepurrs/2022/model-cat-batch-1)
+
 
 ### Alpha for Series 2
 

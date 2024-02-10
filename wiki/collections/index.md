@@ -11,7 +11,6 @@ import Kittens from './\_kittens.md';
 import Grandma from './\_grandma.md';
 import Tier2 from './\_tier2.md';
 import Gift from './\_gift.md';
-import KVPurrks from './\_kittyvault-purrks.md';
 
 ![](./assets/pcc-collections.jpg)
 
@@ -77,17 +76,12 @@ Details for Tiers & $YARN will be documented and updated accordingly following t
 
 ### Purrnelope's Exclusives
 
-[![](./exclusives/assets/pcc-exclusives.jpg)](./exclusives/index.md)
-
-[Purrnelope's Exclusives](./exclusives/index.md) are $YARN Yielding NFTs. There are 5 categories in Exclusives, the higher the rarity, different categories yield different $YARN amount.
 
 Exclusives may receive extra perks in PCC Universe.
 
 ## KittyVault Collection
 
 <span className="wikiPostListImgR">
-
-[![](../collections/kittyvault-purrks/assets/purrks-s.jpg)](../collections/kittyvault-purrks/index.md)
 
 </span>
 
@@ -98,8 +92,6 @@ Exclusives may receive extra perks in PCC Universe.
 ## Other Collections
 
 <span className="wikiPostListImgR">
-
-[![](../collections/gift/assets/gift-s.jpg)](../collections/gift/index.md)
 
 </span>
 

@@ -3,24 +3,23 @@ const lightCodeTheme = require('prism-react-renderer/themes/github')
 const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 module.exports = {
   navbar: {
-    // title: "PCC Archive",
+   // title: "Tejvir S. Mann",
     logo: {
-      alt: 'PCC Archive Logo',
+      alt: 'Tejvir S. Mann',
       src: 'img/logo-pcca.svg',
     },
     items: [
-      { to: '/club', label: '⛳️ Club', position: 'left' },
       {
-        label: '😺 Collections',
-        position: 'left',
+        label: 'Collections',
+        position: 'right',
         to: '/collections',
         items: [
           {
-            label: '😺 Cats',
+            label: 'Cats',
             to: '/collections/cats',
           },
           {
-            label: '🐈 Kittens',
+            label: 'Kittens',
             to: '/collections/kittens',
           },
           {
@@ -28,15 +27,11 @@ module.exports = {
             to: '/collections/grandmas',
           },
           {
-            label: '🛩 Exclusives',
+            label: 'Exclusives',
             to: '/collections/exclusives',
           },
           {
-            label: '🪂 KittyVault Purrks',
-            to: '/collections/kittyvault-purrks',
-          },
-          {
-            label: "🎁 Purrnelope's Gift",
+            label: "Purrnelope's Gift",
             to: '/collections/gift',
           },
           {
@@ -45,132 +40,101 @@ module.exports = {
           },
         ],
       },
-      { to: '/ens', label: '🆔 ENS', position: 'left' },
-      { to: '/kittyvault', label: '🏦 KittyVault', position: 'left' },
-      { to: '/merch', label: '👕 Merch', position: 'left' },
+      { to: '/ens', label: '🆔 ENS', position: 'right' },
+      { to: '/chat', label: 'Chat', position: 'right' },
+      { to: '/merch', label: 'Merch', position: 'right' },
+      { to: '/resources', label: 'Resources', position: 'right' },
       {
-        label: '📰 Posts',
-        position: 'left',
-        to: '/posts',
+        label: 'Logs',
+        position: 'right',
+        to: '/logs',
         items: [
           {
-            label: '📅 Weekly Update',
-            to: '/posts/tags/weekly-update',
+            label: 'Tags',
+            to: '/logs/tags/',
           },
           {
-            label: '📔 Team Blog',
-            to: '/posts/tags/blog',
+            label: 'Projects',
+            to: '/logs/projects/project2',
           },
           {
-            label: '🎙 PurrCast',
-            to: '/posts/tags/purr-cast',
+            label: 'All Logs',
+            to: '/logs/',
           },
-          {
-            label: '💬 Interview',
-            to: '/posts/tags/interview',
-          },
-          {
-            label: '🧐 Explained',
-            to: '/posts/tags/explained',
-          },
-          {
-            label: '👨‍🏫 Learn',
-            to: '/posts/tags/learn',
-          },
-          {
-            label: '🏷 All Tags',
-            to: '/posts/tags',
-          },
-          {
-            label: 'All Posts',
-            to: '/posts',
-          },
+          // {
+          //   label: 'Archive',
+          //   to: '/logs/tags/archive',
+          // },
         ],
       },
-      { to: '/welovethepurrs', label: '💜 Purrs', position: 'left' },
-      {
-        label: 'More',
-        position: 'left',
-        items: [
-          {
-            label: '😼 PCC Team',
-            to: '/club/team',
-          },
-          {
-            label: '🔗 PCC Official Links',
-            to: '/official-links',
-          },
-          {
-            label: '🎨 Artwork',
-            to: '/artwork',
-          },
-          {
-            label: '🛠 Contracts & EOA Addresses',
-            to: '/addresses',
-          },
-          {
-            label: '🛰 Resources',
-            to: '/resources',
-          },
-        ],
-      },
+      // {
+      //   label: 'projects',
+      //   position: 'right',
+      //   to: '/projects',
+      //   items: [
+      //     {
+      //       label: 'Project 1',
+      //       to: 'projects/Project-1',
+      //     },
+      //   ],
+      // },
     ],
   },
   footer: {
-    links: [
-      {
-        title: 'PCC-Archive.org',
-        items: [
-          {
-            label: 'About PCC Archive',
-            to: '/about',
-          },
-          {
-            label: 'Contribute',
-            to: '/contribute',
-          },
-          {
-            label: "PCC Archive's GitHub",
-            href: 'https://github.com/CuratorCat/pcc-archive.org',
-          },
-        ],
-      },
-      {
-        title: 'PCC Official',
-        items: [
-          {
-            label: 'Website',
-            href: 'https://www.purrnelopescountryclub.com/',
-          },
-          {
-            label: 'Discord',
-            href: 'http://discord.gg/purrnelopescountryclub',
-          },
-          {
-            label: 'Twitter',
-            href: 'https://twitter.com/PurrnelopesCC',
-          },
-          {
-            label: 'Official Links',
-            to: '/official-links',
-          },
-        ],
-      },
-      {
-        title: 'More',
-        items: [
-          {
-            label: 'Posts Archive',
-            to: '/posts/archive',
-          },
-          {
-            label: 'Posts Tags',
-            to: '/posts/tags',
-          },
-        ],
-      },
-    ],
-    copyright: `${new Date().getFullYear()} pcc-archive.org`,
+  //   links: [
+  //     {
+  //       title: 'PCC-Archive.org',
+  //       items: [
+  //         {
+  //           label: 'About PCC Archive',
+  //           to: '/about',
+  //         },
+  //         {
+  //           label: 'Contribute',
+  //           to: '/contribute',
+  //         },
+  //         {
+  //           label: "PCC Archive's GitHub",
+  //           href: 'https://github.com/CuratorCat/pcc-archive.org',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: 'Tejvir S. Mann',
+  //       items: [
+  //         {
+  //           label: 'Website',
+  //           href: 'https://www.purrnelopescountryclub.com/',
+  //         },
+  //         {
+  //           label: 'Discord',
+  //           href: 'http://discord.gg/purrnelopescountryclub',
+  //         },
+  //         {
+  //           label: 'Twitter',
+  //           href: 'https://twitter.com/PurrnelopesCC',
+  //         },
+  //         {
+  //           label: 'Official Links',
+  //           to: '/official-links',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: 'More',
+  //       items: [
+  //         {
+  //           label: 'Posts Archive',
+  //           to: '/posts/archive',
+  //         },
+  //         {
+  //           label: 'Posts Tags',
+  //           to: '/posts/tags',
+  //         },
+  //       ],
+  //     },
+  //   ],
+    copyright: `© ${new Date().getFullYear()} Tejvir S. Mann`,
   },
   image: 'img/pcc-archive-soc.jpg',
   metadata: [{ name: 'twitter:card', content: 'summary_large_image' }],
