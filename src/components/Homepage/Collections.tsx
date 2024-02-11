@@ -15,7 +15,7 @@ const webkitMaskHack = {
   WebkitMaskImage: '-webkit-radial-gradient(white, black)',
 }
 
-const CollectionList: CollectionItem[] = require('./collections.json')
+const CollectionList: CollectionItem[] = require('./groups.json')
 
 export default function Collections() {
   return (
@@ -76,7 +76,7 @@ export default function Collections() {
 
           {/* Link to collection page */}
           <Link
-            to="/collections"
+            to="/groups"
             className="snap snap-end shrink-0 w-40 grid place-items-center text-center rounded-xl md:rounded-2xl bg-slate-500/20 hover:bg-violet-500/40 group transition-all duration-300"
           >
             <p className="uppercase font-medium">View All Work</p>

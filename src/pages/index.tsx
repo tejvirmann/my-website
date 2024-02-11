@@ -13,13 +13,13 @@ import Posts from '../components/Homepage/Posts'
 import ActiveEvents from '../components/Homepage/ActiveEvents'
 import RecentPosts from '../components/Homepage/RecentPosts'
 
-import ShowcaseTagSelect from './resources/_components/ShowcaseTagSelect'
-import ShowcaseFilterToggle, { type Operator, readOperator } from './resources/_components/ShowcaseFilterToggle'
-import ShowcaseCard from './resources/_components/ShowcaseCard'
-import { sortedResources, Tags, TagList, type Resource, type TagType } from '@site/src/data/resources'
-import styles from './resources/styles.module.css'
+import ShowcaseTagSelect from './projects/_components/ShowcaseTagSelect'
+import ShowcaseFilterToggle, { type Operator, readOperator } from './projects/_components/ShowcaseFilterToggle'
+import ShowcaseCard from './projects/_components/ShowcaseCard'
+import { sortedResources, Tags, TagList, type Resource, type TagType } from '@site/src/data/projects'
+import styles from './projects/styles.module.css'
 import clsx from 'clsx'
-import { useFilteredResources, SearchBar} from './resources/index'
+import { useFilteredResources, SearchBar} from './projects/index'
 import Translate, { translate } from '@docusaurus/Translate'
 
 
@@ -31,8 +31,8 @@ export default function Home() {
 
   return (
     <Layout
-      title={`Welcome to ${siteConfig.title}`}
-      description="A place to learn and find information about the Purrnelope's Country Club project"
+      // title={`${siteConfig.title}`}
+      description="The official website of Tejvir S. Mann."
     >
       <LayoutTw>
 
@@ -81,7 +81,7 @@ export default function Home() {
               <div className="max-w-7xl px-3 sm:px-6 mx-auto">
                 <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
                   <h2>Favorites</h2>
-                  <span>💜</span>
+                  <span></span>
                   <SearchBar />
                 </div>
                 <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>

@@ -1,0 +1,31 @@
+[
+  {
+    "title": "Purrnelope's Cats",
+    "href": "/groups/cats",
+    "description": "OG Cat Collection",
+    "tier": 1,
+    "imageUrl": "/img/collection-cats.jpg"
+  },
+
+  {
+    "title": "Purrnelope's Exclusives",
+    "href": "/groups/exclusives",
+    "description": "$YARN Yielding NFT",
+    "tier": null,
+    "imageUrl": "/img/collection-exclusives.jpg"
+  },
+  {
+    "title": "Purrnelope's Kittens",
+    "href": "/groups/kittens",
+    "description": "1st Cat Companion",
+    "tier": 3,
+    "imageUrl": "/img/collection-kittens.jpg"
+  },
+  {
+    "title": "Purrnelope's Grandmas",
+    "href": "/groups/grandmas",
+    "description": "2nd Cat Companion",
+    "tier": 3,
+    "imageUrl": "/img/collection-grandmas.jpg"
+  }
+]

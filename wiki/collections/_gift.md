@@ -1,1 +1,0 @@
-[**Purrnelope's Gift**](./gift/index.md) are a long-term plan to reward PCC's loyal fans.

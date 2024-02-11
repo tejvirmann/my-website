@@ -9,41 +9,7 @@ module.exports = {
       src: 'img/logo-pcca.svg',
     },
     items: [
-      {
-        label: 'Collections',
-        position: 'right',
-        to: '/collections',
-        items: [
-          {
-            label: 'Cats',
-            to: '/collections/cats',
-          },
-          {
-            label: 'Kittens',
-            to: '/collections/kittens',
-          },
-          {
-            label: '👵🏻 Grandmas',
-            to: '/collections/grandmas',
-          },
-          {
-            label: 'Exclusives',
-            to: '/collections/exclusives',
-          },
-          {
-            label: "Purrnelope's Gift",
-            to: '/collections/gift',
-          },
-          {
-            label: 'All Collections',
-            to: '/collections',
-          },
-        ],
-      },
-      { to: '/ens', label: '🆔 ENS', position: 'right' },
-      { to: '/chat', label: 'Chat', position: 'right' },
-      { to: '/merch', label: 'Merch', position: 'right' },
-      { to: '/resources', label: 'Resources', position: 'right' },
+      { to: '/projects', label: 'Projects', position: 'right' },
       {
         label: 'Logs',
         position: 'right',
@@ -54,27 +20,39 @@ module.exports = {
             to: '/logs/tags/',
           },
           {
-            label: 'Projects',
-            to: '/logs/projects/project2',
+            label: 'Archive',
+            to: '/logs/archive',
+          },
+        ],
+      },
+      { to: '/chat', label: 'Chat', position: 'right' },
+      {
+        label: 'Groups',
+        position: 'right',
+        to: '/groups',
+        items: [
+          {
+            label: 'Eywal Research',
+            to: '/groups/eywal',
           },
           {
-            label: 'All Logs',
-            to: '/logs/',
+            label: 'Tejvir Mann Show',
+            to: '/groups/tejvirshow',
           },
-          // {
-          //   label: 'Archive',
-          //   to: '/logs/tags/archive',
-          // },
+          {
+            label: 'Madison Group Builder',
+            to: '/groups/builder',
+          },
         ],
       },
       // {
-      //   label: 'projects',
+      //   label: 'something',
       //   position: 'right',
-      //   to: '/projects',
+      //   to: '/something',
       //   items: [
       //     {
       //       label: 'Project 1',
-      //       to: 'projects/Project-1',
+      //       to: 'something/Project-1',
       //     },
       //   ],
       // },
@@ -136,8 +114,8 @@ module.exports = {
   //   ],
     copyright: `© ${new Date().getFullYear()} Tejvir S. Mann`,
   },
-  image: 'img/pcc-archive-soc.jpg',
-  metadata: [{ name: 'twitter:card', content: 'summary_large_image' }],
+  // image: 'img/pcc-archive-soc.jpg',
+  // metadata: [{ name: 'twitter:card', content: 'summary_large_image' }],
   prism: {
     theme: lightCodeTheme,
     darkTheme: darkCodeTheme,
@@ -147,7 +125,7 @@ module.exports = {
     disableSwitch: false,
     respectPrefersColorScheme: true,
   },
-  announcementBar: require('./announcementBar'),
+  // announcementBar: require('./announcementBar'),
   metadata: [
     {
       name: 'viewport',

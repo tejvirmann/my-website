@@ -179,8 +179,9 @@ div[class^='announcementBar_'] {
   border: none !important;
   background: none !important;
   cursor: pointer !important;
-  color: #000000 important;
+color: #000000 important;
 }
+
 .aa-DetachedSearchButtonPlaceholder {
   display: none;
 }
@@ -429,8 +430,8 @@ main {
     @apply dark:bg-white/5 dark:hover:bg-white/[0.15] dark:text-white;
   }
   & .breadcrumbs__item a.breadcrumbs__link {
-    @apply text-violet-400;
-    @apply dark:text-violet-400;
+    @apply text-black;
+    @apply dark:text-white;
   }
   /* & .breadcrumbs__item:last-child,
   & .breadcrumbs__item:nth-last-child(2):after {
