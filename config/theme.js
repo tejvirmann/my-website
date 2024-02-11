@@ -9,72 +9,50 @@ module.exports = {
       src: 'img/logo-pcca.svg',
     },
     items: [
-      {
-        label: 'Collections',
-        position: 'right',
-        to: '/collections',
-        items: [
-          {
-            label: 'Cats',
-            to: '/collections/cats',
-          },
-          {
-            label: 'Kittens',
-            to: '/collections/kittens',
-          },
-          {
-            label: '👵🏻 Grandmas',
-            to: '/collections/grandmas',
-          },
-          {
-            label: 'Exclusives',
-            to: '/collections/exclusives',
-          },
-          {
-            label: "Purrnelope's Gift",
-            to: '/collections/gift',
-          },
-          {
-            label: 'All Collections',
-            to: '/collections',
-          },
-        ],
-      },
-      { to: '/ens', label: '🆔 ENS', position: 'right' },
-      { to: '/chat', label: 'Chat', position: 'right' },
-      { to: '/merch', label: 'Merch', position: 'right' },
-      { to: '/resources', label: 'Resources', position: 'right' },
-      {
-        label: 'Logs',
-        position: 'right',
-        to: '/logs',
-        items: [
-          {
-            label: 'Tags',
-            to: '/logs/tags/',
-          },
-          {
-            label: 'Projects',
-            to: '/logs/projects/project2',
-          },
-          {
-            label: 'All Logs',
-            to: '/logs/',
-          },
-          // {
-          //   label: 'Archive',
-          //   to: '/logs/tags/archive',
-          // },
-        ],
-      },
+      { to: '/projects', label: 'Projects', position: 'right' },
       // {
-      //   label: 'projects',
+      //   label: 'Logs',
       //   position: 'right',
-      //   to: '/projects',
+      //   to: '/logs',
+      //   items: [
+      //     {
+      //       label: 'Tags',
+      //       to: '/logs/tags/',
+      //     },
+      //     {
+      //       label: 'Archive',
+      //       to: '/logs/archive',
+      //     },
+      //   ],
+      // },
+      // {
+      //   label: 'Groups',
+      //   position: 'right',
+      //   to: '/groups',
+      //   items: [
+      //     {
+      //       label: 'Eywal Research',
+      //       to: '/groups/eywal',
+      //     },
+      //     {
+      //       label: 'Tejvir Mann Show',
+      //       to: '/groups/tejvirshow',
+      //     },
+      //     {
+      //       label: 'Madison Group Builder',
+      //       to: '/groups/builder',
+      //     },
+      //   ],
+      // },
+      { to: '/chat', label: 'Chat', position: 'right' },
+      // {
+      //   label: 'something',
+      //   position: 'right',
+      //   to: '/something',
       //   items: [
       //     {
       //       label: 'Project 1',
-      //       to: 'projects/Project-1',
+      //       to: 'something/Project-1',
       //     },
       //   ],
       // },
