@@ -10,41 +10,41 @@ module.exports = {
     },
     items: [
       { to: '/projects', label: 'Projects', position: 'right' },
-      // {
-      //   label: 'Logs',
-      //   position: 'right',
-      //   to: '/logs',
-      //   items: [
-      //     {
-      //       label: 'Tags',
-      //       to: '/logs/tags/',
-      //     },
-      //     {
-      //       label: 'Archive',
-      //       to: '/logs/archive',
-      //     },
-      //   ],
-      // },
-      // {
-      //   label: 'Groups',
-      //   position: 'right',
-      //   to: '/groups',
-      //   items: [
-      //     {
-      //       label: 'Eywal Research',
-      //       to: '/groups/eywal',
-      //     },
-      //     {
-      //       label: 'Tejvir Mann Show',
-      //       to: '/groups/tejvirshow',
-      //     },
-      //     {
-      //       label: 'Madison Group Builder',
-      //       to: '/groups/builder',
-      //     },
-      //   ],
-      // },
+      {
+        label: 'Logs',
+        position: 'right',
+        to: '/logs',
+        items: [
+          {
+            label: 'Tags',
+            to: '/logs/tags/',
+          },
+          {
+            label: 'Archive',
+            to: '/logs/archive',
+          },
+        ],
+      },
       { to: '/chat', label: 'Chat', position: 'right' },
+      {
+        label: 'Groups',
+        position: 'right',
+        to: '/groups',
+        items: [
+          {
+            label: 'Eywal Research',
+            to: '/groups/eywal',
+          },
+          {
+            label: 'Tejvir Mann Show',
+            to: '/groups/tejvirshow',
+          },
+          {
+            label: 'Madison Group Builder',
+            to: '/groups/builder',
+          },
+        ],
+      },
       // {
       //   label: 'something',
       //   position: 'right',
