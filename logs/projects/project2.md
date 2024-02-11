@@ -8,7 +8,7 @@ tags: [Merch]
 
 import {EmbedTweet} from '@site/src/components/Social'
 
-<!-- ![](./assets/model-cat-batch-1.jpg) -->
+hello 
 
 First batch of 
 
