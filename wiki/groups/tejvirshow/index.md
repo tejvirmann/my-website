@@ -1,7 +1,7 @@
 ---
 sidebar_position: 50
 title: Tejvir Mann Show
-sidebar_label: Tejvir Mann Showw
+sidebar_label: Tejvir Mann Show
 description: A fun and insightful show.
 ---
 
