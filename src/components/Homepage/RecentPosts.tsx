@@ -33,7 +33,7 @@ welovethepurrsPosts.items.slice(0, 3).map(item => {
 export default function RecentPosts() {
   return (
     <section className="relative max-w-7xl px-3 mt-3 md:mt-0 bg-violet-500 bg-opacity-10 md:bg-opacity-0 p-3 mx-3 md:mx-auto rounded-xl">
-      <h3 className="text-center p-3 md:hidden">💜 WeLoveThePurrs</h3>
+      <h3 className="text-center p-3 md:hidden">Tejvir like sandwhiches</h3>
       <div className="grid md:grid-cols-3 gap-0 md:gap-3 text-center">
         {Posts.map((item, index) => (
           <Link
@@ -50,7 +50,7 @@ export default function RecentPosts() {
                 href={`${item.tagLink}`}
                 className="bg-violet-500/25 hover:bg-violet-500 hover:text-white rounded-full px-2 py-1 opacity-75 hover:opacity-100 transition-all duration-300"
               >
-                💜 {item.tag}
+               {item.tag}
               </Link>
             </div>
           </Link>

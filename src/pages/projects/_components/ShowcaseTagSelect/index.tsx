@@ -90,7 +90,7 @@ function ShowcaseTagSelect({ id, label, text, color, tag, ...rest }: Props, ref:
       >
         {label}
         {tag === 'favorite' ? (
-          <span>💜</span>
+          <span> </span>
         ) : (
           <span
             style={{

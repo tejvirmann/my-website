@@ -9,4 +9,3 @@ description: Here are Tejvir's projects.
 import {Redirect} from '@docusaurus/router';
 
 <Redirect to="/projects?operator=AND&tags=official" />
-s

@@ -1,10 +1,12 @@
 ---
 sidebar_position: 60
-title: The Chat
+title: Communication Methods
 sidebar_label: Chat
 # image: /img/cover/kittyvault.png
-description: "The KittyVault is a vault of NFTs that backs every PCC cat & first 8 airdrops. It is the 'Gold Standard' that keeps your PCC NFTs secured."
+description: "The following are ways anyone can reach out to me."
 ---
 
-🏦
-[OpenSea](https://opensea.io/kittyvault.pcc.eth) ·
+Email: 
+Linkedin:
+Slack:
+Reddit: 
