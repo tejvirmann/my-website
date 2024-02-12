@@ -6,7 +6,7 @@ sidebar_label: Chat
 description: "The following are ways anyone can reach out to me."
 ---
 
-Email: 
-Linkedin:
-Slack:
-Reddit: 
+Email: tsmann@wisc.edu
+Linkedin: https://www.linkedin.com/in/tejvir-s-mann/
+Slack: not yet
+Reddit: not yet

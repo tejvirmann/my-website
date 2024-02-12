@@ -87,10 +87,10 @@ export const Resources: Resource[] = [
     tags: ['drawing', 'favorite'],
   },
   {
-    title: 'Aleopold',
+    title: 'Aleopard',
     description: 'An alien leopard.',
     image: 'aleopard.png',
-    website: '/logs/projects/aleopold',
+    website: '/logs/projects/aleopard',
     tags: ['drawing'],
   },
   {
