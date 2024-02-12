@@ -20,8 +20,8 @@ import ShowcaseCard from './_components/ShowcaseCard'
 
 import styles from './styles.module.css'
 
-const TITLE = "Tejvir Mann's Projects"
-const DESCRIPTION = 'Official things that I done did.'
+const TITLE = "Projects"
+const DESCRIPTION = 'The following are a list of my contributions.'
 
 type ResourceState = {
   scrollTopPosition: number
@@ -106,9 +106,9 @@ function ShowcaseHeader() {
       <h1>{TITLE}</h1>
       <p className="text-lg">{DESCRIPTION}</p>
       <p>
-        <Link href="https://github.com/CuratorCat/pcc-archive.org/blob/main/src/data/projects/data.ts">
+        {/* <Link href="https://github.com/CuratorCat/pcc-archive.org/blob/main/src/data/projects/data.ts">
           <span className="underline hover:text-black-500 rounded px-1 py-0.5 ">add a new resource</span>
-        </Link>
+        </Link> */}
       </p>
     </section>
   )

@@ -10,7 +10,7 @@
 import { Resources } from './data'
 import { sortBy } from '@site/src/utils/jsUtils'
 
-export type TagType = 'favorite' | 'official' | 'social' | 'ens' | 'tool' | 'marketplace' | 'analytics' | 'other'
+export type TagType = 'favorite' | 'writing' | 'film' | 'drawing' | 'software'| 'uimodeling' | 'painting' | 'other'
 
 // prettier - ignore
 
@@ -36,38 +36,38 @@ export const Tags: { [type in TagType]: Tag } = {
     color: '#58439F',
   },
 
-  official: {
-    label: 'Official',
+  film: {
+    label: 'Film',
     description: '',
     color: '#F7B500',
   },
 
-  social: {
-    label: 'Social Media',
+  writing: {
+    label: 'Writing',
     description: '',
     color: '#E72961',
   },
 
-  tool: {
-    label: 'Tool',
+  drawing: {
+    label: 'Drawing',
     description: '',
     color: '#8FC756',
   },
 
-  ens: {
-    label: 'ENS',
+  uimodeling: {
+    label: 'UI Modeling',
     description: '',
     color: '#1D9BF0',
   },
 
-  marketplace: {
-    label: 'Marketplace',
+  painting: {
+    label: 'Painting',
     description: '',
     color: '#446A8E',
   },
 
-  analytics: {
-    label: 'Analytics',
+  software: {
+    label: 'Software',
     description: '',
     color: '#A91A32',
   },

@@ -17,6 +17,12 @@ const config = {
   presets: require('./config/presets'),
   themeConfig: require('./config/theme'),
   plugins: require('./config/plugin'),
+  scripts: [
+    {
+      src: './redirect.js', // create a file named redirect.js
+      async: true,
+    },
+  ],
 }
 
 module.exports = config
