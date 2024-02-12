@@ -33,7 +33,7 @@ export const Tags: { [type in TagType]: Tag } = {
   favorite: {
     label: 'Favorite',
     description: '',
-    color: '#58439F',
+    color: '#731ba6',
   },
 
   film: {
@@ -51,7 +51,7 @@ export const Tags: { [type in TagType]: Tag } = {
   drawing: {
     label: 'Drawing',
     description: '',
-    color: '#8FC756',
+    color: '#5ad66b',
   },
 
   uimodeling: {
