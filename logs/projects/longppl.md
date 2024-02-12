@@ -5,7 +5,7 @@ date: 2023-9-26
 authors: tejvirmann
 tags: [Projects, Artwork, Drawing]
 ---
-Drawings of a wierd, alien, leopard in blue and purple. 
+Some long drawings that I drew after a long day. 
 
 ### Long Cat
 ![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/LongPpl%2F1.png?alt=media&token=3ad8eb02-b08d-46e6-a1a7-cfa540790c07)

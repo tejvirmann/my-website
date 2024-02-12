@@ -90,7 +90,16 @@ function ShowcaseTagSelect({ id, label, text, color, tag, ...rest }: Props, ref:
       >
         {label}
         {tag === 'favorite' ? (
-          <span> </span>
+          // <span> </span>
+          <span
+            style={{
+              backgroundColor: selected ? 'white' : color,
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              marginLeft: 4,
+            }}
+          />
         ) : (
           <span
             style={{
