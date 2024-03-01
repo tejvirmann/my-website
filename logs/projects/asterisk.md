@@ -24,4 +24,9 @@ This was the first painting I ever sold.
 
 ![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2F1.jpg?alt=media&token=232e8601-bd56-43df-927e-3db9e4316b50)
 
+### UW Art Club 2020 Spring Gallery
+I got the chance to show this art UW Art Clubs 2020 gallery. Here's a picture with me and my friends who showed up for support!
+
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2Fgallery.jpg?alt=media&token=439cfce6-c615-48b6-8f06-395a47a97e67)
+
 
