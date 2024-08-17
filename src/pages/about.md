@@ -1,25 +1,33 @@
 ---
-title: About Tejvir Mann
+title: About
 ---
 
-# Tejvir 
+# Tejvir S. Mann
 
-### Why not Public Forum?
+<img
+align="left"
+src="/img/authors/tejvir.jpg"
+alt="drawing"
+width="200"
+style={{ marginRight: '20px', marginBottom: '10px' }}
+/>
 
-PCC Archive contains links to contracts, marketplaces etc. that will be dangerous if changed by people with bad intention. So the content update is through GitHub, and the history is on [GitHub](https://github.com/CuratorCat/pcc-archive.org).
+Hi there! My name is Tejvir. My current interests are drawing, AI, brain architectures, and stories. This website is the official place where I will post my works, discoveries, research, and other projects. Enjoy.
 
-PCC team planned it's official forum in the future.
+---
 
-## Contact Me {#contact}
+---
 
-:::caution
+---
 
-Never share your confidential information, passwords, private keys or seed phrases with ANYONE!
+---
 
-Be extra careful when receiving any external links or online forms.
+---
 
-:::
+## Contact
 
-- GitHub: [Issue](https://github.com/CuratorCat/pcc-archive.org/issues) in this project's repo
-- Discord: tag me `curatorcat.pcc.eth#0385` in PCC Discord publicly
-- Twitter: [@CuratorCatPCC](https://twitter.com/CuratorCatPCC)
+- **GitHub:** [tejvirmann](https://github.com/tejvirmann)
+- **Slack:** [Tejvir Public Slack](https://tejvir.slack.com)
+- **X:** [@TejvirMann](https://twitter.com/TejvirMann)
+- **Email:** tsmann at wisc.edu or tejvir at utexas.edu
+- **LinkedIn:** [tejvir-s-mann](https://www.linkedin.com/in/tejvir-s-mann/)
