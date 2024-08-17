@@ -101,10 +101,17 @@ export const Resources: Resource[] = [
     tags: ['software', 'favorite'],
   },
   {
-    title: 'Pink Bird',
+    title: 'Pink Pen',
     description: 'A bird that is pink.',
     image: 'pinkbird.png',
-    website: '/logs/projects/pinkbird',
+    website: '/logs/projects/pinkpen',
+    tags: ['drawing'],
+  },
+  {
+    title: 'Pencil Drawings',
+    description: 'A bunch of pencil drawings.',
+    image: 'pencildrawing.jpg',
+    website: '/logs/projects/pencil-drawings',
     tags: ['drawing'],
   },
   {
