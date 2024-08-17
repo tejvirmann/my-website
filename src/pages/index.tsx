@@ -19,9 +19,12 @@ import ShowcaseCard from './projects/_components/ShowcaseCard'
 import { sortedResources, Tags, TagList, type Resource, type TagType } from '@site/src/data/projects'
 import styles from './projects/styles.module.css'
 import clsx from 'clsx'
-import { useFilteredResources, SearchBar} from './projects/index'
+import { useFilteredResources, SearchBar } from './projects/index'
 import Translate, { translate } from '@docusaurus/Translate'
 
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 export default function Home() {
   const { siteConfig } = useDocusaurusContext()
@@ -29,26 +32,48 @@ export default function Home() {
   const favoriteResources = sortedResources.filter(resource => resource.tags.includes('favorite'))
   const otherResources = sortedResources.filter(resource => !resource.tags.includes('favorite'))
 
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  }
+
   return (
     <Layout
       // title={`${siteConfig.title}`}
       description="The official website of Tejvir S. Mann."
     >
       <LayoutTw>
+        <div style={{ width: '100%', margin: '0 auto' }}>
+          <Slider {...settings}>
+            <div>
+              <img src=".test.png" alt="Slide 1" style={{ width: '100%' }} />
+              <p>hello</p>
+            </div>
+            <div>
+              <Ens />
+            </div>
+            <div>
+              <Ens />
+            </div>
+          </Slider>
+        </div>
 
-        <Ens />
-        
         {/* <ActiveEvents /> */}
         {/* <RecentPosts /> */}
         {/* <Hero /> */}
         {/* <main className="pt-0"> */}
-          {/* <section className="relative max-w-7xl mx-auto lg:grid grid-cols-1 lg:grid-cols-5 gap-3 lg:px-3">
+        {/* <section className="relative max-w-7xl mx-auto lg:grid grid-cols-1 lg:grid-cols-5 gap-3 lg:px-3">
             <Club />
             <Collections />
           </section> */}
-          {/* <Posts /> */}
-          {/* <RecentPosts /> */}
-          {/* <KittyVault /> */}
+        {/* <Posts /> */}
+        {/* <RecentPosts /> */}
+        <KittyVault />
         {/* </main> */}
 
         <section className="max-w-7xl px-3 sm:px-6 mx-auto ">
@@ -58,7 +83,7 @@ export default function Home() {
                 <h2>Filters</h2>
                 <span>({filteredResources.length})</span>
               </div>
-              <ShowcaseFilterToggle />
+              {/* <ShowcaseFilterToggle /> */}
             </div>
             <ul className={clsx('clean-list list-none', styles.checkboxList)}>
               {TagList.map((tag, i) => {
@@ -80,9 +105,9 @@ export default function Home() {
             <>
               <div className="max-w-7xl px-3 sm:px-6 mx-auto">
                 <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-                  <h2>Favorites</h2>
+                  <h2>Featured</h2>
                   <span></span>
-                  <SearchBar />
+                  {/* <SearchBar /> */}
                 </div>
                 <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>
                   {favoriteResources.map(resource => (
@@ -106,9 +131,7 @@ export default function Home() {
             </>
           ) : (
             <div className="max-w-7xl px-6 mx-auto">
-              <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-                <SearchBar />
-              </div>
+              <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>{/* <SearchBar /> */}</div>
               <ul className={clsx('clean-list', styles.showcaseList)}>
                 {filteredResources.map(resource => (
                   <ShowcaseCard key={resource.title} resource={resource} />

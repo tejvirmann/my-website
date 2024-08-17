@@ -19,6 +19,7 @@ const TagComp = React.forwardRef<HTMLLIElement, Tag>(({ label, color, descriptio
     title={description}
     style={{
       backgroundColor: color,
+      marginTop: -10,
     }}
   >
     <span className={styles.textLabel}>{label.toLowerCase()}</span>
@@ -66,6 +67,8 @@ function ShowcaseCard({ resource }: { resource: Resource }) {
                 <Link href={resource.website} className={styles.showcaseCardLink}>
                   {resource.title}
                 </Link>
+                &nbsp;
+                <ShowcaseCardTag tags={resource.tags} />
               </h4>
               {/* {resource.tags.includes('favorite') && '💜'} */}
               {resource.source && (
@@ -77,12 +80,13 @@ function ShowcaseCard({ resource }: { resource: Resource }) {
                 </Link>
               )}
             </div>
-            <p className={styles.showcaseCardBody}>{resource.description}</p>
+            {/* <p className={styles.showcaseCardBody}>{resource.description}</p> */}
+          
           </div>
         </div>
-        <ul className={` ${styles.cardFooter}`}>
+        {/* <ul className={` ${styles.cardFooter}`}>
           <ShowcaseCardTag tags={resource.tags} />
-        </ul>
+        </ul> */}
       </li>
     </Link>
   )

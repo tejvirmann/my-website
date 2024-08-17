@@ -122,11 +122,11 @@ export const Resources: Resource[] = [
     tags: ['other'],
   },
   {
-    title: 'Forest Language Writing',
+    title: 'Forest Language Essay',
     description: 'Natural and Classical Computing.',
     image: 'forestlang.png',
     website: '/logs/projects/forestlanguage',
-    tags: ['favorite', 'writing'],
+    tags: ['writing'],
   },
   {
     title: 'Dishwasher Anime',
