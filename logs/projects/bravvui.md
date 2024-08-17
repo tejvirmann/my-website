@@ -3,7 +3,7 @@ title: Bravv UI
 description: "UI work for fintech startup."
 date: 2021-8-25
 authors: tejvirmann
-tags: [Projects, UI Modeling]
+tags: [Projects, UI]
 ---
 Bravv was a fintech startup meant to compete with Uphold, and to trade crypto assets. This startup was during the summer crypto boom of 2021. The startup only lasted about 6 months, where I served as creative director. 
 

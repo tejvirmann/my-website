@@ -124,7 +124,7 @@ function ShowcaseFilters() {
             <h2>Filters</h2>
             <span>({filteredResources.length})</span>
           </div>
-          <ShowcaseFilterToggle />
+          {/* <ShowcaseFilterToggle /> */}
         </div>
         <ul className={clsx('clean-list list-none', styles.checkboxList)}>
           {TagList.map((tag, i) => {
@@ -194,7 +194,7 @@ export function ShowcaseCards() {
       <section className="py-6">
         <div className="container padding-vert--md text--center">
           <h2>No result</h2>
-          <SearchBar />
+          {/* <SearchBar /> */}
         </div>
       </section>
     )
@@ -206,9 +206,9 @@ export function ShowcaseCards() {
         <>
           <div className="max-w-7xl px-3 sm:px-6 mx-auto">
             <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-              <h2>Favorites</h2>
+              <h2>Featured</h2>
               <span></span>
-              <SearchBar />
+              {/* <SearchBar /> */}
             </div>
             <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>
               {favoriteResources.map(resource => (
@@ -233,7 +233,7 @@ export function ShowcaseCards() {
       ) : (
         <div className="max-w-7xl px-6 mx-auto">
           <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-            <SearchBar />
+            {/* <SearchBar /> */}
           </div>
           <ul className={clsx('clean-list', styles.showcaseList)}>
             {filteredResources.map(resource => (

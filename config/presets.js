@@ -22,7 +22,7 @@ module.exports = [
         blogDescription: 'Tejvirs Logs',
         showReadingTime: false,
         postsPerPage: 1,
-        blogSidebarCount: 15,
+        blogSidebarCount: 0,
         // Please change this to your repo.
         editUrl: 'https://github.com/tejvirmann/my-website/tree/main/',
         blogSidebarTitle: 'Recent Logs',

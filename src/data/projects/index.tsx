@@ -33,13 +33,13 @@ export const Tags: { [type in TagType]: Tag } = {
   favorite: {
     label: 'Favorite',
     description: '',
-    color: '#731ba6',
+    color: '#FF8000',
   },
 
   film: {
     label: 'Film',
     description: '',
-    color: '#F7B500',
+    color: '#FF0BCF',
   },
 
   writing: {
@@ -55,7 +55,7 @@ export const Tags: { [type in TagType]: Tag } = {
   },
 
   uimodeling: {
-    label: 'UI Modeling',
+    label: 'UI',
     description: '',
     color: '#1D9BF0',
   },
@@ -69,7 +69,7 @@ export const Tags: { [type in TagType]: Tag } = {
   software: {
     label: 'Software',
     description: '',
-    color: '#A91A32',
+    color: '#7321EE	',
   },
 
   other: {

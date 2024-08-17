@@ -3,7 +3,7 @@ title: CODAmarket UI
 description: "UI work for a luxury art company."
 date: 2021-8-25
 authors: tejvirmann
-tags: [Projects, UI Modeling]
+tags: [Projects, UI]
 ---
 [CODAworx](https://codaworx.com) is a high end art seller and art consulting company in Madison, WI. I worked on building out their website CODAmarket, which was a marketplaces for their artists to sell their artwork to high end collectors and dealers.  
 

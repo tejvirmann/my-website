@@ -82,7 +82,7 @@ export const Resources: Resource[] = [
   {
     title: 'Depressed Spirit',
     description: 'Stallion of the Albuquerque.',
-    image: 'depspirit.png',
+    image: 'depspirit.jpg',
     website: '/logs/projects/depspirit',
     tags: ['drawing', 'favorite'],
   },
@@ -122,11 +122,11 @@ export const Resources: Resource[] = [
     tags: ['other'],
   },
   {
-    title: 'Forest Language Writing',
+    title: 'Forest Language Essay',
     description: 'Natural and Classical Computing.',
     image: 'forestlang.png',
     website: '/logs/projects/forestlanguage',
-    tags: ['favorite', 'writing'],
+    tags: ['writing'],
   },
   {
     title: 'Dishwasher Anime',
