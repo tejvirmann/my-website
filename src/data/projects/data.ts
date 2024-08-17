@@ -82,7 +82,7 @@ export const Resources: Resource[] = [
   {
     title: 'Depressed Spirit',
     description: 'Stallion of the Albuquerque.',
-    image: 'depspirit.png',
+    image: 'depspirit.jpg',
     website: '/logs/projects/depspirit',
     tags: ['drawing', 'favorite'],
   },
