@@ -50,10 +50,10 @@ export default function Home() {
       <LayoutTw>
         <div style={{ width: '100%', margin: '0 auto' }}>
           <Slider {...settings}>
-            <div>
+            {/* <div>
               <img src=".test.png" alt="Slide 1" style={{ width: '100%' }} />
               <p>hello</p>
-            </div>
+            </div> */}
             <div>
               <Ens />
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
           </section> */}
         {/* <Posts /> */}
         {/* <RecentPosts /> */}
-        <KittyVault />
+        {/* <KittyVault /> */}
         {/* </main> */}
 
         <section className="max-w-7xl px-3 sm:px-6 mx-auto ">
