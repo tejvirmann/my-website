@@ -98,7 +98,7 @@ export const Resources: Resource[] = [
     description: 'An iOS application for AR spaces.',
     image: 'gallify.png',
     website: '/logs/projects/gallify',
-    tags: ['software'],
+    tags: ['software', 'uimodeling'],
   },
   {
     title: 'Pink Pen',
