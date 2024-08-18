@@ -55,10 +55,24 @@ export default function Home() {
               <p>hello</p>
             </div> */}
             <div>
-              <Ens />
+              <Ens
+                title="Dishwasher"
+                subtitle="THE ANIME"
+                description="Dishwasher is an anime that I am creating."
+                imageSrc="/img/home/dishwasher.png"
+                furtherDesc="I eat butt"
+                button="chicken sandwhich"
+              />
             </div>
             <div>
-              <Ens />
+              <Ens
+                title="Poopface"
+                subtitle="THE Chicken"
+                description="Dishwasher is an poop that I am creating."
+                imageSrc="/img/home/dishwasher.png"
+                furtherDesc="I eat dogs"
+                button="chicken feet"
+              />
             </div>
           </Slider>
         </div>
