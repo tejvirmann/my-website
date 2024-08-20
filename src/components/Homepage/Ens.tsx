@@ -19,19 +19,18 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
         <img className={'w-full h-full object-cover ' + styles.coverImg} src={imageSrc} alt="" />
       </div>
 
-      <div className={'absolute w-full top-0 h-4 p-3 transition-all duration-150 bg-gradient-to-b ' + styles.overlay} />
+      <div className={'absolute w-full top-0 h-4 p-3'} />
       <div
         className={'absolute w-full bottom-0 h-4 p-3 transition-all duration-150 bg-gradient-to-t ' + styles.overlay}
       />
       <div
         className={
-          'absolute w-full top-0 h-24 group-hover:animate-pulse group-hover:h-16 p-3 transition-all duration-150 bg-gradient-to-b ' +
-          styles.overlay
+          'absolute w-full top-0 h-5 group-hover:h-5 p-3 transition-all duration-15 bg-gradient-to-b ' + styles.overlay
         }
       />
       <div
         className={
-          'absolute w-full bottom-0 h-24 group-hover:animate-pulse group-hover:h-16 p-3 transition-all duration-150 bg-gradient-to-t ' +
+          'absolute w-full bottom-0 h-5 group-hover:animate-pulse group-hover:h-5 p-3 transition-all duration-15 bg-gradient-to-t ' +
           styles.overlay
         }
       />

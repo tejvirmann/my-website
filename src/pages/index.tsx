@@ -59,7 +59,7 @@ export default function Home() {
                 title="Dishwasher"
                 subtitle="THE ANIME"
                 description="Dishwasher is an anime that I am creating."
-                imageSrc="/img/home/dishwasher.png"
+                imageSrc="/img/home/forestlang.jpg"
                 furtherDesc="I eat butt"
                 button="chicken sandwhich"
               />
@@ -69,7 +69,7 @@ export default function Home() {
                 title="Poopface"
                 subtitle="THE Chicken"
                 description="Dishwasher is an poop that I am creating."
-                imageSrc="/img/home/dishwasher.png"
+                imageSrc="/img/home/forestlang2.jpg"
                 furtherDesc="I eat dogs"
                 button="chicken feet"
               />

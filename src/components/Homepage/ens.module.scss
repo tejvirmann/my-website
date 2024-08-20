@@ -9,24 +9,24 @@
 
 .coverImg {
   @apply transition-all duration-300;
-  @apply mix-blend-hard-light opacity-10;
+  @apply mix-blend-hard-light opacity-5;
 }
 
 .sectionBg:hover .coverImg {
-  @apply opacity-[0.15];
+  @apply opacity-[0.75];
 }
 
 [data-theme='dark'] .coverImg {
-  @apply mix-blend-lighten opacity-50;
+  @apply mix-blend-lighten opacity-70;
 }
 
 [data-theme='dark'] .sectionBg:hover .coverImg {
-  @apply mix-blend-lighten opacity-80;
+  @apply mix-blend-lighten opacity-70;
 }
 
 .overlay {
-  @apply from-[#F0EDFF] to-[#F0EDFF]/0;
+  @apply from-[#FFFFFF] to-[#FFFFFF]/0;
 }
 [data-theme='dark'] .overlay {
-  @apply from-[#170830] to-[#170830]/0;
+  @apply from-[#181414] to-[#181414]/0;
 }
