@@ -56,22 +56,22 @@ export default function Home() {
             </div> */}
             <div>
               <Ens
-                title="Dishwasher"
-                subtitle="THE ANIME"
-                description="Dishwasher is an anime that I am creating."
-                imageSrc="/img/home/dishwasher.png"
-                furtherDesc="I eat butt"
-                button="chicken sandwhich"
+                title="Tejvir S. Mann"
+                subtitle=""
+                description=""
+                imageSrc="/img/home/forestlang2.jpg"
+                furtherDesc=" "
+                button="Forest Language"
               />
             </div>
             <div>
               <Ens
-                title="Poopface"
-                subtitle="THE Chicken"
-                description="Dishwasher is an poop that I am creating."
-                imageSrc="/img/home/dishwasher.png"
-                furtherDesc="I eat dogs"
-                button="chicken feet"
+                title="Tejvir S. Mann"
+                subtitle=""
+                description=""
+                imageSrc="/img/home/cluster.gif"
+                furtherDesc=""
+                button="Forest Language"
               />
             </div>
           </Slider>

@@ -20,8 +20,8 @@ import ShowcaseCard from './_components/ShowcaseCard'
 
 import styles from './styles.module.css'
 
-const TITLE = "Projects"
-const DESCRIPTION = 'The following are a list of my contributions.'
+const TITLE = 'Projects'
+const DESCRIPTION = 'Works, ideas, imaginations, and other contributions.'
 
 type ResourceState = {
   scrollTopPosition: number
@@ -232,9 +232,7 @@ export function ShowcaseCards() {
         </>
       ) : (
         <div className="max-w-7xl px-6 mx-auto">
-          <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-            {/* <SearchBar /> */}
-          </div>
+          <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>{/* <SearchBar /> */}</div>
           <ul className={clsx('clean-list', styles.showcaseList)}>
             {filteredResources.map(resource => (
               <ShowcaseCard key={resource.title} resource={resource} />

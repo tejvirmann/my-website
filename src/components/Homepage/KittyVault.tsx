@@ -8,7 +8,7 @@ export default function KittyVault() {
         <div className="relative sm:grid md:grid-cols-2 lg:gap-8 lg:items-center bg-slate-500/10 hover:bg-slate-500/20 rounded-3xl px-8 py-8 md:py-12 group transition-all duration-300">
           <div className="mb-4 md:mb-0 relative lg:mt-0 items-center" aria-hidden="true">
             <img
-              className="relative mx-auto my-auto w-[200px] sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px] group-hover:animate-pulse"
+              className="relative mx-auto my-auto w-[200px] sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px]"
               src="/img/kittyvault-s.png"
               alt=""
             />
