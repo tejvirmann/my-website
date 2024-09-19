@@ -36,20 +36,20 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
       />
 
       <div className="relative max-w-4xl mx-auto text-center py-16 lg:py-24 px-8 sm:px-12 lg:px-3">
-        <h3 className="text-3xl md:text-5xl uppercase pb-4 tracking-widest">
+        <h3 className="text-3xl md:text-5xl pb-4 tracking-widest">
           {title} <span className="block pt-1 text-xl md:text-3xl tracking-normal font-light">{subtitle}</span>
         </h3>
         <div className="text-base sm:text-xl lg:text-lg xl:text-xl">
           <p>{description}</p>
           <p>{furtherDesc}</p>
         </div>
-        <div className="pt-8">
-          <Link className="" to="/logs/projects/dishwasher">
+        {/* <div className="pt-8">
+          <Link className="" to="/logs/projects/forestlanguage">
             <span className="inline-block px-6 py-3 rounded-full bg-green-500 hover:bg-white hover:shadow-lg hover:shadow-green-500 text-base font-medium text-white hover:text-green-500 transition-all duration-300 hover:-translate-y-1">
               {button}
             </span>
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   )
