@@ -59,8 +59,8 @@ export default function Home() {
                 title="Tejvir S. Mann"
                 subtitle=""
                 description=""
-                imageSrc="/img/home/forestlang2.jpg"
-                furtherDesc=" "
+                imageSrc="/img/home/cluster.gif"
+                furtherDesc=""
                 button="Forest Language"
               />
             </div>
@@ -69,8 +69,8 @@ export default function Home() {
                 title="Tejvir S. Mann"
                 subtitle=""
                 description=""
-                imageSrc="/img/home/cluster.gif"
-                furtherDesc=""
+                imageSrc="/img/home/forestlang2.jpg"
+                furtherDesc=" "
                 button="Forest Language"
               />
             </div>
