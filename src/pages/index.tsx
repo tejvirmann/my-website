@@ -21,6 +21,7 @@ import styles from './projects/styles.module.css'
 import clsx from 'clsx'
 import { useFilteredResources, SearchBar } from './projects/index'
 import Translate, { translate } from '@docusaurus/Translate'
+import CardGrid from '../components/Homepage/CardGrid/CardGrid'
 
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
@@ -76,6 +77,9 @@ export default function Home() {
             </div>
           </Slider>
         </div>
+
+        <h1>Gallery</h1>
+        <CardGrid />
 
         {/* <ActiveEvents /> */}
         {/* <RecentPosts /> */}
