@@ -12,6 +12,8 @@ width="200"
 style={{ marginRight: '20px', marginBottom: '10px' }}
 />
 
+---
+
 Hi there! My name is Tejvir. My current interests are drawing, AI, brain architectures, and stories. This website is the official place where I will post my works, discoveries, research, and other projects. Enjoy.
 
 ---
