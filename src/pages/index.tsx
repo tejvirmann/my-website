@@ -78,8 +78,8 @@ export default function Home() {
           </Slider>
         </div>
 
-        <h1>Gallery</h1>
-        <CardGrid />
+        {/* <h1>Gallery</h1> */}
+        {/* <CardGrid /> */}
 
         {/* <ActiveEvents /> */}
         {/* <RecentPosts /> */}
