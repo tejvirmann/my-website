@@ -26,6 +26,10 @@ Hi there! My name is Tejvir. My current interests are drawing, AI, brain archite
 
 ---
 
+---
+
+---
+
 ## Contact
 
 - **GitHub:** [tejvirmann](https://github.com/tejvirmann)
