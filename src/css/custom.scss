@@ -66,7 +66,7 @@
   --ifm-color-primary-darkest: #ffffff;
   --ifm-color-primary-light: #ffffff;
   --ifm-color-primary-lighter: #ffffff;
-  --ifm-color-primary-lightest: #ffffff; 
+  --ifm-color-primary-lightest: #ffffff;
   --ifm-background-color: #101010 !important;
   --ifm-navbar-background-color: #101010;
   --ifm-background-surface-color: #101010;
@@ -179,7 +179,7 @@ div[class^='announcementBar_'] {
   border: none !important;
   background: none !important;
   cursor: pointer !important;
-color: #000000 important;
+  color: #000000 important;
 }
 
 .aa-DetachedSearchButtonPlaceholder {
@@ -201,8 +201,8 @@ color: #000000 important;
 
 [itemtype="http://schema.org/Blog"] article #post-content,
 div[itemprop="articleBody"] {
- //@apply prose prose-violet lg:prose-base xl:prose-lg max-w-none;
- @apply prose-a:text-inherit;
+  //@apply prose prose-violet lg:prose-base xl:prose-lg max-w-none;
+  @apply prose-a:text-inherit;
 }
 
 [data-theme="dark"] [itemtype="http://schema.org/Blog"] article #post-content,
