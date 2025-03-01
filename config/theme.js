@@ -9,6 +9,13 @@ module.exports = {
       src: 'img/logo-pcca.svg',
     },
     items: [
+      {
+        href: 'https://tejvir.etsy.com/',
+        label: 'Shop',
+        position: 'right',
+        target: '_blank', // Open in a new tab
+        rel: 'noopener noreferrer',
+      },
       { to: '/projects', label: 'Projects', position: 'right' },
       {
         label: 'Logs',
