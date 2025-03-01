@@ -40,7 +40,7 @@ export default function Home() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 7000,
   }
 
   return (
@@ -50,6 +50,36 @@ export default function Home() {
     >
       <LayoutTw>
         <div style={{ width: '100%', margin: '0 auto' }}>
+          {/* <div
+            style={{
+              position: 'absolute',
+              top: '25%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 10,
+              fontSize: '4rem',
+              fontWeight: 450,
+              color: 'white',
+            }}
+          >
+            <div className="text-black dark:text-white">Tejvir S. Mann</div>
+          </div> */}
+
+          <div
+            style={{
+              position: 'absolute',
+              top: '20%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 10,
+              fontSize: '4.5vw', // Adjust this value to your needs
+              fontWeight: 450,
+              color: 'white',
+            }}
+          >
+            <div className="text-black dark:text-white">Tejvir S. Mann</div>
+          </div>
+
           <Slider {...settings}>
             {/* <div>
               <img src=".test.png" alt="Slide 1" style={{ width: '100%' }} />
@@ -57,7 +87,7 @@ export default function Home() {
             </div> */}
             <div>
               <Ens
-                title="Tejvir S. Mann"
+                title=""
                 subtitle=""
                 description=""
                 imageSrc="/img/home/cluster.gif"
@@ -67,7 +97,7 @@ export default function Home() {
             </div>
             <div>
               <Ens
-                title="Tejvir S. Mann"
+                title=""
                 subtitle=""
                 description=""
                 imageSrc="/img/home/forestlang2.jpg"
