@@ -14,7 +14,7 @@ interface EnsProps {
 
 export default function Ens({ title, subtitle, description, imageSrc, furtherDesc, button }: EnsProps) {
   return (
-    <section className={'relative my-8 md:my-12 group ' + styles.sectionBg}>
+    <section className={'relative mb-8 md:mb-12 group ' + styles.sectionBg}>
       <div className="absolute inset-0 w-full h-full">
         <img className={'w-full h-full object-cover ' + styles.coverImg} src={imageSrc} alt="" />
       </div>

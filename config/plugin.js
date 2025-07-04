@@ -2,15 +2,6 @@
 module.exports = [
   'docusaurus-plugin-sass',
   [
-    require.resolve('@easyops-cn/docusaurus-search-local'),
-    {
-      indexDocs: true,
-      indexBlog: true,
-      indexPages: true,
-      language: ['en'],
-    },
-  ],
-  [
     '@docusaurus/plugin-content-blog',
     {
       id: 'projects',

@@ -72,10 +72,6 @@ module.exports = {
       },
     ],
   },
-  search: {
-    type: 'local',
-    placeholder: 'Search...',
-  },
   footer: {
     //   links: [
     //     {

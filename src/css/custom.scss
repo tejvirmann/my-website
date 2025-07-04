@@ -265,45 +265,6 @@ div[class^='announcementBar_'] {
   }
 }
 
-.aa-DetachedSearchButton {
-  border-radius: 9999px !important;
-  border: none !important;
-  background: rgba(0, 0, 0, 0.05) !important;
-  cursor: pointer !important;
-  color: #000000 !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  transition: all 0.3s ease;
-  padding: 8px 16px !important;
-  min-width: 200px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-.aa-DetachedSearchButton:hover {
-  background: rgba(0, 0, 0, 0.1) !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
-}
-
-[data-theme='dark'] .aa-DetachedSearchButton {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-[data-theme='dark'] .aa-DetachedSearchButton:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-.aa-DetachedSearchButtonPlaceholder {
-  display: block !important;
-  color: inherit !important;
-  opacity: 0.7 !important;
-}
-
 // Wiki: use prose
 // currently disabled
 // main[class^="docMainContainer"] {
@@ -320,12 +281,12 @@ div[class^='announcementBar_'] {
 [itemtype="http://schema.org/Blog"] article #post-content,
 div[itemprop="articleBody"] {
   //@apply prose prose-violet lg:prose-base xl:prose-lg max-w-none;
-  @apply prose-a:text-inherit;
+  // @apply prose-a:text-inherit;
 }
 
 [data-theme="dark"] [itemtype="http://schema.org/Blog"] article #post-content,
 [data-theme="dark"] div[itemprop="articleBody"] {
-  @apply prose-invert;
+  // @apply prose-invert;
 }
 
 [itemtype="http://schema.org/Blog"] > header

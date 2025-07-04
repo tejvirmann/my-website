@@ -51,39 +51,17 @@ export default function Home() {
       description="The official website of Tejvir S. Mann."
     >
       <LayoutTw>
-        <div style={{ width: '100%', maxWidth: '100vw', margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
-          {/* Enhanced Glassy Overlay for better contrast */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10,
-              fontSize: 'clamp(2rem, 4.5vw, 4rem)',
-              fontWeight: 450,
-              textAlign: 'center',
-              width: '100%',
-              pointerEvents: 'none',
-            }}
-          >
-            <div
-              className="text-black dark:text-white"
-              style={{
-                textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4)',
-                padding: '1rem 2rem',
-                borderRadius: '20px',
-                background: 'rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-                width: 'fit-content',
-                margin: '0 auto',
-              }}
-            >
-              Tejvir S. Mann
-            </div>
-          </div>
-
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '100vw',
+            margin: '0 auto',
+            position: 'relative',
+            overflow: 'hidden',
+            marginTop: 0,
+            paddingTop: 0,
+          }}
+        >
           {/* Floating Particles Background Effect */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(6)].map((_, i) => (
@@ -102,6 +80,38 @@ export default function Home() {
 
           {/* Slider with Enhanced Styling */}
           <div className="relative">
+            {/* Enhanced Glassy Overlay for better contrast */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '45%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 10,
+                fontSize: 'clamp(2rem, 4.5vw, 4rem)',
+                fontWeight: 450,
+                textAlign: 'center',
+                width: '100%',
+                pointerEvents: 'none',
+              }}
+            >
+              <div
+                className="text-black dark:text-white dark:bg-black/20 dark:border-white/20"
+                style={{
+                  textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4)',
+                  padding: '1rem 2rem',
+                  borderRadius: '20px',
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.05)',
+                  width: 'fit-content',
+                  margin: '0 auto',
+                }}
+              >
+                Tejvir S. Mann
+              </div>
+            </div>
+
             <Slider {...settings}>
               <div>
                 <Ens
