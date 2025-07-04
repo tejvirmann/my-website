@@ -1,32 +1,63 @@
 .sectionBg {
   @apply transition-all duration-300;
   @apply bg-violet-200/10 hover:bg-violet-200/20;
+  position: relative;
+  overflow: hidden;
 }
 
 [data-theme='dark'] .sectionBg {
-  @apply bg-slate-500/10 hover:bg-violet-500/20;
+  @apply bg-slate-500/10 hover:bg-slate-600/20;
 }
 
 .coverImg {
-  @apply transition-all duration-300;
-  @apply mix-blend-hard-light opacity-5;
+  @apply transition-all duration-500;
+  @apply mix-blend-multiply opacity-80;
+  filter: contrast(1.1) brightness(1.05) saturate(1.1);
 }
 
 .sectionBg:hover .coverImg {
-  @apply opacity-[0.75];
+  @apply opacity-90;
+  filter: contrast(1.2) brightness(1.1) saturate(1.2);
+  transform: scale(1.02);
 }
 
 [data-theme='dark'] .coverImg {
-  @apply mix-blend-lighten opacity-70;
+  @apply mix-blend-lighten opacity-80;
+  filter: contrast(1.15) brightness(1.1) saturate(1.05);
 }
 
 [data-theme='dark'] .sectionBg:hover .coverImg {
-  @apply mix-blend-lighten opacity-70;
+  @apply mix-blend-lighten opacity-90;
+  filter: contrast(1.25) brightness(1.15) saturate(1.1);
+  transform: scale(1.02);
 }
 
 .overlay {
   @apply from-[#FFFFFF] to-[#FFFFFF]/0;
 }
+
 [data-theme='dark'] .overlay {
   @apply from-[#181414] to-[#181414]/0;
+}
+
+// Add a subtle gradient overlay for better text readability
+.sectionBg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-theme='dark'] .sectionBg::before {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.2) 100%);
 }

@@ -35,7 +35,7 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
         }
       />
 
-      <div className="relative max-w-4xl mx-auto text-center py-16 lg:py-24 px-8 sm:px-12 lg:px-3">
+      <div className="relative max-w-4xl mx-auto text-center py-32 lg:py-48 px-8 sm:px-12 lg:px-3">
         <h3 className="text-3xl md:text-5xl pb-4 tracking-widest">
           {title} <span className="block pt-1 text-xl md:text-3xl tracking-normal font-light">{subtitle}</span>
         </h3>
