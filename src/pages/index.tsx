@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import Layout from '@theme/Layout'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import LayoutTw from '@site/src/theme/LayoutTw'
@@ -45,13 +45,81 @@ export default function Home() {
     swipe: true,
   }
 
+  // Dynamic banner height for GIF background positioning
+  const bannerRef = useRef(null)
+  const [bannerHeight, setBannerHeight] = useState(0)
+  useEffect(() => {
+    function updateBannerHeight() {
+      if (bannerRef.current) {
+        setBannerHeight(bannerRef.current.offsetHeight)
+      }
+    }
+    updateBannerHeight()
+    window.addEventListener('resize', updateBannerHeight)
+    return () => window.removeEventListener('resize', updateBannerHeight)
+  }, [])
+
   return (
     <Layout
       // title={`${siteConfig.title}`}
       description="The official website of Tejvir S. Mann."
     >
       <LayoutTw>
+        {/* Fixed, full-viewport mew.webp GIF background, starting at the bottom */}
         <div
+          style={{
+            position: 'fixed',
+            top: 'calc(100vh - 33vh)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '33vw',
+            height: '33vh',
+            zIndex: 0,
+            pointerEvents: 'none',
+            overflow: 'hidden',
+          }}
+          aria-hidden="true"
+        >
+          <img
+            src="/img/home/mew.webp"
+            alt="Mew GIF background"
+            style={{
+              width: '100%',
+              height: '100%',
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit: 'cover',
+              display: 'block',
+              pointerEvents: 'none',
+              userSelect: 'none',
+            }}
+            draggable="false"
+          />
+        </div>
+        {/* Third mew.webp GIF above the banner, always touching but never crossing the top of the banner */}
+        <div style={{ position: 'relative', width: '100vw', height: bannerHeight || 320 }}>
+          <img
+            src="/img/home/mew.webp"
+            alt="Mew GIF above banner"
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '25vw',
+              maxWidth: '100%',
+              height: 'auto',
+              objectFit: 'contain',
+              display: 'block',
+              pointerEvents: 'none',
+              userSelect: 'none',
+            }}
+            draggable="false"
+          />
+        </div>
+        {/* Banner/slider remains at the top */}
+        <div
+          ref={bannerRef}
           style={{
             width: '100%',
             maxWidth: '100vw',
@@ -63,23 +131,8 @@ export default function Home() {
           }}
         >
           {/* Floating Particles Background Effect */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-2 h-2 bg-white/30 dark:bg-white/20 rounded-full animate-pulse"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${i * 0.5}s`,
-                  animationDuration: `${2 + Math.random() * 2}s`,
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Slider with Enhanced Styling */}
-          <div className="relative">
+          {/* ...rest of banner/slider code... */}
+          <div className="relative" style={{ marginBottom: 0, paddingBottom: 0, background: 'none' }}>
             {/* Enhanced Glassy Overlay for better contrast */}
             <div
               style={{
@@ -146,194 +199,242 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Creative Polymath Gallery Section */}
-        <section className="py-16 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Film Domain */}
-              <div className="group relative overflow-hidden rounded-2xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl">
-                <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative p-6 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-red-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg animate-float">
-                    🎬
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">Film</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Visual storytelling through motion and emotion
-                  </p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-
-              {/* Writing Domain */}
-              <div className="group relative overflow-hidden rounded-2xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl">
-                <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative p-6 text-center">
-                  <div
-                    className="w-16 h-16 mx-auto mb-4 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg animate-float"
-                    style={{ animationDelay: '0.5s' }}
-                  >
-                    ✍️
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">Writing</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Crafting narratives that transport and transform
-                  </p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-
-              {/* Software Domain */}
-              <div className="group relative overflow-hidden rounded-2xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl">
-                <div className="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative p-6 text-center">
-                  <div
-                    className="w-16 h-16 mx-auto mb-4 bg-green-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg animate-float"
-                    style={{ animationDelay: '1s' }}
-                  >
-                    💻
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">Software</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Building digital experiences that inspire</p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-
-              {/* Drawing Domain */}
-              <div className="group relative overflow-hidden rounded-2xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl">
-                <div className="absolute inset-0 bg-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative p-6 text-center">
-                  <div
-                    className="w-16 h-16 mx-auto mb-4 bg-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg animate-float"
-                    style={{ animationDelay: '1.5s' }}
-                  >
-                    🎨
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">Drawing</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Visual expression through lines and imagination
-                  </p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-            </div>
+        {/* Main homepage content with a scrollable mew.webp GIF background */}
+        <div style={{ position: 'relative', marginTop: bannerHeight || 320, width: '100vw' }}>
+          {/* Absolutely positioned GIF background below the banner */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 0,
+              pointerEvents: 'none',
+              overflow: 'hidden',
+            }}
+            aria-hidden="true"
+          >
+            <img
+              src="/img/home/mew.webp"
+              alt="Mew GIF background scrolling"
+              style={{
+                width: '25vw',
+                maxWidth: '100%',
+                height: 'auto',
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                transform: 'translateX(-50%)',
+                objectFit: 'contain',
+                display: 'block',
+                pointerEvents: 'none',
+                userSelect: 'none',
+              }}
+              draggable="false"
+            />
           </div>
-        </section>
-
-        {/* Featured Project Showcase */}
-        <section className="py-16 px-4 bg-gray-50/50 dark:bg-gray-900/50">
-          <div className="max-w-7xl mx-auto">
-            <div className="relative group overflow-hidden rounded-3xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl">
-              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-              <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 lg:p-12">
-                <div className="flex flex-col justify-center">
-                  <div className="mb-4">
-                    <span className="inline-block px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-full animate-pulse-glow">
-                      Latest Project
-                    </span>
+          {/* All homepage content goes here, with zIndex: 1+ */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {/* Creative Polymath Gallery Section */}
+            <section className="py-16 px-4">
+              <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Film Domain */}
+                  <div className="group relative overflow-hidden rounded-2xl bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl z-10">
+                    <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="relative p-6 text-center">
+                      <img
+                        src="/img/home/cluster.gif"
+                        alt="Film"
+                        className="w-20 h-20 mx-auto mb-4 object-cover rounded-full border-2 border-black dark:border-white"
+                      />
+                      <h3 className="text-xl font-bold mb-2 text-black dark:text-white">Film</h3>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Visual storytelling through motion and emotion
+                      </p>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white">Forest Language</h3>
-                  <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                    An experimental exploration of natural language processing and creative coding, blending the organic
-                    patterns of nature with the precision of computational linguistics.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full">
-                      AI/ML
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-full">
-                      Creative Coding
-                    </span>
-                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm rounded-full">
-                      Innovation
-                    </span>
-                  </div>
-                  <button className="inline-flex items-center px-6 py-3 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                    Explore Project
-                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </button>
-                </div>
 
-                <div className="relative overflow-hidden rounded-2xl">
-                  <img
-                    src="/img/home/forestlang2.jpg"
-                    alt="Forest Language Project"
-                    className="w-full h-64 lg:h-80 object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+                  {/* Writing Domain */}
+                  <div className="group relative overflow-hidden rounded-2xl bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl z-10">
+                    <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="relative p-6 text-center">
+                      <img
+                        src="/img/home/cluster.gif"
+                        alt="Writing"
+                        className="w-20 h-20 mx-auto mb-4 object-cover rounded-full border-2 border-black dark:border-white"
+                      />
+                      <h3 className="text-xl font-bold mb-2 text-black dark:text-white">Writing</h3>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Crafting narratives that transport and transform
+                      </p>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+
+                  {/* Software Domain */}
+                  <div className="group relative overflow-hidden rounded-2xl bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl z-10">
+                    <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="relative p-6 text-center">
+                      <img
+                        src="/img/home/cluster.gif"
+                        alt="Software"
+                        className="w-20 h-20 mx-auto mb-4 object-cover rounded-full border-2 border-black dark:border-white"
+                      />
+                      <h3 className="text-xl font-bold mb-2 text-black dark:text-white">Software</h3>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Building digital experiences that inspire
+                      </p>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+
+                  {/* Drawing Domain */}
+                  <div className="group relative overflow-hidden rounded-2xl bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-500 hover:shadow-2xl z-10">
+                    <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="relative p-6 text-center">
+                      <img
+                        src="/img/home/cluster.gif"
+                        alt="Drawing"
+                        className="w-20 h-20 mx-auto mb-4 object-cover rounded-full border-2 border-black dark:border-white"
+                      />
+                      <h3 className="text-xl font-bold mb-2 text-black dark:text-white">Drawing</h3>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Visual expression through lines and imagination
+                      </p>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
+            </section>
 
-        <section className="max-w-7xl px-3 sm:px-6 mx-auto ">
-          <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl">
-            <div className={clsx('margin-bottom--sm', styles.filterCheckbox)}>
-              <div>
-                <h2>Filters</h2>
-                <span>({filteredResources.length})</span>
-              </div>
-              {/* <ShowcaseFilterToggle /> */}
-            </div>
-            <ul className={clsx('clean-list list-none', styles.checkboxList)}>
-              {TagList.map((tag, i) => {
-                const { label, description, color } = Tags[tag]
-                const id = `showcase_checkbox_id_${tag}`
+            {/* Featured Project Showcase */}
+            <section className="py-16 px-4 bg-white/70 dark:bg-black/50 z-10">
+              <div className="max-w-7xl mx-auto">
+                <div className="relative group overflow-hidden rounded-3xl bg-white/80 dark:bg-black/60 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl z-10">
+                  <div className="absolute inset-0 bg-neutral-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                return (
-                  <li key={i} className={styles.checkboxListItem}>
-                    <ShowcaseTagSelect tag={tag} id={id} label={label} text={description} color={color} />
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        </section>
+                  <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 lg:p-12">
+                    <div className="flex flex-col justify-center">
+                      <div className="mb-4">
+                        <span className="inline-block px-4 py-2 bg-neutral-800 text-white text-sm font-medium rounded-full animate-pulse-glow">
+                          Latest Project
+                        </span>
+                      </div>
+                      <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white">
+                        Forest Language
+                      </h3>
+                      <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                        An experimental exploration of natural language processing and creative coding, blending the
+                        organic patterns of nature with the precision of computational linguistics.
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        <span className="px-3 py-1 bg-neutral-200 dark:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-sm rounded-full">
+                          AI/ML
+                        </span>
+                        <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm rounded-full">
+                          Creative Coding
+                        </span>
+                        <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm rounded-full">
+                          Innovation
+                        </span>
+                      </div>
+                      <button
+                        className="inline-flex items-center px-6 py-3 bg-neutral-900 text-white font-medium rounded-full hover:bg-neutral-700 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        onClick={() => window.open('https://forestlang.com', '_blank')}
+                      >
+                        Explore Project
+                        <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          />
+                        </svg>
+                      </button>
+                    </div>
 
-        <section className="py-6">
-          {filteredResources.length === sortedResources.length ? (
-            <>
-              <div className="max-w-7xl px-3 sm:px-6 mx-auto">
-                <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-                  <h2>Featured</h2>
-                  <span></span>
-                  {/* <SearchBar /> */}
+                    <div className="relative overflow-hidden rounded-2xl">
+                      <img
+                        src="/img/home/forestlang2.jpg"
+                        alt="Forest Language Project"
+                        className="w-full h-64 lg:h-80 object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+                    </div>
+                  </div>
                 </div>
-                <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>
-                  {favoriteResources.map(resource => (
-                    <ShowcaseCard key={resource.title} resource={resource} />
-                  ))}
+              </div>
+            </section>
+
+            <section className="max-w-7xl px-3 sm:px-6 mx-auto z-10">
+              <div className="p-4 bg-white/80 dark:bg-black/60 rounded-2xl z-10">
+                <div className={clsx('margin-bottom--sm', styles.filterCheckbox)}>
+                  <div>
+                    <h2>Filters</h2>
+                    <span>({filteredResources.length})</span>
+                  </div>
+                </div>
+                <ul className={clsx('clean-list list-none', styles.checkboxList)}>
+                  {TagList.map((tag, i) => {
+                    const { label, description, color } = Tags[tag]
+                    const id = `showcase_checkbox_id_${tag}`
+                    return (
+                      <li key={i} className={styles.checkboxListItem}>
+                        <ShowcaseTagSelect tag={tag} id={id} label={label} text={description} color={color} />
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
+            </section>
 
-              <div className="max-w-7xl px-3 sm:px-6 mx-auto margin-top--lg">
-                <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
-                  <h2>
-                    <Translate id="showcase.usersList.allUsers">All</Translate>
-                  </h2>
+            <section className="py-6">
+              {filteredResources.length === sortedResources.length ? (
+                <>
+                  <div className="max-w-7xl px-3 sm:px-6 mx-auto">
+                    <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
+                      <h2>Featured</h2>
+                      <span></span>
+                      {/* <SearchBar /> */}
+                    </div>
+                    <ul className={clsx('max-w-7xl px-3 sm:px-6 mx-auto', 'clean-list', styles.showcaseList)}>
+                      {favoriteResources.map(resource => (
+                        <ShowcaseCard key={resource.title} resource={resource} />
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="max-w-7xl px-3 sm:px-6 mx-auto margin-top--lg">
+                    <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>
+                      <h2>
+                        <Translate id="showcase.usersList.allUsers">All</Translate>
+                      </h2>
+                    </div>
+                    <ul className={clsx('clean-list', styles.showcaseList)}>
+                      {otherResources.map(resource => (
+                        <ShowcaseCard key={resource.title} resource={resource} />
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <div className="max-w-7xl px-6 mx-auto">
+                  <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>{/* <SearchBar /> */}</div>
+                  <ul className={clsx('clean-list', styles.showcaseList)}>
+                    {filteredResources.map(resource => (
+                      <ShowcaseCard key={resource.title} resource={resource} />
+                    ))}
+                  </ul>
                 </div>
-                <ul className={clsx('clean-list', styles.showcaseList)}>
-                  {otherResources.map(resource => (
-                    <ShowcaseCard key={resource.title} resource={resource} />
-                  ))}
-                </ul>
-              </div>
-            </>
-          ) : (
-            <div className="max-w-7xl px-6 mx-auto">
-              <div className={clsx('margin-bottom--md', styles.showcaseFavoriteHeader)}>{/* <SearchBar /> */}</div>
-              <ul className={clsx('clean-list', styles.showcaseList)}>
-                {filteredResources.map(resource => (
-                  <ShowcaseCard key={resource.title} resource={resource} />
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
+              )}
+            </section>
+          </div>
+        </div>
       </LayoutTw>
     </Layout>
   )
