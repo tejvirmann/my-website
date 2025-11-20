@@ -131,17 +131,19 @@ export default function Home() {
         <div className="relative w-full" style={{ position: 'relative' }}>
           {/* Centered Text */}
           <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 w-full text-center pointer-events-none"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0"
             style={{
               fontSize: 'clamp(2rem, 4.5vw, 4rem)',
               fontWeight: 450,
             }}
           >
-            <div className="text-black dark:text-white">Tejvir S. Mann</div>
+            <div className="text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] dark:drop-shadow-[0_0_20px_rgba(0,0,0,0.9)] font-bold">
+              Tejvir S. Mann
+            </div>
           </div>
 
           {/* Slider */}
-          <div className="w-full overflow-hidden">
+          <div className="w-full overflow-hidden group" style={{ height: '60vh', minHeight: '500px' }}>
             <Slider {...settings}>
               <div>
                 <Ens
@@ -192,7 +194,7 @@ export default function Home() {
                             draggable={false}
                           />
                           {/* Dark overlay for text readability */}
-                          <div className="absolute inset-0 bg-black/40 dark:bg-black/60 pointer-events-none"></div>
+                          <div className="absolute inset-0 bg-black/40 dark:bg-black/30 pointer-events-none"></div>
                         </div>
 
                         {/* Content overlay */}

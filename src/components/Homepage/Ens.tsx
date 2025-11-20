@@ -13,11 +13,44 @@ interface EnsProps {
 }
 
 export default function Ens({ title, subtitle, description, imageSrc, furtherDesc, button }: EnsProps) {
+  // Determine background color based on image
+  const getBackgroundColor = () => {
+    if (imageSrc.includes('cluster.gif')) {
+      return '#FFFFFF' // White for cluster.gif
+    }
+    if (imageSrc.includes('forestlang2.jpg')) {
+      return '#000000' // Black for forest image
+    }
+    return '#000000' // Default black
+  }
+
+  const isClusterGif = imageSrc.includes('cluster.gif')
+
   return (
-    <section className={'relative my-8 md:my-12 group ' + styles.sectionBg}>
-      <div className="absolute inset-0 w-full h-full">
-        <img className={'w-full h-full object-cover ' + styles.coverImg} src={imageSrc} alt="" />
+    <section 
+      className={'relative group ' + styles.sectionBg} 
+      style={{ 
+        height: '100%', 
+        minHeight: '500px',
+        backgroundColor: getBackgroundColor(),
+      }}
+    >
+      <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden z-0">
+        <img 
+          className={styles.coverImg} 
+          src={imageSrc} 
+          alt="" 
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            objectPosition: 'center',
+          }}
+        />
       </div>
+
+      {/* Shaded overlay on top of image for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/30 dark:from-black/50 dark:via-black/40 dark:to-black/50 pointer-events-none z-10"></div>
 
       <div className={'absolute w-full top-0 h-4 p-3'} />
       <div
@@ -35,7 +68,7 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
         }
       />
 
-      <div className="relative max-w-4xl mx-auto text-center py-16 lg:py-24 px-8 sm:px-12 lg:px-3">
+      <div className="relative max-w-4xl mx-auto text-center px-8 sm:px-12 lg:px-3 z-20" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <h3 className="text-3xl md:text-5xl pb-4 tracking-widest">
           {title} <span className="block pt-1 text-xl md:text-3xl tracking-normal font-light">{subtitle}</span>
         </h3>
