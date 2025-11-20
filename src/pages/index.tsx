@@ -137,7 +137,7 @@ export default function Home() {
               fontWeight: 450,
             }}
           >
-            <div className="text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] dark:drop-shadow-[0_0_20px_rgba(0,0,0,0.9)] font-bold">
+            <div className="text-white drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] dark:drop-shadow-[0_0_20px_rgba(0,0,0,0.9)]">
               Tejvir S. Mann
             </div>
           </div>

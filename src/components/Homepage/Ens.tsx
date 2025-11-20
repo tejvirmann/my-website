@@ -50,7 +50,7 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
       </div>
 
       {/* Shaded overlay on top of image for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/30 dark:from-black/50 dark:via-black/40 dark:to-black/50 pointer-events-none z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 dark:from-black/50 dark:via-black/40 dark:to-black/50 pointer-events-none z-10"></div>
 
       <div className={'absolute w-full top-0 h-4 p-3'} />
       <div
