@@ -168,7 +168,7 @@ export default function Home() {
         </div>
 
         {/* Latest Logs Showcase */}
-        <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010]">
+        <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010] relative z-0">
           <div className="max-w-7xl mx-auto">
             {/* Slider for Latest Logs */}
             <div className="mb-8" style={{ width: '100%', overflow: 'hidden' }}>
@@ -313,8 +313,8 @@ export default function Home() {
         {/* <KittyVault /> */}
         {/* </main> */}
 
-        <section className="max-w-7xl px-3 sm:px-6 mx-auto">
-          <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl">
+        <section className="max-w-7xl px-3 sm:px-6 mx-auto relative z-30">
+          <div className="p-4 bg-white dark:bg-[#101010] rounded-2xl">
             <div className={clsx('margin-bottom--sm', styles.filterCheckbox)}>
               <div>
                 <h2>Filters</h2>
