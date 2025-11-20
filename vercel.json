@@ -2,7 +2,6 @@
   "buildCommand": "npm run build",
   "devCommand": "npm start",
   "installCommand": "npm install",
-  "framework": null,
-  "nodeVersion": "22.x"
+  "framework": null
 }
 
