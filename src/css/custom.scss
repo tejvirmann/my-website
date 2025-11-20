@@ -544,3 +544,29 @@ section.bg-gray-900\/50 {
   max-width: 100vw;
 }
 
+// Remove blue highlight on click/focus, use white/black instead
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+a:focus,
+div:focus {
+  outline: none;
+}
+
+// Custom focus ring for dark/light mode
+button:focus-visible,
+a:focus-visible,
+div:focus-visible {
+  outline: 2px solid;
+  outline-color: black;
+  outline-offset: 2px;
+}
+
+[data-theme='dark'] button:focus-visible,
+[data-theme='dark'] a:focus-visible,
+[data-theme='dark'] div:focus-visible {
+  outline-color: white;
+}
+

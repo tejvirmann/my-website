@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Layout from '@theme/Layout'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import LayoutTw from '@site/src/theme/LayoutTw'
@@ -98,7 +98,9 @@ export default function Home() {
     slidesToScroll: 1,
     autoplay: false,
     arrows: false,
-    beforeChange: (current: number, next: number) => setCurrentLogSlide(next),
+    beforeChange: (current: number, next: number) => {
+      setCurrentLogSlide(next)
+    },
   }
 
   const goToLogSlide = (index: number) => {
@@ -113,6 +115,11 @@ export default function Home() {
     const [year, month, day] = dateString.split('-').map(Number)
     const date = new Date(year, month - 1, day)
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  }
+
+  const truncateDescription = (text: string, maxLength: number = 100) => {
+    if (text.length <= maxLength) return text
+    return text.slice(0, maxLength).trim() + '...'
   }
 
   return (
@@ -161,7 +168,7 @@ export default function Home() {
         </div>
 
         {/* Latest Logs Showcase */}
-        <section className="py-16 px-3 sm:px-6 bg-gray-50/50 dark:bg-gray-900/50">
+        <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010]">
           <div className="max-w-7xl mx-auto">
             {/* Slider for Latest Logs */}
             <div className="mb-8" style={{ width: '100%', overflow: 'hidden' }}>
@@ -172,70 +179,70 @@ export default function Home() {
 
                   return (
                     <div key={log.title}>
-                      <div className="relative group overflow-hidden rounded-3xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl">
-                        <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                      <div className="relative group overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl min-h-[500px]">
+                        {/* Background image takes full area */}
+                        <div className="absolute inset-0 select-none">
+                          <img
+                            src={require('../data/projects/img/' + log.image).default}
+                            alt={log.title}
+                            className="absolute w-full h-full object-cover"
+                            style={{
+                              objectPosition: log.title === 'Demon Faces' ? 'top' : 'center',
+                            }}
+                            draggable={false}
+                          />
+                          {/* Dark overlay for text readability */}
+                          <div className="absolute inset-0 bg-black/40 dark:bg-black/60 pointer-events-none"></div>
+                        </div>
 
+                        {/* Content overlay */}
                         <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-0">
-                          {/* Image takes full space on left */}
-                          <div className="relative overflow-hidden w-full h-64 lg:h-[500px] order-2 lg:order-1">
-                            <img
-                              src={require('../data/projects/img/' + log.image).default}
-                              alt={log.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                          </div>
-
                           {/* Content on right */}
-                          <div className="flex flex-col justify-center p-8 lg:p-12 order-1 lg:order-2">
-                            <div className="mb-4 flex items-center gap-3">
-                              <span className="inline-block px-4 py-2 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full">
-                                Latest Log
-                              </span>
-                              {formattedDate && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{formattedDate}</p>
-                              )}
-                            </div>
-                            <h3 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white">
-                              {log.title}
-                            </h3>
-                            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                              {log.description}
+                          <div className="relative flex flex-col justify-center p-8 lg:p-12 order-1 lg:order-2 z-10">
+                            {formattedDate && (
+                              <p className="text-sm text-white/80 dark:text-white/70 mb-4">{formattedDate}</p>
+                            )}
+                            <h3 className="text-3xl md:text-4xl font-bold mb-4 text-white">{log.title}</h3>
+                            <p className="text-lg text-white/90 dark:text-white/80 mb-6 leading-relaxed">
+                              {truncateDescription(log.description, 100)}
                             </p>
-                            <div className="flex flex-wrap gap-2 mb-6">
-                              {log.tags.slice(0, 3).map(tag => {
-                                const tagData = Tags[tag]
-                                if (!tagData) return null
-                                return (
-                                  <span
-                                    key={tag}
-                                    className="px-3 py-1 text-sm rounded-full border"
-                                    style={{
-                                      borderColor: tagData.color + '40',
-                                      color: tagData.color,
-                                      backgroundColor: tag === 'favorite' ? tagData.color + '10' : tagData.color + '08',
-                                    }}
-                                  >
-                                    {tagData.label}
-                                  </span>
-                                )
-                              })}
+                            <div className="flex items-center gap-3 flex-wrap">
+                              <Link
+                                to={log.website}
+                                className="inline-flex items-center px-4 py-2 text-sm border-2 border-white/50 dark:border-white/30 bg-white/20 dark:bg-black/20 backdrop-blur-sm text-white font-medium rounded-full hover:border-white dark:hover:border-white/50 hover:bg-white/30 dark:hover:bg-black/30 transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white dark:focus:ring-white/50"
+                              >
+                                View Log
+                                <svg className="ml-2 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                  />
+                                </svg>
+                              </Link>
                             </div>
-                            <Link
-                              to={log.website}
-                              className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-full hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-300 hover:scale-105 hover:shadow-lg w-fit"
-                            >
-                              View Log
-                              <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                />
-                              </svg>
-                            </Link>
                           </div>
+                        </div>
+                        {/* Tags in bottom right corner of entire card */}
+                        <div className="absolute bottom-4 right-4 lg:bottom-8 lg:right-12 flex flex-wrap gap-2 justify-end z-20">
+                          {log.tags.slice(0, 3).map(tag => {
+                            const tagData = Tags[tag]
+                            if (!tagData) return null
+                            return (
+                              <span
+                                key={tag}
+                                className="px-3 py-1 text-sm rounded-full border backdrop-blur-sm"
+                                style={{
+                                  borderColor: tagData.color + '40',
+                                  color: tagData.color,
+                                  backgroundColor: tag === 'favorite' ? tagData.color + '20' : tagData.color + '15',
+                                }}
+                              >
+                                {tagData.label}
+                              </span>
+                            )
+                          })}
                         </div>
                       </div>
                     </div>
@@ -254,26 +261,19 @@ export default function Home() {
                   <div
                     key={log.title}
                     onClick={() => goToLogSlide(index)}
-                    className={`relative group overflow-hidden rounded-2xl bg-white/50 dark:bg-black/20 border transition-all duration-300 cursor-pointer ${
+                    className={`relative group overflow-hidden rounded-2xl bg-white dark:bg-[#101010] border transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 ${
                       currentLogSlide === index
-                        ? 'border-blue-500 dark:border-blue-400 shadow-lg scale-105'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                        ? 'border-black dark:border-white shadow-lg ring-2 ring-black dark:ring-white'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:ring-black dark:focus:ring-white'
                     }`}
+                    tabIndex={0}
                   >
-                    <div className="p-4 lg:p-6">
-                      <div className="relative overflow-hidden rounded-xl mb-4">
-                        <img
-                          src={require('../data/projects/img/' + log.image).default}
-                          alt={log.title}
-                          className="w-full h-32 lg:h-40 object-cover rounded-xl group-hover:scale-110 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
-                      </div>
+                    <div className="p-3 lg:p-4">
                       {formattedDate && (
                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{formattedDate}</p>
                       )}
-                      <h4 className="text-lg font-bold mb-2 text-gray-800 dark:text-white">{log.title}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">{log.description}</p>
+                      <h4 className="text-base font-bold mb-1 text-gray-800 dark:text-white">{log.title}</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 mb-2">{log.description}</p>
                       <Link
                         to={log.website}
                         onClick={e => e.stopPropagation()}
