@@ -7,6 +7,18 @@
 @import url(./tailwindcss.base.reset.css);
 @tailwind components;
 @tailwind utilities;
+
+// Prevent horizontal scrolling globally
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+}
 /* @import 'fonts.scss'; */
 
 @layer utilities {
@@ -455,3 +467,107 @@ nav[aria-label='Blog recent posts navigation'] {
     @apply hidden opacity-0 -ml-[1em];
   }
 }
+
+// Remove extra padding on homepage and prevent horizontal scroll
+main[class^='main-wrapper'] {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+// Remove padding from Docusaurus container on homepage
+main .container {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+// Ensure LayoutTw doesn't add extra padding
+.twBaseExtra {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  width: 100% !important;
+}
+
+// Fix slick carousel - ensure it doesn't overflow but maintains functionality
+.slick-slider {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.slick-list {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.slick-track {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slick-slide {
+  display: none;
+  float: left;
+  height: 100%;
+  min-height: 1px;
+  
+  > div {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+}
+
+.slick-slide.slick-active {
+  display: block;
+}
+
+// Only apply overflow-x hidden to specific sections that need it
+section.bg-gray-50\/50,
+section.bg-gray-900\/50 {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+// Remove blue highlight on click/focus, use white/black instead
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+a:focus,
+div:focus {
+  outline: none;
+}
+
+// Custom focus ring for dark/light mode
+button:focus-visible,
+a:focus-visible,
+div:focus-visible {
+  outline: 2px solid;
+  outline-color: black;
+  outline-offset: 2px;
+}
+
+[data-theme='dark'] button:focus-visible,
+[data-theme='dark'] a:focus-visible,
+[data-theme='dark'] div:focus-visible {
+  outline-color: white;
+}
+

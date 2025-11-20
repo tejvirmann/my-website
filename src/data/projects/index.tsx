@@ -80,6 +80,7 @@ export const Tags: { [type in TagType]: Tag } = {
 }
 
 export const TagList = Object.keys(Tags) as TagType[]
+export { Resources }
 function sortResources() {
   let result = Resources
   // Sort by site name

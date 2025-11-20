@@ -1,27 +1,26 @@
 .sectionBg {
   @apply transition-all duration-300;
-  @apply bg-violet-200/10 hover:bg-violet-200/20;
-}
-
-[data-theme='dark'] .sectionBg {
-  @apply bg-slate-500/10 hover:bg-violet-500/20;
+  height: 100%;
+  min-height: 500px;
 }
 
 .coverImg {
   @apply transition-all duration-300;
-  @apply mix-blend-hard-light opacity-5;
+  opacity: 1;
 }
 
 .sectionBg:hover .coverImg {
-  @apply opacity-[0.75];
+  opacity: 1;
 }
 
 [data-theme='dark'] .coverImg {
-  @apply mix-blend-lighten opacity-70;
+  @apply mix-blend-lighten;
+  opacity: 0.8;
 }
 
 [data-theme='dark'] .sectionBg:hover .coverImg {
-  @apply mix-blend-lighten opacity-70;
+  @apply mix-blend-lighten;
+  opacity: 0.9;
 }
 
 .overlay {
