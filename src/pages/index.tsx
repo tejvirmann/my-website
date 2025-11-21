@@ -28,8 +28,8 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
-import ClipartSection from '../components/PartyMode/ClipartSection'
 import BackgroundClipart from '../components/PartyMode/BackgroundClipart'
+import Space3D from '../components/PartyMode/Space3D'
 
 export default function Home() {
   const { siteConfig } = useDocusaurusContext()
@@ -188,7 +188,7 @@ export default function Home() {
                   title=""
                   subtitle=""
                   description=""
-                  imageSrc="/party_gifs/mew.webp"
+                  imageSrc="/img/home/cluster.gif"
                   furtherDesc=""
                   button="Forest Language"
                 />
@@ -210,11 +210,11 @@ export default function Home() {
         {/* Party Mode Background Clipart */}
         <BackgroundClipart />
 
-        {/* Party Mode Clipart Section 1 - Between top slider and latest logs */}
-        <ClipartSection />
+        {/* 3D Space Effects - Temporarily disabled to prevent crashes */}
+        {/* <Space3D /> */}
 
         {/* Latest Logs Showcase */}
-        <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010] relative z-0">
+        <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010] relative" style={{ zIndex: 10 }}>
           <div className="max-w-7xl mx-auto">
             {/* Slider for Latest Logs */}
             <div className="mb-8" style={{ width: '100%', overflow: 'hidden' }}>
@@ -352,9 +352,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Party Mode Clipart Section 2 - Between latest logs and projects */}
-        <ClipartSection />
 
         {/* <h1>Gallery</h1> */}
         {/* <CardGrid /> */}

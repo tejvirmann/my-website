@@ -1,17 +1,73 @@
-// Client module to inject party mode theme switcher
+// Client module to inject party mode button (separate from light/dark toggle)
 export function onRouteDidUpdate() {
   // Wait for navbar to be ready
   setTimeout(() => {
     const navbarItems = document.querySelector('.navbar__items--right')
     if (!navbarItems) return
 
-    // Check if theme switcher already exists
-    if (navbarItems.querySelector('.party-theme-switcher')) return
+    // Check if party button already exists
+    if (navbarItems.querySelector('.party-mode-button')) return
 
-    // Create theme switcher button
+    // Check if party mode is active
+    const isPartyMode = () => {
+      return localStorage.getItem('party-mode') === 'true'
+    }
+
+    // Toggle party mode
+    const togglePartyMode = () => {
+      const active = isPartyMode()
+      localStorage.setItem('party-mode', (!active).toString())
+      applyPartyMode(!active)
+    }
+
+    // Helper to determine if color is light (needs black text) or dark (needs white text)
+    const isLightColor = hex => {
+      const r = parseInt(hex.slice(1, 3), 16)
+      const g = parseInt(hex.slice(3, 5), 16)
+      const b = parseInt(hex.slice(5, 7), 16)
+      // Calculate luminance
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+      return luminance > 0.5 // Light colors need black text
+    }
+
+    // Apply party mode effects
+    const applyPartyMode = enable => {
+      if (enable) {
+        // Set random party color - change each time party mode is enabled
+        const partyColors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff']
+        // Pick a random color each time (not from saved)
+        const color = partyColors[Math.floor(Math.random() * partyColors.length)]
+        document.documentElement.style.setProperty('--party-current-color', color)
+        localStorage.setItem('party-color', color)
+        document.documentElement.setAttribute('data-party-mode', 'true')
+
+        // Set text color class based on color brightness
+        if (isLightColor(color)) {
+          document.documentElement.setAttribute('data-party-text', 'dark')
+        } else {
+          document.documentElement.setAttribute('data-party-text', 'light')
+        }
+      } else {
+        document.documentElement.style.removeProperty('--party-current-color')
+        document.documentElement.removeAttribute('data-party-mode')
+        document.documentElement.removeAttribute('data-party-text')
+      }
+      updateButton()
+    }
+
+    // Update button appearance
+    const updateButton = () => {
+      const active = isPartyMode()
+      button.style.opacity = active ? '1' : '0.7'
+      button.style.transform = active ? 'scale(1.1)' : 'scale(1)'
+      button.setAttribute('aria-label', active ? 'Disable party mode' : 'Enable party mode')
+    }
+
+    // Create party mode button
     const button = document.createElement('button')
-    button.className = 'party-theme-switcher navbar__item'
-    button.setAttribute('aria-label', 'Switch theme')
+    button.className = 'party-mode-button navbar__item'
+    button.setAttribute('aria-label', 'Toggle party mode')
+    button.innerHTML = '🎉'
     button.style.cssText = `
       background: transparent;
       border: none;
@@ -22,99 +78,29 @@ export function onRouteDidUpdate() {
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.3s ease;
     `
 
-    // Get current theme
-    const getCurrentTheme = () => {
-      const saved = localStorage.getItem('theme-mode')
-      if (saved === 'party') return 'party'
-      return document.documentElement.getAttribute('data-theme') || 'light'
-    }
+    button.onclick = togglePartyMode
 
-    // Update icon based on theme
-    const updateIcon = () => {
-      const theme = getCurrentTheme()
-      button.innerHTML = theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '🎉'
-    }
+    // Add button to navbar
+    navbarItems.appendChild(button)
 
-    // Cycle themes
-    button.onclick = () => {
-      const modes = ['light', 'dark', 'party']
-      const current = getCurrentTheme()
-      const nextIndex = (modes.indexOf(current) + 1) % modes.length
-      const next = modes[nextIndex]
-
-      localStorage.setItem('theme-mode', next)
-      document.documentElement.setAttribute('data-theme', next)
-
-      // If party mode, set random party color
-      if (next === 'party') {
-        const partyColors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff']
-        const randomColor = partyColors[Math.floor(Math.random() * partyColors.length)]
-        document.documentElement.style.setProperty('--party-current-color', randomColor)
-        localStorage.setItem('party-color', randomColor)
-      } else {
-        // Remove party color when switching away
-        document.documentElement.style.removeProperty('--party-current-color')
-      }
-
-      // Update Docusaurus colorMode if not party
-      if (next !== 'party') {
-        // Try to trigger Docusaurus theme change
-        const colorModeToggle = document.querySelector('.navbar__item [class*="colorModeToggle"]')
-        if (colorModeToggle && next === 'dark') {
-          colorModeToggle.click()
-        }
-      }
-
-      updateIcon()
-
-      // Apply party mode styles when switching
-      if (next === 'party') {
-        setTimeout(() => {
-          applyPartyModeStyles()
-        }, 100)
-      }
-    }
-
-    // Apply party mode styles function
-    const applyPartyModeStyles = () => {
-      if (getCurrentTheme() === 'party') {
-        // Show logo in navbar
-        const logo = document.querySelector('.navbar__logo')
-        if (logo) {
-          logo.style.display = 'block'
-          logo.style.opacity = '1'
-          logo.style.visibility = 'visible'
-        }
-        // Remove any distortion effects on navbar text
-        const navbarItems = document.querySelectorAll('.navbar__item, .navbar__link, .navbar__brand')
-        navbarItems.forEach(item => {
-          item.style.filter = 'none'
-          item.style.transform = 'none'
-          item.style.textShadow = 'none'
-          item.style.animation = 'none'
-        })
-      }
-    }
-
-    // Load saved party color on mount
-    if (getCurrentTheme() === 'party') {
+    // Load saved party mode state
+    if (isPartyMode()) {
       const savedColor = localStorage.getItem('party-color')
       if (savedColor) {
         document.documentElement.style.setProperty('--party-current-color', savedColor)
-      } else {
-        const partyColors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff']
-        const randomColor = partyColors[Math.floor(Math.random() * partyColors.length)]
-        document.documentElement.style.setProperty('--party-current-color', randomColor)
-        localStorage.setItem('party-color', randomColor)
+        // Set text color based on saved color (using same logic as applyPartyMode)
+        if (isLightColor(savedColor)) {
+          document.documentElement.setAttribute('data-party-text', 'dark')
+        } else {
+          document.documentElement.setAttribute('data-party-text', 'light')
+        }
       }
+      applyPartyMode(true)
+    } else {
+      updateButton()
     }
-
-    // Apply styles after a short delay to ensure DOM is ready
-    setTimeout(applyPartyModeStyles, 200)
-
-    updateIcon()
-    navbarItems.appendChild(button)
   }, 100)
 }

@@ -88,8 +88,8 @@ body {
   --ifm-footer-background-color: #101010;
 }
 
-/* 🎉 PARTY MODE 🎉 - Party Colors */
-[data-theme='party'] {
+/* 🎉 PARTY MODE 🎉 - Party Colors (works as overlay on light/dark mode) */
+[data-party-mode='true'] {
   --party-color-1: #ffadad;
   --party-color-2: #ffd6a5;
   --party-color-3: #fdffb6;
@@ -115,45 +115,112 @@ body {
   --ifm-footer-background-color: var(--party-current-color, #ffadad);
 }
 
-/* Textured moving background with party colors */
-[data-theme='party'] body {
+/* Hyperspace tunnel effect for footer in party mode - shorter footer */
+[data-party-mode='true'] footer {
   position: relative;
+  overflow: hidden;
+  background: #000000 !important;
+  min-height: 250px !important;
+  padding: 2rem 1.5rem !important;
+}
+
+[data-party-mode='true'] footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: 
     repeating-linear-gradient(
       0deg,
-      var(--party-current-color, #ffadad) 0%,
-      var(--party-current-color, #ffadad) 10%,
-      rgba(255, 255, 255, 0.1) 10%,
-      rgba(255, 255, 255, 0.1) 20%
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.1) 2px,
+      rgba(255, 255, 255, 0.1) 4px
     ),
     repeating-linear-gradient(
       90deg,
-      var(--party-current-color, #ffadad) 0%,
-      var(--party-current-color, #ffadad) 10%,
-      rgba(0, 0, 0, 0.1) 10%,
-      rgba(0, 0, 0, 0.1) 20%
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.1) 2px,
+      rgba(255, 255, 255, 0.1) 4px
     );
-  background-size: 50px 50px, 50px 50px;
-  animation: party-texture-move 3s linear infinite;
+  background-size: 100% 100%;
+  animation: hyperspace-tunnel 2s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  transform-origin: center center;
+  perspective: 1000px;
+}
+
+/* Removed spinning radial gradient effect - keeping only black and white space warp */
+
+[data-party-mode='true'] footer > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes hyperspace-tunnel {
+  0% {
+    transform: perspective(1000px) translateZ(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: perspective(1000px) translateZ(-500px) scale(2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: perspective(1000px) translateZ(-1000px) scale(4);
+    opacity: 0.2;
+  }
+}
+
+/* Removed hyperspace-pulse animation */
+
+/* Cool textured gradient background with party colors */
+[data-party-mode='true'] body {
+  position: relative;
+  background: 
+    radial-gradient(circle at 20% 50%, var(--party-current-color, #ffadad) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 214, 165, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(202, 255, 191, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, var(--party-current-color, #ffadad) 0%, rgba(189, 178, 255, 0.6) 50%, var(--party-current-color, #ffadad) 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.05) 2px,
+      rgba(255, 255, 255, 0.05) 4px
+    );
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+  animation: party-texture-move 8s ease-in-out infinite;
   background-attachment: fixed;
 }
 
 @keyframes party-texture-move {
-  0% {
-    background-position: 0 0, 0 0;
+  0%, 100% {
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0 0;
   }
-  100% {
-    background-position: 50px 50px, -50px -50px;
+  50% {
+    background-position: 100% 100%, -100% -100%, 50% 50%, 0% 0%, 20px 20px;
   }
 }
 
+/* Party mode banner/slider background */
+[data-party-mode='true'] .slick-slider,
+[data-party-mode='true'] section[class*="slider"],
+[data-party-mode='true'] div[class*="slider"] {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
 /* Remove rainbow text effects - keep text normal */
-[data-theme='party'] h1,
-[data-theme='party'] h2,
-[data-theme='party'] h3,
-[data-theme='party'] p,
-[data-theme='party'] span,
-[data-theme='party'] div {
+[data-party-mode='true'] h1,
+[data-party-mode='true'] h2,
+[data-party-mode='true'] h3,
+[data-party-mode='true'] p,
+[data-party-mode='true'] span,
+[data-party-mode='true'] div {
   color: inherit !important;
   background: none !important;
   -webkit-background-clip: unset !important;
@@ -162,24 +229,24 @@ body {
 }
 
 /* Party mode buttons */
-[data-theme='party'] button,
-[data-theme='party'] .button,
-[data-theme='party'] a.button {
+[data-party-mode='true'] button,
+[data-party-mode='true'] .button,
+[data-party-mode='true'] a.button {
   background: var(--party-current-color, #ffadad);
   border: 2px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   color: white;
 }
 
-[data-theme='party'] button:hover,
-[data-theme='party'] .button:hover,
-[data-theme='party'] a.button:hover {
+[data-party-mode='true'] button:hover,
+[data-party-mode='true'] .button:hover,
+[data-party-mode='true'] a.button:hover {
   box-shadow: 0 0 30px var(--party-current-color, #ffadad);
   transform: scale(1.05);
 }
 
 /* Background clipart container */
-[data-theme='party'] .party-clipart-bg {
+[data-party-mode='true'] .party-clipart-bg {
   position: fixed;
   top: 0;
   left: 0;
@@ -190,7 +257,7 @@ body {
   overflow: hidden;
 }
 
-[data-theme='party'] .party-clipart-bg img {
+[data-party-mode='true'] .party-clipart-bg img {
   position: absolute;
   opacity: 0.3;
   animation: party-float 20s ease-in-out infinite;
@@ -211,83 +278,133 @@ body {
   }
 }
 
-/* Show clipart sections only in party mode */
-.party-clipart-section {
-  display: none;
-}
-
+/* Show clipart only in party mode */
 .party-clipart-bg {
   display: none;
 }
 
-[data-theme='party'] .party-clipart-section {
+[data-party-mode='true'] .party-clipart-bg {
   display: block;
 }
 
-[data-theme='party'] .party-clipart-bg {
-  display: block;
+/* Ensure party gifs don't overlap and are properly constrained */
+[data-party-mode='true'] .party-bg-clipart {
+  will-change: transform;
+  backface-visibility: hidden;
+  image-rendering: auto;
 }
 
-/* Ensure text is readable in party mode */
-[data-theme='party'] {
+/* Prevent gifs from overlapping content */
+[data-party-mode='true'] .party-clipart-bg {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Ensure content sections are above background gifs */
+[data-party-mode='true'] section,
+[data-party-mode='true'] main > * {
+  position: relative;
+  z-index: 5;
+}
+
+/* Context-aware text colors in party mode - black on light colors, white on dark */
+/* Light party colors (bright) - use black text */
+[data-party-mode='true'][data-party-text='dark'] {
+  color: black;
+}
+
+[data-party-mode='true'][data-party-text='dark'] h1,
+[data-party-mode='true'][data-party-text='dark'] h2,
+[data-party-mode='true'][data-party-text='dark'] h3,
+[data-party-mode='true'][data-party-text='dark'] h4,
+[data-party-mode='true'][data-party-text='dark'] h5,
+[data-party-mode='true'][data-party-text='dark'] h6 {
+  color: black !important;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+[data-party-mode='true'][data-party-text='dark'] p,
+[data-party-mode='true'][data-party-text='dark'] span,
+[data-party-mode='true'][data-party-text='dark'] div:not(.party-clipart-bg):not(.party-clipart-section) {
+  color: black !important;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Dark party colors - use white text (default) */
+[data-party-mode='true'] {
   color: white;
 }
 
-[data-theme='party'] h1,
-[data-theme='party'] h2,
-[data-theme='party'] h3,
-[data-theme='party'] h4,
-[data-theme='party'] h5,
-[data-theme='party'] h6 {
+[data-party-mode='true'] h1,
+[data-party-mode='true'] h2,
+[data-party-mode='true'] h3,
+[data-party-mode='true'] h4,
+[data-party-mode='true'] h5,
+[data-party-mode='true'] h6 {
   color: white !important;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-[data-theme='party'] p,
-[data-theme='party'] span,
-[data-theme='party'] div:not(.party-clipart-bg):not(.party-clipart-section) {
+[data-party-mode='true'] p,
+[data-party-mode='true'] span,
+[data-party-mode='true'] div:not(.party-clipart-bg):not(.party-clipart-section) {
   color: white !important;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* Make all white backgrounds/components use party colors */
-[data-theme='party'] .bg-white,
-[data-theme='party'] [class*="bg-white"],
-[data-theme='party'] section.bg-white {
+/* Make all white/black backgrounds use party colors in party mode */
+[data-party-mode='true'] .bg-white,
+[data-party-mode='true'] [class*="bg-white"],
+[data-party-mode='true'] section.bg-white,
+[data-party-mode='true'] [class*="dark:bg"],
+[data-party-mode='true'] .bg-gray-50\/50,
+[data-party-mode='true'] .bg-gray-900\/50,
+[data-party-mode='true'] body,
+[data-party-mode='true'] main {
   background-color: var(--party-current-color, #ffadad) !important;
 }
 
-/* Target dark mode background classes in party mode */
-[data-theme='party'] [class*="dark:bg"] {
-  background-color: var(--party-current-color, #ffadad) !important;
-}
-
-[data-theme='party'] .bg-gray-50\/50,
-[data-theme='party'] .bg-gray-900\/50 {
+/* Override dark mode backgrounds */
+[data-party-mode='true'][data-theme='dark'] body,
+[data-party-mode='true'][data-theme='dark'] main,
+[data-party-mode='true'][data-theme='dark'] .bg-white,
+[data-party-mode='true'][data-theme='dark'] [class*="bg-white"],
+[data-party-mode='true'][data-theme='dark'] section.bg-white {
   background-color: var(--party-current-color, #ffadad) !important;
 }
 
 /* Party mode cards and containers */
-[data-theme='party'] .card,
-[data-theme='party'] [class^='cardContainer_'],
-[data-theme='party'] .rounded-2xl,
-[data-theme='party'] .rounded-xl {
+[data-party-mode='true'] .card,
+[data-party-mode='true'] [class^='cardContainer_'],
+[data-party-mode='true'] .rounded-2xl,
+[data-party-mode='true'] .rounded-xl {
   background-color: var(--party-current-color, #ffadad) !important;
 }
 
+/* Ensure latest log images show in party mode */
+[data-party-mode='true'] section img,
+[data-party-mode='true'] .slick-slide img,
+[data-party-mode='true'] img[src*="projects/img"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1 !important;
+  position: relative !important;
+}
+
 /* Party mode dropdowns */
-[data-theme='party'] .dropdown__menu {
+[data-party-mode='true'] .dropdown__menu {
   background-color: var(--party-current-color, #ffadad) !important;
 }
 
 /* Party mode breadcrumbs */
-[data-theme='party'] .breadcrumbs__link {
+[data-party-mode='true'] .breadcrumbs__link {
   background-color: var(--party-current-color, #ffadad) !important;
 }
 
 /* Party mode table of contents */
-[data-theme='party'] div.theme-doc-toc-desktop > ul,
-[data-theme='party'] div[class^='tableOfContents_'] > ul {
+[data-party-mode='true'] div.theme-doc-toc-desktop > ul,
+[data-party-mode='true'] div[class^='tableOfContents_'] > ul {
   background-color: var(--party-current-color, #ffadad) !important;
 }
 
@@ -381,27 +498,27 @@ div[class^='announcementBar_'] {
 }
 
 /* Party mode navbar */
-[data-theme='party'] .navbar {
+[data-party-mode='true'] .navbar {
   backdrop-filter: blur(10px);
   background-color: var(--party-current-color, #ffadad) !important;
   @apply shadow-md;
 }
 
-/* Show logo in party mode */
-[data-theme='party'] .navbar__logo {
+/* Show logo in party mode - make it white for visibility */
+[data-party-mode='true'] .navbar__logo {
   display: block !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-[data-theme='party'] .navbar__logo img {
-  filter: none !important;
+[data-party-mode='true'] .navbar__logo img {
+  filter: brightness(0) invert(1) !important; /* Make logo white in party mode */
 }
 
 /* Remove distortion effects on navbar text in party mode */
-[data-theme='party'] .navbar__item,
-[data-theme='party'] .navbar__link,
-[data-theme='party'] .navbar__brand {
+[data-party-mode='true'] .navbar__item,
+[data-party-mode='true'] .navbar__link,
+[data-party-mode='true'] .navbar__brand {
   filter: none !important;
   transform: none !important;
   text-shadow: none !important;
@@ -409,8 +526,8 @@ div[class^='announcementBar_'] {
   color: white !important;
 }
 
-[data-theme='party'] .navbar__item:hover,
-[data-theme='party'] .navbar__link:hover {
+[data-party-mode='true'] .navbar__item:hover,
+[data-party-mode='true'] .navbar__link:hover {
   filter: none !important;
   transform: none !important;
   opacity: 0.9 !important;

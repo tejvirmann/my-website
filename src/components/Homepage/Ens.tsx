@@ -15,8 +15,8 @@ interface EnsProps {
 export default function Ens({ title, subtitle, description, imageSrc, furtherDesc, button }: EnsProps) {
   // Determine background color based on image
   const getBackgroundColor = () => {
-    if (imageSrc.includes('party_gifs')) {
-      return '#FFFFFF' // White for party gifs
+    if (imageSrc.includes('cluster.gif')) {
+      return '#FFFFFF' // White for cluster.gif
     }
     if (imageSrc.includes('forestlang2.jpg')) {
       return '#000000' // Black for forest image
@@ -24,7 +24,7 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
     return '#000000' // Default black
   }
 
-  const isPartyGif = imageSrc.includes('party_gifs')
+  const isClusterGif = imageSrc.includes('cluster.gif')
 
   return (
     <section 
