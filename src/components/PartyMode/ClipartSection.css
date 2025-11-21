@@ -1,0 +1,13 @@
+@keyframes party-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(calc(var(--rotation, 0deg) + 10deg));
+  }
+}
+
+.party-clipart-item {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+

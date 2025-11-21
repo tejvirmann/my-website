@@ -28,6 +28,9 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
+import ClipartSection from '../components/PartyMode/ClipartSection'
+import BackgroundClipart from '../components/PartyMode/BackgroundClipart'
+
 export default function Home() {
   const { siteConfig } = useDocusaurusContext()
   const filteredResources = useFilteredResources()
@@ -185,7 +188,7 @@ export default function Home() {
                   title=""
                   subtitle=""
                   description=""
-                  imageSrc="/img/home/cluster.gif"
+                  imageSrc="/party_gifs/mew.webp"
                   furtherDesc=""
                   button="Forest Language"
                 />
@@ -203,6 +206,12 @@ export default function Home() {
             </Slider>
           </div>
         </div>
+
+        {/* Party Mode Background Clipart */}
+        <BackgroundClipart />
+
+        {/* Party Mode Clipart Section 1 - Between top slider and latest logs */}
+        <ClipartSection />
 
         {/* Latest Logs Showcase */}
         <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010] relative z-0">
@@ -343,6 +352,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Party Mode Clipart Section 2 - Between latest logs and projects */}
+        <ClipartSection />
 
         {/* <h1>Gallery</h1> */}
         {/* <CardGrid /> */}

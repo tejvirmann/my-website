@@ -88,6 +88,209 @@ body {
   --ifm-footer-background-color: #101010;
 }
 
+/* 🎉 PARTY MODE 🎉 - Party Colors */
+[data-theme='party'] {
+  --party-color-1: #ffadad;
+  --party-color-2: #ffd6a5;
+  --party-color-3: #fdffb6;
+  --party-color-4: #caffbf;
+  --party-color-5: #9bf6ff;
+  --party-color-6: #a0c4ff;
+  --party-color-7: #bdb2ff;
+  --party-color-8: #ffc6ff;
+  
+  --ifm-color-primary: var(--party-current-color, #ffadad);
+  --ifm-color-primary-dark: var(--party-current-color, #ffadad);
+  --ifm-color-primary-darker: var(--party-current-color, #ffadad);
+  --ifm-color-primary-darkest: var(--party-current-color, #ffadad);
+  --ifm-color-primary-light: var(--party-current-color, #ffadad);
+  --ifm-color-primary-lighter: var(--party-current-color, #ffadad);
+  --ifm-color-primary-lightest: var(--party-current-color, #ffadad);
+  --ifm-background-color: var(--party-current-color, #ffadad) !important;
+  --ifm-navbar-background-color: var(--party-current-color, #ffadad);
+  --ifm-background-surface-color: var(--party-current-color, #ffadad);
+  --ifm-dropdown-background-color: var(--party-current-color, #ffadad);
+  --ifm-code-background-color: rgba(255, 255, 255, 0.2);
+  --ifm-toc-border-color: rgba(255, 255, 255, 0.3);
+  --ifm-footer-background-color: var(--party-current-color, #ffadad);
+}
+
+/* Textured moving background with party colors */
+[data-theme='party'] body {
+  position: relative;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      var(--party-current-color, #ffadad) 0%,
+      var(--party-current-color, #ffadad) 10%,
+      rgba(255, 255, 255, 0.1) 10%,
+      rgba(255, 255, 255, 0.1) 20%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--party-current-color, #ffadad) 0%,
+      var(--party-current-color, #ffadad) 10%,
+      rgba(0, 0, 0, 0.1) 10%,
+      rgba(0, 0, 0, 0.1) 20%
+    );
+  background-size: 50px 50px, 50px 50px;
+  animation: party-texture-move 3s linear infinite;
+  background-attachment: fixed;
+}
+
+@keyframes party-texture-move {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 50px 50px, -50px -50px;
+  }
+}
+
+/* Remove rainbow text effects - keep text normal */
+[data-theme='party'] h1,
+[data-theme='party'] h2,
+[data-theme='party'] h3,
+[data-theme='party'] p,
+[data-theme='party'] span,
+[data-theme='party'] div {
+  color: inherit !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+}
+
+/* Party mode buttons */
+[data-theme='party'] button,
+[data-theme='party'] .button,
+[data-theme='party'] a.button {
+  background: var(--party-current-color, #ffadad);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+[data-theme='party'] button:hover,
+[data-theme='party'] .button:hover,
+[data-theme='party'] a.button:hover {
+  box-shadow: 0 0 30px var(--party-current-color, #ffadad);
+  transform: scale(1.05);
+}
+
+/* Background clipart container */
+[data-theme='party'] .party-clipart-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+[data-theme='party'] .party-clipart-bg img {
+  position: absolute;
+  opacity: 0.3;
+  animation: party-float 20s ease-in-out infinite;
+}
+
+@keyframes party-float {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(20px, -20px) rotate(5deg);
+  }
+  50% {
+    transform: translate(-20px, 20px) rotate(-5deg);
+  }
+  75% {
+    transform: translate(20px, 20px) rotate(5deg);
+  }
+}
+
+/* Show clipart sections only in party mode */
+.party-clipart-section {
+  display: none;
+}
+
+.party-clipart-bg {
+  display: none;
+}
+
+[data-theme='party'] .party-clipart-section {
+  display: block;
+}
+
+[data-theme='party'] .party-clipart-bg {
+  display: block;
+}
+
+/* Ensure text is readable in party mode */
+[data-theme='party'] {
+  color: white;
+}
+
+[data-theme='party'] h1,
+[data-theme='party'] h2,
+[data-theme='party'] h3,
+[data-theme='party'] h4,
+[data-theme='party'] h5,
+[data-theme='party'] h6 {
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+[data-theme='party'] p,
+[data-theme='party'] span,
+[data-theme='party'] div:not(.party-clipart-bg):not(.party-clipart-section) {
+  color: white !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Make all white backgrounds/components use party colors */
+[data-theme='party'] .bg-white,
+[data-theme='party'] [class*="bg-white"],
+[data-theme='party'] section.bg-white {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
+/* Target dark mode background classes in party mode */
+[data-theme='party'] [class*="dark:bg"] {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
+[data-theme='party'] .bg-gray-50\/50,
+[data-theme='party'] .bg-gray-900\/50 {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
+/* Party mode cards and containers */
+[data-theme='party'] .card,
+[data-theme='party'] [class^='cardContainer_'],
+[data-theme='party'] .rounded-2xl,
+[data-theme='party'] .rounded-xl {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
+/* Party mode dropdowns */
+[data-theme='party'] .dropdown__menu {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
+/* Party mode breadcrumbs */
+[data-theme='party'] .breadcrumbs__link {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
+/* Party mode table of contents */
+[data-theme='party'] div.theme-doc-toc-desktop > ul,
+[data-theme='party'] div[class^='tableOfContents_'] > ul {
+  background-color: var(--party-current-color, #ffadad) !important;
+}
+
 .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.1);
   display: block;
@@ -175,6 +378,42 @@ div[class^='announcementBar_'] {
   backdrop-filter: blur(10px);
   background-color: rgba(16, 16, 16, 0.9);
   @apply shadow shadow-slate-500/30;
+}
+
+/* Party mode navbar */
+[data-theme='party'] .navbar {
+  backdrop-filter: blur(10px);
+  background-color: var(--party-current-color, #ffadad) !important;
+  @apply shadow-md;
+}
+
+/* Show logo in party mode */
+[data-theme='party'] .navbar__logo {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+[data-theme='party'] .navbar__logo img {
+  filter: none !important;
+}
+
+/* Remove distortion effects on navbar text in party mode */
+[data-theme='party'] .navbar__item,
+[data-theme='party'] .navbar__link,
+[data-theme='party'] .navbar__brand {
+  filter: none !important;
+  transform: none !important;
+  text-shadow: none !important;
+  animation: none !important;
+  color: white !important;
+}
+
+[data-theme='party'] .navbar__item:hover,
+[data-theme='party'] .navbar__link:hover {
+  filter: none !important;
+  transform: none !important;
+  opacity: 0.9 !important;
 }
 @-moz-document url-prefix() {
   :root .navbar {

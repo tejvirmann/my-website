@@ -17,6 +17,7 @@ const config = {
   presets: require('./config/presets'),
   themeConfig: require('./config/theme'),
   plugins: require('./config/plugin'),
+  clientModules: [require.resolve('./src/client-modules/theme-switcher.js')],
   scripts: [
     {
       src: './redirect.js', // create a file named redirect.js

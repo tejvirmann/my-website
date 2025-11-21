@@ -5,7 +5,7 @@ import styles from './CardGrid.module.css'
 
 const cards = [
   {
-    image: '/img/home/cluster.gif',
+    image: '/party_gifs/bird-0199.gif',
     title: 'Indra Nooyi and Lisa Kassenaar',
     description: 'Indra Nooyi and Lisa Kassenaar discuss her book...',
   },
@@ -15,7 +15,7 @@ const cards = [
     description: 'Indra poses with Professor Modupe Akinola...',
   },
   {
-    image: '/img/home/cluster.gif',
+    image: '/party_gifs/bird-0333.gif',
     title: 'Indra Nooyi and Lisa Kassenaar',
     description: 'Indra Nooyi and Lisa Kassenaar discuss her book...',
   },
@@ -25,7 +25,7 @@ const cards = [
     description: 'Indra poses with Professor Modupe Akinola...',
   },
   {
-    image: '/img/home/cluster.gif',
+    image: '/party_gifs/i-22899.gif',
     title: 'Indra Nooyi and Lisa Kassenaar',
     description: 'Indra Nooyi and Lisa Kassenaar discuss her book...',
   },
@@ -35,7 +35,7 @@ const cards = [
     description: 'Indra poses with Professor Modupe Akinola...',
   },
   {
-    image: '/img/home/cluster.gif',
+    image: '/party_gifs/i-37830.gif',
     title: 'Indra Nooyi and Lisa Kassenaar',
     description: 'Indra Nooyi and Lisa Kassenaar discuss her book...',
   },
@@ -45,7 +45,7 @@ const cards = [
     description: 'Indra poses with Professor Modupe Akinola...',
   },
   {
-    image: '/img/home/cluster.gif',
+    image: '/party_gifs/i-47893.gif',
     title: 'Indra Nooyi and Lisa Kassenaar',
     description: 'Indra Nooyi and Lisa Kassenaar discuss her book...',
   },
@@ -55,7 +55,7 @@ const cards = [
     description: 'Indra poses with Professor Modupe Akinola...',
   },
   {
-    image: '/img/home/cluster.gif',
+    image: '/party_gifs/i-49995.gif',
     title: 'Indra Nooyi and Lisa Kassenaar',
     description: 'Indra Nooyi and Lisa Kassenaar discuss her book...',
   },
