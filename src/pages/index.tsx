@@ -60,21 +60,24 @@ export default function Home() {
   }
 
   // Get logs with dates, sort by date (newest first), and take the top 3
-  const latestLogs = Resources.filter(resource => {
-    const date = logDates[resource.title]
-    return date && date.trim() !== '' // Only include logs with actual dates
-  })
-    .map(resource => ({
-      ...resource,
-      date: logDates[resource.title],
-    }))
-    .sort((a, b) => {
-      const dateA = new Date(a.date)
-      const dateB = new Date(b.date)
-      return dateB.getTime() - dateA.getTime() // Newest first
+  // Use useMemo to ensure consistent calculation and prevent race conditions
+  const latestLogs = React.useMemo(() => {
+    return Resources.filter(resource => {
+      const date = logDates[resource.title]
+      return date && date.trim() !== '' // Only include logs with actual dates
     })
-    .slice(0, 3)
-    .map(({ date, ...resource }) => resource) // Remove date from final objects
+      .map(resource => ({
+        ...resource,
+        date: logDates[resource.title],
+      }))
+      .sort((a, b) => {
+        const dateA = new Date(a.date)
+        const dateB = new Date(b.date)
+        return dateB.getTime() - dateA.getTime() // Newest first
+      })
+      .slice(0, 3)
+      .map(({ date, ...resource }) => resource) // Remove date from final objects
+  }, []) // Empty deps since Resources and logDates are constants
 
   // State for controlling the latest logs slider
   const [currentLogSlide, setCurrentLogSlide] = useState(0)
@@ -82,6 +85,9 @@ export default function Home() {
 
   // Sync slider state after initialization to ensure correct starting slide
   useEffect(() => {
+    // Reset to slide 0 whenever latestLogs changes
+    setCurrentLogSlide(0)
+
     // Wait for slider to be fully initialized
     const timer = setTimeout(() => {
       if (latestLogsSliderRef.current && latestLogsSliderRef.current.innerSlider) {
@@ -89,8 +95,8 @@ export default function Home() {
         const currentSlide = innerSlider.currentSlide || 0
         // Normalize the slide index in case infinite mode offset it
         const normalizedSlide = currentSlide % latestLogs.length
-        // Only force go to 0 if we're not already at the correct slide
-        if (normalizedSlide !== 0) {
+        // Always force go to 0 on initialization to ensure correct starting slide
+        if (normalizedSlide !== 0 || currentSlide !== 0) {
           latestLogsSliderRef.current.slickGoTo(0, false)
           setCurrentLogSlide(0)
         } else {
@@ -98,9 +104,9 @@ export default function Home() {
         }
       }
     }, 150)
-    
+
     return () => clearTimeout(timer)
-  }, [latestLogs.length])
+  }, [latestLogs.length, latestLogs])
 
   const settings = {
     dots: false,
@@ -220,14 +226,21 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             {/* Slider for Latest Logs */}
             <div className="mb-8" style={{ width: '100%', overflow: 'hidden' }}>
-              <Slider ref={latestLogsSliderRef} {...latestLogsSliderSettings}>
+              <Slider
+                key={`latest-logs-${latestLogs.length}-${latestLogs[0]?.title || ''}`}
+                ref={latestLogsSliderRef}
+                {...latestLogsSliderSettings}
+              >
                 {latestLogs.map((log, index) => {
                   const date = logDates[log.title] || ''
                   const formattedDate = date ? formatDate(date) : ''
 
                   return (
                     <div key={log.title}>
-                      <div className="relative group overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl" style={{ minHeight: '500px', height: '100%' }}>
+                      <div
+                        className="relative group overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl"
+                        style={{ minHeight: '500px', height: '100%' }}
+                      >
                         {/* Background image takes full area */}
                         <div className="absolute inset-0 select-none">
                           <img
@@ -244,7 +257,10 @@ export default function Home() {
                         </div>
 
                         {/* Content overlay */}
-                        <div className="relative flex lg:grid lg:grid-cols-2 gap-0" style={{ minHeight: '500px', height: '100%' }}>
+                        <div
+                          className="relative flex lg:grid lg:grid-cols-2 gap-0"
+                          style={{ minHeight: '500px', height: '100%' }}
+                        >
                           {/* Content on right */}
                           <div className="absolute inset-0 lg:relative flex flex-col justify-center items-center lg:items-start p-6 sm:p-8 lg:p-12 lg:order-2 z-10">
                             {formattedDate && (
