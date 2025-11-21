@@ -80,6 +80,20 @@ export default function Home() {
   const [currentLogSlide, setCurrentLogSlide] = useState(0)
   const latestLogsSliderRef = useRef<any>(null)
 
+  // Sync slider state after initialization to ensure correct starting slide
+  useEffect(() => {
+    // Wait for slider to be fully initialized
+    const timer = setTimeout(() => {
+      if (latestLogsSliderRef.current && latestLogsSliderRef.current.innerSlider) {
+        // Force slider to go to slide 0 initially
+        latestLogsSliderRef.current.slickGoTo(0, false)
+        setCurrentLogSlide(0)
+      }
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  }, [latestLogs.length])
+
   const settings = {
     dots: false,
     infinite: true,
@@ -99,8 +113,16 @@ export default function Home() {
     autoplay: true,
     autoplaySpeed: 13000,
     arrows: false,
-    beforeChange: (current: number, next: number) => {
-      setCurrentLogSlide(next)
+    initialSlide: 0,
+    afterChange: (current: number) => {
+      // Normalize the index in case infinite mode offsets it
+      // With infinite mode, react-slick can return indices >= slide count
+      const normalizedSlide = current % latestLogs.length
+      setCurrentLogSlide(normalizedSlide)
+    },
+    onInit: () => {
+      // Ensure we start at slide 0 when slider initializes
+      setCurrentLogSlide(0)
     },
   }
 
