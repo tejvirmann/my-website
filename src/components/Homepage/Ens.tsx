@@ -50,7 +50,7 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
       </div>
 
       {/* Shaded overlay on top of image for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 dark:from-black/50 dark:via-black/40 dark:to-black/50 pointer-events-none z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 dark:from-black/50 dark:via-black/40 dark:to-black/50 pointer-events-none z-10 touch-none"></div>
 
       <div className={'absolute w-full top-0 h-4 p-3'} />
       <div
@@ -58,12 +58,12 @@ export default function Ens({ title, subtitle, description, imageSrc, furtherDes
       />
       <div
         className={
-          'absolute w-full top-0 h-5 group-hover:h-5 p-3 transition-all duration-15 bg-gradient-to-b ' + styles.overlay
+          'absolute w-full top-0 h-5 lg:group-hover:h-5 p-3 transition-all duration-15 bg-gradient-to-b ' + styles.overlay
         }
       />
       <div
         className={
-          'absolute w-full bottom-0 h-5 group-hover:animate-pulse group-hover:h-5 p-3 transition-all duration-15 bg-gradient-to-t ' +
+          'absolute w-full bottom-0 h-5 lg:group-hover:animate-pulse lg:group-hover:h-5 p-3 transition-all duration-15 bg-gradient-to-t ' +
           styles.overlay
         }
       />
