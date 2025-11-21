@@ -85,11 +85,19 @@ export default function Home() {
     // Wait for slider to be fully initialized
     const timer = setTimeout(() => {
       if (latestLogsSliderRef.current && latestLogsSliderRef.current.innerSlider) {
-        // Force slider to go to slide 0 initially
-        latestLogsSliderRef.current.slickGoTo(0, false)
-        setCurrentLogSlide(0)
+        const innerSlider = latestLogsSliderRef.current.innerSlider
+        const currentSlide = innerSlider.currentSlide || 0
+        // Normalize the slide index in case infinite mode offset it
+        const normalizedSlide = currentSlide % latestLogs.length
+        // Only force go to 0 if we're not already at the correct slide
+        if (normalizedSlide !== 0) {
+          latestLogsSliderRef.current.slickGoTo(0, false)
+          setCurrentLogSlide(0)
+        } else {
+          setCurrentLogSlide(0)
+        }
       }
-    }, 100)
+    }, 150)
     
     return () => clearTimeout(timer)
   }, [latestLogs.length])
@@ -123,7 +131,22 @@ export default function Home() {
     onInit: () => {
       // Ensure we start at slide 0 when slider initializes
       setCurrentLogSlide(0)
+      // Force go to slide 0 after a brief delay to ensure it's applied
+      setTimeout(() => {
+        if (latestLogsSliderRef.current) {
+          latestLogsSliderRef.current.slickGoTo(0, false)
+        }
+      }, 50)
     },
+    responsive: [
+      {
+        breakpoint: 1024, // lg breakpoint - applies to screens < 1024px (mobile/tablet)
+        settings: {
+          infinite: false, // Disable infinite mode on mobile/tablet to prevent index misalignment
+          initialSlide: 0, // Explicitly set initial slide to 0 on mobile
+        },
+      },
+    ],
   }
 
   const goToLogSlide = (index: number) => {
@@ -204,7 +227,7 @@ export default function Home() {
 
                   return (
                     <div key={log.title}>
-                      <div className="relative group overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl min-h-[500px]">
+                      <div className="relative group overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-700 hover:shadow-2xl" style={{ minHeight: '500px', height: '100%' }}>
                         {/* Background image takes full area */}
                         <div className="absolute inset-0 select-none">
                           <img
@@ -221,9 +244,9 @@ export default function Home() {
                         </div>
 
                         {/* Content overlay */}
-                        <div className="relative flex flex-col lg:grid lg:grid-cols-2 gap-0 h-full min-h-[500px]">
+                        <div className="relative flex lg:grid lg:grid-cols-2 gap-0" style={{ minHeight: '500px', height: '100%' }}>
                           {/* Content on right */}
-                          <div className="relative flex flex-col justify-center p-8 lg:p-12 lg:order-2 z-10">
+                          <div className="absolute inset-0 lg:relative flex flex-col justify-center items-center lg:items-start p-6 sm:p-8 lg:p-12 lg:order-2 z-10">
                             {formattedDate && (
                               <p className="text-sm text-white/80 dark:text-white/70 mb-4">{formattedDate}</p>
                             )}
