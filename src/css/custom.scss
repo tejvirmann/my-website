@@ -571,3 +571,14 @@ div:focus-visible {
   outline-color: white;
 }
 
+// Prevent hover effects on touch devices
+@media (hover: none) and (pointer: coarse) {
+  .group:hover .group-hover\:opacity-0 {
+    opacity: 1 !important;
+  }
+  
+  .group:hover * {
+    opacity: inherit !important;
+  }
+}
+

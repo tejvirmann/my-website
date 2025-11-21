@@ -132,7 +132,7 @@ export default function Home() {
         <div className="relative w-full" style={{ position: 'relative' }}>
           {/* Centered Text */}
           <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-full text-center pointer-events-none transition-opacity duration-300 lg:group-hover:opacity-0"
             style={{
               fontSize: 'clamp(2rem, 4.5vw, 4rem)',
               fontWeight: 450,
@@ -199,9 +199,9 @@ export default function Home() {
                         </div>
 
                         {/* Content overlay */}
-                        <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-0">
+                        <div className="relative flex flex-col lg:grid lg:grid-cols-2 gap-0 h-full min-h-[500px]">
                           {/* Content on right */}
-                          <div className="relative flex flex-col justify-center p-8 lg:p-12 order-1 lg:order-2 z-10">
+                          <div className="relative flex flex-col justify-center p-8 lg:p-12 lg:order-2 z-10">
                             {formattedDate && (
                               <p className="text-sm text-white/80 dark:text-white/70 mb-4">{formattedDate}</p>
                             )}
