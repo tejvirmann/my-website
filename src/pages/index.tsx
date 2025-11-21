@@ -34,8 +34,13 @@ export default function Home() {
   const favoriteResources = sortedResources.filter(resource => resource.tags.includes('favorite'))
   const otherResources = sortedResources.filter(resource => !resource.tags.includes('favorite'))
 
-  // Map of log titles to their dates (YYYY-M-D format)
-  // When adding new logs, add their date here to enable automatic sorting
+  // ============================================================================
+  // ONLY HARDCODED PART: List of the 3 latest logs (newest to oldest)
+  // When adding a new log, update this array - put the newest one first
+  // ============================================================================
+  const LATEST_LOG_TITLES = ['Shin Sakaino', 'Demon Faces', 'Human Face'] as const
+
+  // Map of log titles to their dates (for display purposes only)
   const logDates: { [key: string]: string } = {
     'Shin Sakaino': '2024-9-25',
     'Demon Faces': '2024-8-25',
@@ -43,41 +48,19 @@ export default function Home() {
     'Another Day in the Carbonite': '2019-1-25',
     'Pencil Drawings 1.2.24': '2024-1-2',
     'Pink Pen': '2023-11-2',
-    'Aleopard': '',
-    'Gallify': '',
-    'Depressed Spirit': '',
-    'Last Supper 231': '',
-    'Blue Bird': '',
-    'Asterisk': '',
-    'Tejvir Mann Show': '',
-    'CODAmarket UI': '',
-    'Bravv UI': '',
-    'Pink Sky Rocks': '',
-    'Purple Dragon': '',
-    'Hope Tiger': '',
     'Intermission': '2019-7-30',
-    'Forest Language': '',
   }
 
-  // Get logs with dates, sort by date (newest first), and take the top 3
-  // Use useMemo to ensure consistent calculation and prevent race conditions
+  // Automatically get the 3 latest logs in the specified order
   const latestLogs = React.useMemo(() => {
-    return Resources.filter(resource => {
-      const date = logDates[resource.title]
-      return date && date.trim() !== '' // Only include logs with actual dates
-    })
-      .map(resource => ({
-        ...resource,
-        date: logDates[resource.title],
-      }))
-      .sort((a, b) => {
-        const dateA = new Date(a.date)
-        const dateB = new Date(b.date)
-        return dateB.getTime() - dateA.getTime() // Newest first
-      })
-      .slice(0, 3)
-      .map(({ date, ...resource }) => resource) // Remove date from final objects
-  }, []) // Empty deps since Resources and logDates are constants
+    return LATEST_LOG_TITLES.map(title => {
+      const log = Resources.find(resource => resource.title === title)
+      if (!log) {
+        console.warn(`Latest log "${title}" not found in Resources array`)
+      }
+      return log
+    }).filter((log): log is Resource => log !== undefined)
+  }, [])
 
   // State for controlling the latest logs slider
   const [currentLogSlide, setCurrentLogSlide] = useState(0)
