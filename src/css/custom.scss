@@ -334,6 +334,42 @@ article .markdown {
   }
 }
 
+// About page responsive styles
+article .markdown {
+  // Responsive profile image
+  img[alt="Tejvir S Mann"] {
+    @media screen and (max-width: 768px) {
+      float: none !important;
+      display: block;
+      margin: 0 auto 1.5rem auto !important;
+      width: 150px !important;
+    }
+  }
+  
+  // Responsive PDF iframe
+  iframe[src="/cv.pdf"],
+  iframe[src^="/cv.pdf"] {
+    @media screen and (max-width: 768px) {
+      height: 600px !important;
+      min-height: 500px !important;
+    }
+    @media screen and (max-width: 480px) {
+      height: 500px !important;
+      min-height: 400px !important;
+    }
+  }
+  
+  // Better spacing for about page sections
+  h1:first-of-type {
+    margin-bottom: 1.5rem;
+  }
+  
+  h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
 .footnotes hr {
   @apply border-0 border-b border-gray-500/30;
 }
