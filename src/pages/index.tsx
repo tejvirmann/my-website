@@ -28,8 +28,20 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
+import FunHome from '../components/FunMode/FunHome'
+
 export default function Home() {
+
+  // ... (existing imports)
+
   const { siteConfig } = useDocusaurusContext()
+  
+  // Fun Mode Toggle
+  const isFunMode = siteConfig.customFields?.funMode === true;
+  if (isFunMode) {
+    return <FunHome />;
+  }
+
   const filteredResources = useFilteredResources()
   const favoriteResources = sortedResources.filter(resource => resource.tags.includes('favorite'))
   const otherResources = sortedResources.filter(resource => !resource.tags.includes('favorite'))

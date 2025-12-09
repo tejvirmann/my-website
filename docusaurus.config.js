@@ -13,6 +13,10 @@ const config = {
   organizationName: 'tejvirmann', // Usually your GitHub org/user name.
   projectName: 'my-website', // Usually your repo name.
   titleDelimiter: ' | ', // Defaults to `|`
+  
+  customFields: {
+    funMode: process.env.FUN_MODE === 'true',
+  },
 
   presets: require('./config/presets'),
   themeConfig: require('./config/theme'),
