@@ -337,7 +337,7 @@ article .markdown {
 // About page responsive styles
 article .markdown {
   // Responsive profile image
-  img[alt="Tejvir S Mann"] {
+  img[alt='Tejvir S Mann'] {
     @media screen and (max-width: 768px) {
       float: none !important;
       display: block;
@@ -345,10 +345,10 @@ article .markdown {
       width: 150px !important;
     }
   }
-  
+
   // Responsive PDF iframe
-  iframe[src="/cv.pdf"],
-  iframe[src^="/cv.pdf"] {
+  iframe[src='/cv.pdf'],
+  iframe[src^='/cv.pdf'] {
     @media screen and (max-width: 768px) {
       height: 600px !important;
       min-height: 500px !important;
@@ -358,12 +358,12 @@ article .markdown {
       min-height: 400px !important;
     }
   }
-  
+
   // Better spacing for about page sections
   h1:first-of-type {
     margin-bottom: 1.5rem;
   }
-  
+
   h2 {
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -562,7 +562,7 @@ main .container {
   float: left;
   height: 100%;
   min-height: 1px;
-  
+
   > div {
     width: 100%;
     max-width: 100%;
@@ -612,9 +612,394 @@ div:focus-visible {
   .group:hover .group-hover\:opacity-0 {
     opacity: 1 !important;
   }
-  
+
   .group:hover * {
     opacity: inherit !important;
   }
 }
 
+// GitHub Calendar styling - responsive, minimal, pretty
+// Using high specificity to override library styles
+.github-calendar-wrapper.calendar,
+.calendar.github-calendar-wrapper,
+.github-calendar-wrapper .calendar {
+  @apply w-full;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+
+  // Firefox scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+
+  // Make calendar responsive and clean
+  &,
+  .calendar {
+    @apply w-full;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 1rem 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+    // Ensure calendar doesn't get cut off
+    min-width: max-content;
+
+    // Custom scrollbar for nested calendar
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+
+      &:hover {
+        background: #555;
+      }
+    }
+
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+
+    // Remove default margins/padding from calendar elements
+    > * {
+      margin: 0;
+    }
+
+    // Hide "Skip to contributions year list" text - multiple selectors to catch it
+    .sr-only,
+    a[href='#year-list'],
+    a[href*='year-list'],
+    a.sr-only,
+    .calendar a[href*='year'] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      position: absolute !important;
+      width: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+    }
+
+    // Calendar grid - better spacing, allow horizontal scroll
+    svg {
+      display: block;
+      margin: 0 auto;
+      height: auto;
+      min-width: 828px; // Minimum width to prevent squishing
+      width: 100%;
+      max-width: none; // Allow it to be wider than container
+    }
+
+    // Fix for table border overlap issue (from PR #185)
+    table.ContributionCalendar-grid,
+    .ContributionCalendar-grid,
+    table[class*='ContributionCalendar'] {
+      border-collapse: separate !important;
+      border-spacing: 0;
+    }
+
+    // Make squares actually square (not rectangles) with better spacing
+    // Light mode colors - better contrast - target SVG rect elements directly
+    svg rect.day,
+    .day,
+    rect.day {
+      rx: 2 !important;
+      ry: 2 !important;
+      width: 11px !important;
+      height: 11px !important;
+      shape-rendering: geometricPrecision !important;
+      fill: #ebedf0 !important; // Light gray for no contributions
+    }
+
+    // Light mode contribution levels - GitHub colors with better visibility
+    // Target both data-level and the actual SVG elements
+    svg rect.day[data-level='0'],
+    .day[data-level='0'],
+    rect[data-level='0'] {
+      fill: #ebedf0 !important; // No contributions
+    }
+
+    svg rect.day[data-level='1'],
+    .day[data-level='1'],
+    rect[data-level='1'] {
+      fill: #9be9a8 !important; // 1-3 contributions
+    }
+
+    svg rect.day[data-level='2'],
+    .day[data-level='2'],
+    rect[data-level='2'] {
+      fill: #40c463 !important; // 4-6 contributions
+    }
+
+    svg rect.day[data-level='3'],
+    .day[data-level='3'],
+    rect[data-level='3'] {
+      fill: #30a14e !important; // 7-9 contributions
+    }
+
+    svg rect.day[data-level='4'],
+    .day[data-level='4'],
+    rect[data-level='4'] {
+      fill: #216e39 !important; // 10+ contributions
+    }
+
+    // Better font for months and dates
+    text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 400 !important;
+      fill: #656d76;
+    }
+
+    // Month labels - better styling
+    .month {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 400 !important;
+      fill: #656d76 !important;
+    }
+
+    // Day of week labels
+    .wday {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 12px !important;
+      fill: #656d76 !important;
+    }
+
+    // Stats section - improved layout and typography
+    .contrib-column-container {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #d1d9e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: space-between;
+    }
+
+    .contrib-column {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 12px !important;
+      color: #656d76;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    // Stats numbers - better typography
+    .contrib-number {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 18px !important;
+      font-weight: 600 !important;
+      color: #1f2328;
+      margin: 0 0 0.25rem 0;
+      line-height: 1.2;
+    }
+
+    .text-muted {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 400 !important;
+      color: #656d76;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    // Contribution count tooltip
+    .contrib-legend {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+      font-size: 12px !important;
+      margin-top: 0.5rem;
+    }
+
+    // Responsive adjustments
+    @media (max-width: 768px) {
+      padding: 0.5rem 0;
+
+      .contrib-column-container {
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .contrib-column {
+        min-width: 100%;
+      }
+
+      .contrib-number {
+        font-size: 16px !important;
+      }
+
+      .text-muted {
+        font-size: 11px !important;
+      }
+
+      text {
+        font-size: 10px !important;
+      }
+
+      .day {
+        width: 10px !important;
+        height: 10px !important;
+      }
+    }
+  }
+}
+
+// Dark mode support for GitHub Calendar - high specificity
+[data-theme='dark'] .github-calendar-wrapper.calendar,
+[data-theme='dark'] .calendar.github-calendar-wrapper,
+[data-theme='dark'] .github-calendar-wrapper .calendar {
+  // Dark mode scrollbar
+  &::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+
+    &:hover {
+      background: #777;
+    }
+  }
+
+  scrollbar-color: #555 #1a1a1a;
+
+  &,
+  .calendar {
+    // Dark mode scrollbar for nested calendar
+    &::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #555;
+
+      &:hover {
+        background: #777;
+      }
+    }
+
+    scrollbar-color: #555 #1a1a1a;
+    .contrib-number {
+      color: #e6edf3 !important;
+      font-size: 18px !important;
+      font-weight: 600 !important;
+    }
+
+    .text-muted,
+    .contrib-column,
+    .contrib-legend {
+      color: #8b949e !important;
+    }
+
+    // Calendar background - ensure squares stay square
+    // Dark mode colors - target SVG elements directly
+    svg rect.day,
+    .day,
+    rect.day {
+      fill: #161b22 !important;
+      width: 11px !important;
+      height: 11px !important;
+    }
+
+    // Contribution levels - GitHub dark mode colors
+    svg rect.day[data-level='0'],
+    .day[data-level='0'],
+    rect[data-level='0'] {
+      fill: #161b22 !important;
+    }
+
+    svg rect.day[data-level='1'],
+    .day[data-level='1'],
+    rect[data-level='1'] {
+      fill: #0e4429 !important;
+    }
+
+    svg rect.day[data-level='2'],
+    .day[data-level='2'],
+    rect[data-level='2'] {
+      fill: #006d32 !important;
+    }
+
+    svg rect.day[data-level='3'],
+    .day[data-level='3'],
+    rect[data-level='3'] {
+      fill: #26a641 !important;
+    }
+
+    svg rect.day[data-level='4'],
+    .day[data-level='4'],
+    rect[data-level='4'] {
+      fill: #39d353 !important;
+    }
+
+    // Text elements in dark mode
+    text {
+      fill: #8b949e !important;
+    }
+
+    .month {
+      fill: #8b949e !important;
+    }
+
+    .wday {
+      fill: #8b949e !important;
+    }
+
+    // Stats container border
+    .contrib-column-container {
+      border-top-color: #30363d !important;
+    }
+
+    // Links
+    a {
+      color: #58a6ff !important;
+
+      &:hover {
+        color: #79c0ff !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .day {
+        width: 10px !important;
+        height: 10px !important;
+      }
+
+      .contrib-number {
+        font-size: 16px !important;
+      }
+    }
+  }
+}

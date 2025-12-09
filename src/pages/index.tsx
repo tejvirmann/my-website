@@ -12,6 +12,7 @@ import KittyVault from '../components/Homepage/KittyVault'
 import Posts from '../components/Homepage/Posts'
 import ActiveEvents from '../components/Homepage/ActiveEvents'
 import RecentPosts from '../components/Homepage/RecentPosts'
+import GitHubContributions from '../components/Homepage/GitHubContributions'
 
 import ShowcaseTagSelect from './projects/_components/ShowcaseTagSelect'
 import ShowcaseFilterToggle, { type Operator, readOperator } from './projects/_components/ShowcaseFilterToggle'
@@ -203,6 +204,9 @@ export default function Home() {
             </Slider>
           </div>
         </div>
+
+        {/* GitHub Contributions */}
+        <GitHubContributions username="tejvirmann" />
 
         {/* Latest Logs Showcase */}
         <section className="py-16 px-3 sm:px-6 bg-white dark:bg-[#101010] relative z-0">
