@@ -19,7 +19,6 @@ const TagComp = React.forwardRef<HTMLLIElement, Tag>(({ label, color, descriptio
     title={description}
     style={{
       backgroundColor: color,
-      marginTop: -10,
     }}
   >
     <span className={styles.textLabel}>{label.toLowerCase()}</span>
@@ -45,49 +44,41 @@ function ShowcaseCardTag({ tags }: { tags: TagType[] }) {
 
 function ShowcaseCard({ resource }: { resource: Resource }) {
   return (
-    <Link href={resource.website} className={styles.showcaseCardLink}>
-      <li
-        key={resource.title}
-        className={
-          'flex flex-col justify-between rounded-md bg-white/50 transition-all duration-150 dark:bg-black/50 border overflow-hidden group ' +
-          styles.showcaseCard
-        }
-      >
-        <div>
-          <div className={styles.showcaseCardImage}>
-            <img
-              src={require('../../../../data/projects/img/' + resource.image).default}
-              alt={resource.title}
-              className="h-[200px] w-full object-cover"
-            />
-          </div>
-          <div className="px-3 py-1">
-            <div className={clsx(styles.showcaseCardHeader)}>
-              <h4 className={styles.showcaseCardTitle}>
-                <Link href={resource.website} className={styles.showcaseCardLink}>
-                  {resource.title}
-                </Link>
-                &nbsp;
-                <ShowcaseCardTag tags={resource.tags} />
-              </h4>
-              {/* {resource.tags.includes('favorite') && '💜'} */}
-              {resource.source && (
-                <Link
-                  href={resource.website}
-                  className={clsx('button button--secondary button--sm', styles.showcaseCardSrcBtn)}
-                >
-                  Source
-                </Link>
-              )}
+    <li key={resource.title} className={styles.showcaseCardWrapper}>
+      <Link href={resource.website} className={styles.showcaseCardLink}>
+        <div className={clsx(styles.showcaseCard, 'group')}>
+          {/* Gradient border effect */}
+          <div className={styles.gradientBorder}></div>
+          
+          {/* Card content */}
+          <div className={styles.cardContent}>
+            {/* Image container with overlay */}
+            <div className={styles.showcaseCardImage}>
+              <img
+                src={require('../../../../data/projects/img/' + resource.image).default}
+                alt={resource.title}
+                className={styles.cardImage}
+              />
+              <div className={styles.imageOverlay}></div>
             </div>
-            {/* <p className={styles.showcaseCardBody}>{resource.description}</p> */}
+            
+            {/* Card body - minimized and professional */}
+            <div className={styles.cardBody}>
+              <div className={clsx(styles.showcaseCardHeader)}>
+                <h4 className={styles.showcaseCardTitle}>
+                  <span className={styles.titleText}>{resource.title}</span>
+                </h4>
+              </div>
+              
+              {/* Tags - moved up, more prominent */}
+              <div className={styles.tagsContainer}>
+                <ShowcaseCardTag tags={resource.tags} />
+              </div>
+            </div>
           </div>
         </div>
-        {/* <ul className={` ${styles.cardFooter}`}>
-          <ShowcaseCardTag tags={resource.tags} />
-        </ul> */}
-      </li>
-    </Link>
+      </Link>
+    </li>
   )
 }
 

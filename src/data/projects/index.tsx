@@ -33,49 +33,49 @@ export const Tags: { [type in TagType]: Tag } = {
   favorite: {
     label: 'Favorite',
     description: '',
-    color: '#FF8000',
+    color: '#D4A574', // Light brown/tan (central area)
   },
 
   film: {
     label: 'Film',
     description: '',
-    color: '#FF0BCF',
+    color: '#FF6B9D', // Pink/Light Magenta
   },
 
   writing: {
     label: 'Writing',
     description: '',
-    color: '#E72961',
+    color: '#B19CD9', // Light Purple/Lavender
   },
 
   drawing: {
     label: 'Drawing',
     description: '',
-    color: '#5ad66b',
+    color: '#7DD3FC', // Light Blue/Cyan
   },
 
   uimodeling: {
     label: 'UI',
     description: '',
-    color: '#1D9BF0',
+    color: '#FB923C', // Orange
   },
 
   painting: {
     label: 'Painting',
     description: '',
-    color: '#446A8E',
+    color: '#C4B5FD', // Light Purple/Lavender variant
   },
 
   software: {
     label: 'Software',
     description: '',
-    color: '#7321EE	',
+    color: '#FDE047', // Yellow/Light Green
   },
 
   other: {
     label: 'Other',
     description: '',
-    color: '#987050',
+    color: '#93C5FD', // Light Blue/Cyan variant
   },
 }
 

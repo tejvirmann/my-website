@@ -5,64 +5,211 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-.showcaseCard:hover {
-  box-shadow: 0 0 1px 1px var(--ifm-color-primary-dark);
+/* Card wrapper for 3D perspective */
+.showcaseCardWrapper {
+  list-style: none;
+  perspective: 1000px;
+  height: 100%;
 }
 
-[data-theme='dark'] .showcaseCard{
-  background-color: #101010 !important;
+.showcaseCardLink {
+  display: block;
+  height: 100%;
+  text-decoration: none;
   color: inherit;
-  border: 1px solid #2b2b2b;
 }
 
-.showcaseCardImage {
+/* Main card container - Enhanced glass effect */
+.showcaseCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 16px;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
 }
 
-.showcaseCardImage img {
-  filter: saturate(1);
-  @apply transition-all duration-150;
+[data-theme='dark'] .showcaseCard {
+  background: rgba(16, 16, 16, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-.showcaseCard:hover .showcaseCardImage img {
-  filter: saturate(1);
+/* 3D tilt effect on hover */
+.showcaseCardWrapper:hover .showcaseCard {
+  transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(35px) saturate(180%);
+  -webkit-backdrop-filter: blur(35px) saturate(180%);
+  box-shadow: 
+    0 20px 25px -5px rgba(31, 38, 135, 0.2),
+    0 10px 10px -5px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+[data-theme='dark'] .showcaseCardWrapper:hover .showcaseCard {
+  background: rgba(16, 16, 16, 0.6);
+  backdrop-filter: blur(35px) saturate(180%);
+  -webkit-backdrop-filter: blur(35px) saturate(180%);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.6),
+    0 10px 10px -5px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animated gradient border */
+.gradientBorder {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.3),
+    rgba(168, 85, 247, 0.3),
+    rgba(236, 72, 153, 0.3),
+    rgba(99, 102, 241, 0.3)
+  );
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  animation: gradientShift 3s ease infinite;
+}
+
+.showcaseCardWrapper:hover .gradientBorder {
+  opacity: 1;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Card content */
+.cardContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Image container - more prominent */
+.showcaseCardImage {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.4s ease, transform 0.4s ease;
+  filter: brightness(1) saturate(1);
+}
+
+.showcaseCardWrapper:hover .cardImage {
+  filter: brightness(1.05) saturate(1.1);
+}
+
+/* Image overlay gradient */
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.showcaseCardWrapper:hover .imageOverlay {
+  opacity: 1;
+}
+
+/* Card body - minimized and professional */
+.cardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  gap: 8px;
+  min-height: auto;
 }
 
 .showcaseCardHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 0;
 }
 
 .showcaseCardTitle {
-  padding: 0.5em 0;
-  flex: 1 1 auto;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
 }
 
-.showcaseCardTitle a {
-  text-decoration: none;
-  background: linear-gradient(var(--ifm-color-primary), var(--ifm-color-primary)) 0% 100% / 0% 1px no-repeat;
-  color: var(--ifm-color-primary);
-  transition: background-size ease-out 200ms;
+.titleText {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 1.3;
+  transition: color 0.3s ease;
+  display: inline-block;
 }
 
-.showcaseCardTitle a:not(:focus):hover {
-  background-size: 100% 1px;
+.showcaseCardWrapper:hover .titleText {
+  color: rgba(0, 0, 0, 0.95);
 }
 
-.showcaseCardTitle,
-.showcaseCardHeader .svgIconFavorite {
-  margin-right: 0.25rem;
+[data-theme='dark'] .titleText {
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.showcaseCardHeader .svgIconFavorite {
-  color: var(--site-color-svg-icon-favorite);
+[data-theme='dark'] .showcaseCardWrapper:hover .titleText {
+  color: rgba(255, 255, 255, 1);
 }
 
 .showcaseCardSrcBtn {
-  margin-left: 6px;
-  padding-left: 12px;
-  padding-right: 12px;
+  margin-left: auto;
+  padding: 4px 12px;
   border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
 }
 
 .showcaseCardSrcBtn:focus-visible {
@@ -70,21 +217,82 @@
 }
 
 [data-theme='dark'] .showcaseCardSrcBtn {
-  background-color: var(--ifm-color-emphasis-200) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
   color: inherit;
 }
 
 [data-theme='dark'] .showcaseCardSrcBtn:hover {
-  background-color: var(--ifm-color-emphasis-300) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
+/* Description - hidden/minimized */
 .showcaseCardBody {
-  font-size: smaller;
-  padding-bottom: 0.1em;
-  line-height: 1.25em;
-  min-height: 0em;
+  display: none;
 }
 
+/* Tags container - more prominent */
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 0;
+}
+
+/* Tag styling with animations - enhanced with new colors */
+.tag {
+  font-size: 0.65rem;
+  cursor: default;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  opacity: 0.95;
+  animation: tagFadeIn 0.5s ease forwards;
+  font-weight: 500;
+}
+
+.tag:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.tag:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.tag:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes tagFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+.showcaseCardWrapper:hover .tag {
+  transform: translateY(-2px);
+  opacity: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tag .textLabel {
+  margin: 0;
+  color: white;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.025em;
+}
+
+/* Legacy styles for compatibility */
 .cardFooter {
   display: flex;
   flex-wrap: wrap;
@@ -94,18 +302,7 @@
   margin-top: 4px !important;
 }
 
-.tag {
-  font-size: 0.675rem;
-  cursor: default;
-  margin-right: 6px;
-  margin-bottom: 6px !important;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-}
-
-.tag .textLabel {
-  margin: 2px 6px;
-  color: white;
-  @apply font-semibold;
+.showcaseCardHeader .svgIconFavorite {
+  color: var(--site-color-svg-icon-favorite);
+  margin-right: 0.25rem;
 }
