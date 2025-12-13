@@ -57,12 +57,23 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         try {
           response = await fetchWithTimeout(apiUrl, 10000)
           if (response && response.ok) {
-            data = await response.json()
+            try {
+              data = await response.json()
+              console.log('Primary API response received:', { 
+                hasData: !!data, 
+                hasContributions: !!(data && data.contributions),
+                contributionsLength: data && data.contributions ? data.contributions.length : 0 
+              })
+            } catch (jsonError) {
+              console.error('Failed to parse JSON response:', jsonError)
+              data = null
+            }
           } else if (response) {
             console.warn(`Primary API returned status ${response.status}, trying fallback...`)
           }
         } catch (fetchError) {
           console.warn('Primary API failed, trying fallback...', fetchError)
+          data = null
         }
 
         // The API returns: { total: number, contributions: [[{date, intensity, count}, ...], ...] }
@@ -70,7 +81,7 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         const days: ContributionDay[] = []
 
         // Handle the actual API format: data.contributions is an array of arrays (weeks)
-        if (data.contributions && Array.isArray(data.contributions)) {
+        if (data && data.contributions && Array.isArray(data.contributions)) {
           data.contributions.forEach((week: any) => {
             if (Array.isArray(week)) {
               week.forEach((day: any) => {
@@ -99,7 +110,7 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
           })
         }
         // Fallback: weeks array with contributionDays (GitHub GraphQL format)
-        else if (data.weeks && Array.isArray(data.weeks)) {
+        else if (data && data.weeks && Array.isArray(data.weeks)) {
           data.weeks.forEach((week: any) => {
             if (week.contributionDays && Array.isArray(week.contributionDays)) {
               week.contributionDays.forEach((day: any) => {
@@ -180,7 +191,15 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
 
         // Final check
         if (days.length === 0) {
-          throw new Error(`No contribution data found. Please verify your username "${username}" is correct and has public contributions.`)
+          const errorMsg = data 
+            ? `No contribution data found in API response. Please verify your username "${username}" is correct and has public contributions.`
+            : `Failed to fetch contribution data. The API may be temporarily unavailable. Please try again later.`
+          console.error('No contribution days found:', { 
+            hasData: !!data, 
+            dataKeys: data ? Object.keys(data) : [],
+            username 
+          })
+          throw new Error(errorMsg)
         }
 
         // Sort days by date
