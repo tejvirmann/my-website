@@ -39,12 +39,19 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         setError(null)
 
         // Helper function to fetch with timeout
-        const fetchWithTimeout = (url: string, timeout = 10000) => {
+        const fetchWithTimeout = (url: string, timeout = 10000, options: RequestInit = {}) => {
           return Promise.race([
-            fetch(url),
-            new Promise<Response>((_, reject) =>
-              setTimeout(() => reject(new Error('Request timeout')), timeout)
-            ),
+            fetch(url, {
+              ...options,
+              mode: 'cors',
+              credentials: 'omit', // Don't send cookies
+              headers: {
+                Accept: 'application/json',
+                // Don't set Content-Type for GET requests - let browser set it
+                ...options.headers,
+              },
+            }),
+            new Promise<Response>((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout)),
           ])
         }
 
@@ -53,17 +60,39 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         const apiUrl = `https://gh-calendar.rschristian.dev/user/${username}`
         let response: Response | null = null
         let data: any = null
-        
+
         try {
           response = await fetchWithTimeout(apiUrl, 10000)
           if (response && response.ok) {
             try {
               data = await response.json()
-              console.log('Primary API response received:', { 
-                hasData: !!data, 
-                hasContributions: !!(data && data.contributions),
-                contributionsLength: data && data.contributions ? data.contributions.length : 0 
+              const contributionsLength = data && data.contributions ? data.contributions.length : 0
+              // Log response info for debugging
+              const headerInfo: Record<string, string> = {}
+              response.headers.forEach((value, key) => {
+                headerInfo[key] = value
               })
+
+              console.log('Primary API response received:', {
+                hasData: !!data,
+                hasContributions: !!(data && data.contributions),
+                contributionsLength,
+                total: data?.total,
+                responseStatus: response.status,
+                responseHeaders: headerInfo,
+              })
+
+              // If API returns empty contributions array, it might be blocking/rate-limiting
+              // This can happen due to browser extensions, privacy settings, or origin-based blocking
+              if (data && data.contributions && contributionsLength === 0) {
+                console.warn(
+                  'API returned empty contributions array. Possible causes:',
+                  '- Browser extension blocking the request (ad blocker, privacy tool)',
+                  '- Browser privacy/security settings',
+                  '- Origin-based rate limiting',
+                  'Will try fallback methods...'
+                )
+              }
             } catch (jsonError) {
               console.error('Failed to parse JSON response:', jsonError)
               data = null
@@ -72,7 +101,17 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
             console.warn(`Primary API returned status ${response.status}, trying fallback...`)
           }
         } catch (fetchError) {
-          console.warn('Primary API failed, trying fallback...', fetchError)
+          // Check if error is due to browser blocking (CORS, network error, etc.)
+          const errorMessage = fetchError instanceof Error ? fetchError.message : String(fetchError)
+          console.warn('Primary API failed, trying fallback...', {
+            error: errorMessage,
+            possibleCauses: [
+              'Browser extension blocking the request (ad blocker, privacy extension)',
+              'Browser privacy/security settings',
+              'Network/CORS error',
+              'Request timeout',
+            ],
+          })
           data = null
         }
 
@@ -81,7 +120,7 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         const days: ContributionDay[] = []
 
         // Handle the actual API format: data.contributions is an array of arrays (weeks)
-        if (data && data.contributions && Array.isArray(data.contributions)) {
+        if (data && data.contributions && Array.isArray(data.contributions) && data.contributions.length > 0) {
           data.contributions.forEach((week: any) => {
             if (Array.isArray(week)) {
               week.forEach((day: any) => {
@@ -135,16 +174,18 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
 
         // If no data found, try fallback: fetch from GitHub directly via CORS proxy
         if (days.length === 0) {
-          console.warn('API returned no data, trying fallback method...')
-          
+          console.warn('API returned no data or empty contributions array, trying fallback method...', {
+            hasData: !!data,
+            contributionsLength: data && data.contributions ? data.contributions.length : 0,
+            contributionsIsEmpty: data && data.contributions ? data.contributions.length === 0 : true,
+          })
+
           // Try multiple CORS proxy services as fallbacks
           const proxyServices = [
             `https://api.allorigins.win/get?url=${encodeURIComponent(
               `https://github.com/users/${username}/contributions`
             )}`,
-            `https://corsproxy.io/?${encodeURIComponent(
-              `https://github.com/users/${username}/contributions`
-            )}`,
+            `https://corsproxy.io/?${encodeURIComponent(`https://github.com/users/${username}/contributions`)}`,
             `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
               `https://github.com/users/${username}/contributions`
             )}`,
@@ -152,7 +193,11 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
 
           for (const proxyUrl of proxyServices) {
             try {
-              const proxyResponse = await fetchWithTimeout(proxyUrl, 8000)
+              const proxyResponse = await fetchWithTimeout(proxyUrl, 8000, {
+                headers: {
+                  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                },
+              })
 
               if (proxyResponse.ok) {
                 const proxyData = await proxyResponse.json()
@@ -161,7 +206,8 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
 
                 if (html && typeof html === 'string') {
                   // Parse HTML using regex to find contribution data
-                  const rectRegex = /<rect[^>]*data-date="([^"]+)"[^>]*data-count="(\d+)"[^>]*data-level="(\d+)"[^>]*>/gi
+                  const rectRegex =
+                    /<rect[^>]*data-date="([^"]+)"[^>]*data-count="(\d+)"[^>]*data-level="(\d+)"[^>]*>/gi
                   let match
                   const foundDays = new Map<string, ContributionDay>()
 
@@ -191,13 +237,13 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
 
         // Final check
         if (days.length === 0) {
-          const errorMsg = data 
+          const errorMsg = data
             ? `No contribution data found in API response. Please verify your username "${username}" is correct and has public contributions.`
             : `Failed to fetch contribution data. The API may be temporarily unavailable. Please try again later.`
-          console.error('No contribution days found:', { 
-            hasData: !!data, 
+          console.error('No contribution days found:', {
+            hasData: !!data,
             dataKeys: data ? Object.keys(data) : [],
-            username 
+            username,
           })
           throw new Error(errorMsg)
         }
@@ -318,13 +364,13 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
     // GitHub counts consecutive days with contributions, working backwards from today
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    
+
     // Create a map for quick lookup
     const contributionMap = new Map<string, number>()
     sortedDays.forEach(day => {
       contributionMap.set(day.date, day.count)
     })
-    
+
     // Find the most recent day with contributions
     let mostRecentContributionDate: Date | null = null
     for (let i = sortedDays.length - 1; i >= 0; i--) {
@@ -334,24 +380,26 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         break
       }
     }
-    
+
     if (mostRecentContributionDate) {
       // Check if the most recent contribution is today or yesterday (within 1 day)
-      const daysSinceLastContribution = Math.floor((today.getTime() - mostRecentContributionDate.getTime()) / (1000 * 60 * 60 * 24))
-      
+      const daysSinceLastContribution = Math.floor(
+        (today.getTime() - mostRecentContributionDate.getTime()) / (1000 * 60 * 60 * 24)
+      )
+
       if (daysSinceLastContribution <= 1) {
         // Count backwards from the most recent contribution day
         currentStreakCount = 1
         currentStreakStart = mostRecentContributionDate.toISOString().split('T')[0]
-        
+
         // Work backwards day by day
         let currentDate = new Date(mostRecentContributionDate)
         currentDate.setDate(currentDate.getDate() - 1)
-        
+
         while (currentDate >= new Date(sortedDays[0].date)) {
           const dateStr = currentDate.toISOString().split('T')[0]
           const count = contributionMap.get(dateStr) || 0
-          
+
           if (count > 0) {
             currentStreakCount++
             currentStreakStart = dateStr
@@ -388,7 +436,7 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
 
     // Create a map for quick lookup
     const contributionMap = new Map<string, ContributionDay>()
-    contributions.forEach((day) => {
+    contributions.forEach(day => {
       contributionMap.set(day.date, day)
     })
 
@@ -456,12 +504,17 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
     const date = new Date(dateStr)
     const day = date.getDate()
     const month = date.toLocaleDateString('en-US', { month: 'long' })
-    
+
     // Add ordinal suffix
-    const suffix = day === 1 || day === 21 || day === 31 ? 'st' :
-                   day === 2 || day === 22 ? 'nd' :
-                   day === 3 || day === 23 ? 'rd' : 'th'
-    
+    const suffix =
+      day === 1 || day === 21 || day === 31
+        ? 'st'
+        : day === 2 || day === 22
+        ? 'nd'
+        : day === 3 || day === 23
+        ? 'rd'
+        : 'th'
+
     return `${month} ${day}${suffix}`
   }
 
@@ -470,14 +523,10 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
       <div className="max-w-7xl mx-auto">
         <div className="bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-[#30363d] rounded-xl p-4 sm:p-6 overflow-hidden shadow-sm dark:shadow-none">
           {loading && (
-            <div className="text-center text-gray-400 dark:text-gray-500 py-12">
-              Loading the data just for you.
-            </div>
+            <div className="text-center text-gray-400 dark:text-gray-500 py-12">Loading the data just for you.</div>
           )}
 
-          {error && (
-            <div className="text-center text-red-500 dark:text-red-400 py-12">{error}</div>
-          )}
+          {error && <div className="text-center text-red-500 dark:text-red-400 py-12">{error}</div>}
 
           {!loading && !error && weeks && (
             <>
@@ -521,10 +570,11 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
                             const colorKey = `level${day.level}` as keyof typeof colors
                             // Format tooltip: always show contributions count and date
                             const dateStr = day.date ? formatDateForTooltip(day.date) : 'Unknown date'
-                            const tooltipText = day.count > 0
-                              ? `${day.count} contribution${day.count === 1 ? '' : 's'} on ${dateStr}`
-                              : `No contributions on ${dateStr}`
-                            
+                            const tooltipText =
+                              day.count > 0
+                                ? `${day.count} contribution${day.count === 1 ? '' : 's'} on ${dateStr}`
+                                : `No contributions on ${dateStr}`
+
                             const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
                               const rect = e.currentTarget.getBoundingClientRect()
                               setHoveredDay({
@@ -534,11 +584,11 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
                                 y: rect.top - 10,
                               })
                             }
-                            
+
                             const handleMouseLeave = () => {
                               setHoveredDay(null)
                             }
-                            
+
                             const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
                               const rect = e.currentTarget.getBoundingClientRect()
                               setHoveredDay({
@@ -548,7 +598,7 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
                                 y: rect.top - 10,
                               })
                             }
-                            
+
                             return (
                               <div
                                 key={`${day.date}-${dayIdx}`}
@@ -587,7 +637,9 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
                 >
                   <div className="bg-gray-900 dark:bg-[#161b22] text-white text-xs font-medium px-2.5 py-1.5 rounded shadow-lg whitespace-nowrap border border-gray-700 dark:border-[#30363d] mb-1">
                     {hoveredDay.count > 0
-                      ? `${hoveredDay.count} contribution${hoveredDay.count === 1 ? '' : 's'} on ${formatDateForTooltip(hoveredDay.date)}`
+                      ? `${hoveredDay.count} contribution${hoveredDay.count === 1 ? '' : 's'} on ${formatDateForTooltip(
+                          hoveredDay.date
+                        )}`
                       : `No contributions on ${formatDateForTooltip(hoveredDay.date)}`}
                   </div>
                   {/* Tooltip arrow */}
@@ -648,7 +700,6 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
                   </div>
                 </div>
               )}
-
             </>
           )}
         </div>
