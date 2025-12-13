@@ -38,16 +38,32 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         setLoading(true)
         setError(null)
 
+        // Helper function to fetch with timeout
+        const fetchWithTimeout = (url: string, timeout = 10000) => {
+          return Promise.race([
+            fetch(url),
+            new Promise<Response>((_, reject) =>
+              setTimeout(() => reject(new Error('Request timeout')), timeout)
+            ),
+          ])
+        }
+
         // Use the GitHub Contribution Calendar API
         // https://github.com/rschristian/github-contribution-calendar-api
         const apiUrl = `https://gh-calendar.rschristian.dev/user/${username}`
-        const response = await fetch(apiUrl)
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch: ${response.status}`)
+        let response: Response | null = null
+        let data: any = null
+        
+        try {
+          response = await fetchWithTimeout(apiUrl, 10000)
+          if (response && response.ok) {
+            data = await response.json()
+          } else if (response) {
+            console.warn(`Primary API returned status ${response.status}, trying fallback...`)
+          }
+        } catch (fetchError) {
+          console.warn('Primary API failed, trying fallback...', fetchError)
         }
-
-        const data = await response.json()
 
         // The API returns: { total: number, contributions: [[{date, intensity, count}, ...], ...] }
         // contributions is an array of arrays (weeks), where each week is an array of days
@@ -110,42 +126,55 @@ export default function GitHubContributions({ username }: GitHubContributionsPro
         if (days.length === 0) {
           console.warn('API returned no data, trying fallback method...')
           
-          try {
-            // Fallback: Use CORS proxy to fetch GitHub's contribution page
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(
+          // Try multiple CORS proxy services as fallbacks
+          const proxyServices = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(
               `https://github.com/users/${username}/contributions`
-            )}`
-            
-            const proxyResponse = await fetch(proxyUrl)
+            )}`,
+            `https://corsproxy.io/?${encodeURIComponent(
+              `https://github.com/users/${username}/contributions`
+            )}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
+              `https://github.com/users/${username}/contributions`
+            )}`,
+          ]
 
-            if (proxyResponse.ok) {
-              const proxyData = await proxyResponse.json()
-              const html = proxyData.contents || ''
+          for (const proxyUrl of proxyServices) {
+            try {
+              const proxyResponse = await fetchWithTimeout(proxyUrl, 8000)
 
-              if (html) {
-                // Parse HTML using regex to find contribution data
-                const rectRegex = /<rect[^>]*data-date="([^"]+)"[^>]*data-count="(\d+)"[^>]*data-level="(\d+)"[^>]*>/gi
-                let match
-                const foundDays = new Map<string, ContributionDay>()
+              if (proxyResponse.ok) {
+                const proxyData = await proxyResponse.json()
+                // Different proxies return data in different formats
+                const html = proxyData.contents || proxyData.data || proxyData
 
-                while ((match = rectRegex.exec(html)) !== null) {
-                  const date = match[1]
-                  const count = parseInt(match[2], 10)
-                  const level = parseInt(match[3], 10)
+                if (html && typeof html === 'string') {
+                  // Parse HTML using regex to find contribution data
+                  const rectRegex = /<rect[^>]*data-date="([^"]+)"[^>]*data-count="(\d+)"[^>]*data-level="(\d+)"[^>]*>/gi
+                  let match
+                  const foundDays = new Map<string, ContributionDay>()
 
-                  if (date && !isNaN(count)) {
-                    foundDays.set(date, { date, count, level })
+                  while ((match = rectRegex.exec(html)) !== null) {
+                    const date = match[1]
+                    const count = parseInt(match[2], 10)
+                    const level = parseInt(match[3], 10)
+
+                    if (date && !isNaN(count)) {
+                      foundDays.set(date, { date, count, level })
+                    }
+                  }
+
+                  if (foundDays.size > 0) {
+                    days.push(...Array.from(foundDays.values()))
+                    console.log('Fallback method succeeded, found', days.length, 'days')
+                    break // Success, exit the loop
                   }
                 }
-
-                if (foundDays.size > 0) {
-                  days.push(...Array.from(foundDays.values()))
-                  console.log('Fallback method succeeded, found', days.length, 'days')
-                }
               }
+            } catch (fallbackError) {
+              console.warn(`Fallback proxy failed, trying next...`, fallbackError)
+              continue // Try next proxy
             }
-          } catch (fallbackError) {
-            console.error('Fallback method also failed:', fallbackError)
           }
         }
 
