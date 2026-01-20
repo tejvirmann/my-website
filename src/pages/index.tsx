@@ -39,10 +39,11 @@ export default function Home() {
   // ONLY HARDCODED PART: List of the 3 latest logs (newest to oldest)
   // When adding a new log, update this array - put the newest one first
   // ============================================================================
-  const LATEST_LOG_TITLES = ['Shin Sakaino', 'Demon Faces', 'Human Face'] as const
+  const LATEST_LOG_TITLES = ['Dishwasher Pilot', 'Shin Sakaino', 'Demon Faces'] as const
 
   // Map of log titles to their dates (for display purposes only)
   const logDates: { [key: string]: string } = {
+    'Dishwasher Pilot': '2026-1-19',
     'Shin Sakaino': '2024-9-25',
     'Demon Faces': '2024-8-25',
     'Human Face': '2024-8-25',

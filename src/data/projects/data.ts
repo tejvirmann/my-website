@@ -178,7 +178,7 @@ export const Resources: Resource[] = [
     tags: ['writing', 'favorite'],
   },
   {
-    title: 'Dishwasher Screenplay',
+    title: 'Dishwasher Pilot',
     description: 'A pilot screenplay about Mark Riley breaking free.',
     image: 'dishwasher.png',
     website: '/logs/projects/dishwasher',
