@@ -177,11 +177,11 @@ export const Resources: Resource[] = [
     website: '/logs/projects/forestlanguage',
     tags: ['writing', 'favorite'],
   },
-  // {
-  //   title: 'Dishwasher Anime',
-  //   description: 'The greatest anime ever!',
-  //   image: 'dishwasher.png',
-  //   website: '/logs/projects/dishwasher',
-  //   tags: ['film', 'favorite'],
-  // },
+  {
+    title: 'Dishwasher Screenplay',
+    description: 'A pilot screenplay about Mark Riley breaking free.',
+    image: 'dishwasher.png',
+    website: '/logs/projects/dishwasher',
+    tags: ['writing', 'favorite'],
+  },
 ]
