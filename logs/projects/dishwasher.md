@@ -1,5 +1,5 @@
 ---
-title: Dishwasher Screenplay
+title: Dishwasher Pilot
 description: "Episode 1: Slaps - A pilot screenplay about Mark Riley, an antisocial teen breaking free."
 date: 2026-1-19
 authors: tejvirmann
