@@ -21,6 +21,7 @@ export type Resource = {
   website: string
   source?: string | null
   tags: TagType[]
+  imagePosition?: string
 }
 
 export type Tag = {

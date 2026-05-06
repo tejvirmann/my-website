@@ -59,6 +59,7 @@ function ShowcaseCard({ resource }: { resource: Resource }) {
               src={require('../../../../data/projects/img/' + resource.image).default}
               alt={resource.title}
               className="h-[200px] w-full object-cover"
+              style={{ objectPosition: resource.imagePosition || 'center' }}
             />
           </div>
           <div className="px-3 py-1">

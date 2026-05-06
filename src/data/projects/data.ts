@@ -190,5 +190,6 @@ export const Resources: Resource[] = [
     image: 'rugbot.png',
     website: '/logs/projects/rugbot',
     tags: ['software', 'writing'],
+    imagePosition: 'top',
   },
 ]
