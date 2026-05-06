@@ -184,4 +184,11 @@ export const Resources: Resource[] = [
     website: '/logs/projects/dishwasher',
     tags: ['writing', 'favorite'],
   },
+  {
+    title: 'Rugbot',
+    description: 'A paper on how to build a robot that ties Turkish knots.',
+    image: 'rugbot.png',
+    website: '/logs/projects/rugbot',
+    tags: ['software', 'writing'],
+  },
 ]
