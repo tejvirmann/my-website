@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets'
+import { fmtDate, logUrl } from '../lib/logs'
+import { allLogs } from '../lib/logs'
+import { KINDS } from '../lib/kinds'
+
+// the three newest logs that have a picture
+const logs = (await allLogs()).filter(l => l.data.image).slice(0, 3)
+---
+
+<section class="wrap" id="latest" aria-label="Latest logs">
+  <div class="sh"><h2>Latest</h2><a href="/logs">All logs →</a></div>
+  <div class="lw">
+    {logs.map((l, i) => (
+      <a class="frame" href={logUrl(l)} hidden={i !== 0} data-i={i} aria-label={`Open ${l.data.title}`}>
+        <Image src={l.data.image!} alt={l.data.title} width={1400} quality={78} format="webp" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} />
+      </a>
+    ))}
+    <button class="ar l" id="pv" aria-label="Previous log">←</button>
+    <button class="ar r" id="nx" aria-label="Next log">→</button>
+  </div>
+  <div class="cap">
+    {logs.map((l, i) => (
+      <div hidden={i !== 0} data-i={i}>
+        <a href={logUrl(l)}><b>{l.data.cardTitle ?? l.data.title}</b></a>
+        <span>{l.data.date.getUTCFullYear()} · {l.data.kinds.filter(k => k !== 'favorite').map(k => KINDS[k].label).join(', ') || fmtDate(l.data.date)}</span>
+        <span class="mute">{l.data.description}</span>
+      </div>
+    ))}
+    <span class="n"><span id="num">01 / 0{logs.length}</span> &nbsp; <a href={logUrl(logs[0])} id="vl">View this log →</a></span>
+  </div>
+  <div class="strip">
+    {logs.map((l, i) => (
+      <button data-i={i} class:list={[i === 0 && 'on']} aria-label={l.data.title}>
+        <Image src={l.data.image!} alt="" width={160} format="webp" quality={60} loading="lazy" />
+      </button>
+    ))}
+  </div>
+</section>
+
+<style>
+  .lw { position: relative }
+  .frame { background: color-mix(in srgb, var(--fg) 3.5%, var(--bg)); display: flex; align-items: center; justify-content: center; height: min(62vh, 600px); padding: 3vh 3vw; cursor: pointer }
+  .frame[hidden] { display: none }
+  .frame :global(img) { max-width: 100%; max-height: 100%; width: auto; height: auto; box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .5) }
+  .ar { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); font-size: 18px; box-shadow: 0 4px 14px -6px rgba(0, 0, 0, .3) }
+  .ar:hover { border-color: var(--fg) }
+  .ar.l { left: 12px }
+  .ar.r { right: 12px }
+  .cap { margin-top: 12px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start }
+  .cap > div { display: flex; flex-direction: column }
+  .cap > div[hidden] { display: none }
+  .cap b { font-weight: 600 }
+  .cap a:hover b { text-decoration: underline }
+  .n { color: var(--mute); white-space: nowrap; font-size: 13px }
+  .n a { color: var(--fg); font-weight: 500; border-bottom: 1px solid var(--fg) }
+  .strip { display: flex; gap: 8px; margin-top: 14px }
+  .strip button { height: 48px; opacity: .4; transition: opacity .2s; padding: 0 }
+  .strip button.on, .strip button:hover { opacity: 1 }
+  .strip :global(img) { height: 48px; width: auto }
+  @media (max-width: 640px) {
+    .frame { height: 52vh; padding: 3vh 4vw }
+    .ar { width: 36px; height: 36px; font-size: 16px }
+    .cap { flex-direction: column; gap: 10px }
+  }
+</style>
+
+<script>
+  const frames = [...document.querySelectorAll<HTMLAnchorElement>('#latest .frame')]
+  const caps = [...document.querySelectorAll<HTMLElement>('#latest .cap > div')]
+  const thumbs = [...document.querySelectorAll<HTMLElement>('#latest .strip button')]
+  const num = document.getElementById('num')!
+  const link = document.getElementById('vl') as HTMLAnchorElement
+  let i = 0
+  const show = (n: number) => {
+    i = (n + frames.length) % frames.length
+    frames.forEach((f, j) => (f.hidden = j !== i))
+    caps.forEach((c, j) => (c.hidden = j !== i))
+    thumbs.forEach((t, j) => t.classList.toggle('on', j === i))
+    num.textContent = `0${i + 1} / 0${frames.length}`
+    link.href = frames[i].href
+  }
+  document.getElementById('pv')!.addEventListener('click', () => show(i - 1))
+  document.getElementById('nx')!.addEventListener('click', () => show(i + 1))
+  thumbs.forEach((t, j) => t.addEventListener('click', () => show(j)))
+</script>

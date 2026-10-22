@@ -1,0 +1,88 @@
+---
+import '@fontsource-variable/inter'
+import '../styles/global.css'
+import { Image } from 'astro:assets'
+import logo from '../assets/logo.png'
+import { settings } from '../lib/site'
+
+interface Props {
+  title?: string
+  description?: string
+  /** which tab is current */
+  active?: 'projects' | 'logs' | 'about' | 'shop'
+  /** extra <head> content, e.g. a preload */
+  noindex?: boolean
+}
+const { title, description = 'The official website of Tejvir S. Mann.', active, noindex } = Astro.props
+const full = title ? `${title} | Tejvir S. Mann` : 'Tejvir S. Mann'
+const tabs = [
+  ['projects', 'Projects', '/projects'],
+  ['logs', 'Logs', '/logs'],
+  ['about', 'About', '/about'],
+  ['shop', 'Shop', '/shop'],
+] as const
+const showName = settings.nameMode === 'beside'
+const accent = /^#[0-9a-f]{6}$/i.test(settings.accent ?? '') ? settings.accent : '#2ea043'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={full} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <style set:html={`:root{--accent:${accent}}`}></style>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script is:inline>
+      try { var t = sessionStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="bar">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label="Tejvir S. Mann, home">
+          <Image src={logo} alt="" width={84} format="webp" quality={85} loading="eager" style="height:30px;width:auto" />
+          {showName && <b>Tejvir S. Mann</b>}
+        </a>
+        <nav class="tabs" aria-label="Main">
+          {tabs.map(([k, l, h]) => <a href={h} aria-current={active === k ? 'page' : undefined}>{l}</a>)}
+        </nav>
+        <button id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menu"><span></span></button>
+      </div>
+      <nav id="menu" aria-label="Mobile">
+        {tabs.map(([k, l, h]) => <a href={h} aria-current={active === k ? 'page' : undefined}>{l}</a>)}
+      </nav>
+    </header>
+    <main><slot /></main>
+    <div class="wrap">
+      <footer class="site-footer">
+        <span>© {new Date().getFullYear()}{settings.nameMode === 'footer' ? ' Tejvir S. Mann' : ''}</span>
+        <nav aria-label="Footer">
+          <a href="/logs/archive">Archive</a>
+          <a href="https://github.com/tejvirmann">GitHub</a>
+          <a href="https://twitter.com/TejvirMann">X</a>
+          <a href="https://www.linkedin.com/in/tejvir-s-mann/">LinkedIn</a>
+          <button id="themeBtn" type="button">Light / dark</button>
+        </nav>
+      </footer>
+    </div>
+    <script>
+      const root = document.documentElement
+      const btn = document.getElementById('menuBtn')!
+      const menu = document.getElementById('menu')!
+      btn.addEventListener('click', () => btn.setAttribute('aria-expanded', String(menu.classList.toggle('on'))))
+      document.getElementById('themeBtn')!.addEventListener('click', () => {
+        const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+        root.dataset.theme = dark ? 'light' : 'dark'
+        try { sessionStorage.setItem('theme', root.dataset.theme) } catch {}
+      })
+    </script>
+  </body>
+</html>

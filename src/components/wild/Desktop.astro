@@ -1,0 +1,85 @@
+---
+// A retro desktop with real content; the windows can be dragged
+import { getImage } from 'astro:assets'
+import { allLogs, fmtDate, logUrl } from '../../lib/logs'
+
+interface Props { title?: string }
+const { title = 'tejvir.exe' } = Astro.props
+const logs = await allLogs()
+const latest = logs.slice(0, 6)
+const pic = logs.find(l => l.data.image && l.data.onSite && l.data.kinds.some(k => k === 'drawing' || k === 'painting'))
+const img = pic ? await getImage({ src: pic.data.image!, width: 420, format: 'webp', quality: 72 }) : null
+---
+
+<section class="wild desk" aria-label="Retro desktop">
+  <div class="icons">
+    <a href="/projects"><i></i>Projects</a><a href="/logs"><i></i>Logs</a><a href="/about"><i></i>About</a><a href="/shop"><i></i>Shop</a>
+  </div>
+  <div class="win" style="left:22%;top:8%;width:min(330px,72%)">
+    <div class="tb"><span>{title}</span><b>x</b></div>
+    <div class="bd">
+      <p><b>Tejvir S. Mann</b></p>
+      <p>Drawing, writing, software and research. Drag these windows around.</p>
+    </div>
+  </div>
+  <div class="win" style="left:46%;top:30%;width:min(340px,80%)">
+    <div class="tb"><span>Latest.log</span><b>x</b></div>
+    <div class="bd list">
+      {latest.map(l => <a href={logUrl(l)}><span>{l.data.cardTitle ?? l.data.title}</span><em>{fmtDate(l.data.date)}</em></a>)}
+    </div>
+  </div>
+  {img && pic && (
+    <div class="win" style="left:6%;top:42%;width:min(250px,58%)">
+      <div class="tb"><span>{pic.id}.bmp</span><b>x</b></div>
+      <a class="bd" href={logUrl(pic)}><img src={img.src} alt={pic.data.title} loading="lazy" decoding="async" /></a>
+    </div>
+  )}
+  <div class="task"><a class="start" href="/projects"><i></i>Start</a><span class="clock"></span></div>
+</section>
+
+<style is:global>
+  .wild.desk { --bg: #008080; --fg: #000; min-height: 600px; font-family: 'Courier New', ui-monospace, monospace; font-size: 13px; user-select: none; touch-action: pan-y }
+  .wild.desk .icons { position: absolute; left: 14px; top: 14px; display: grid; gap: 14px; z-index: 1 }
+  .wild.desk .icons a { color: #fff; text-align: center; text-decoration: none; font-size: 12px; width: 64px }
+  .wild.desk .icons i { display: block; width: 30px; height: 26px; margin: 0 auto 4px; background: #ffe66b; border: 2px solid #000; box-shadow: 2px 2px 0 #000 }
+  .wild.desk .win { position: absolute; background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; box-shadow: 1px 1px 0 #000, 6px 6px 0 rgba(0,0,0,.25); z-index: 2 }
+  .wild.desk .tb { background: linear-gradient(90deg, #000080, #1084d0); color: #fff; padding: 3px 6px; display: flex; justify-content: space-between; cursor: grab; touch-action: none; font-weight: 700 }
+  .wild.desk .tb:active { cursor: grabbing }
+  .wild.desk .tb b { background: #c0c0c0; color: #000; width: 16px; height: 16px; line-height: 14px; text-align: center; border: 1px solid #000; font-size: 11px }
+  .wild.desk .bd { display: block; padding: 10px; color: #000 }
+  .wild.desk .bd p { margin: 0 0 8px }
+  .wild.desk .bd img { display: block; width: 100%; height: auto; border: 2px inset #fff }
+  .wild.desk .list { padding: 4px }
+  .wild.desk .list a { display: flex; justify-content: space-between; gap: 10px; padding: 5px 6px; color: #000; text-decoration: none }
+  .wild.desk .list a:hover { background: #000080; color: #fff }
+  .wild.desk .list em { font-style: normal; opacity: .65; white-space: nowrap }
+  .wild.desk .task { position: absolute; left: 0; right: 0; bottom: 0; height: 34px; background: #c0c0c0; border-top: 2px solid #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; z-index: 50 }
+  .wild.desk .start { display: flex; gap: 6px; align-items: center; padding: 3px 10px; font-weight: 700; color: #000; text-decoration: none; border: 2px solid; border-color: #fff #404040 #404040 #fff }
+  .wild.desk .start i { width: 12px; height: 12px; background: #e33; border: 1px solid #000 }
+  .wild.desk .clock { border: 2px inset #fff; padding: 2px 8px; color: #000 }
+  @media (max-width: 560px) { .wild.desk { min-height: 640px } .wild.desk .win[style*='left:6%'] { top: 62% !important } .wild.desk .win[style*='left:22%'] { left: 30% !important; top: 4% !important } .wild.desk .win[style*='left:46%'] { left: 12% !important; width: 80% !important } .wild.desk .list em { display: none } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.wild.desk').forEach(root => {
+    let z = 10
+    root.querySelectorAll<HTMLElement>('.win').forEach(win => {
+      win.addEventListener('pointerdown', () => (win.style.zIndex = String(++z)))
+      const bar = win.querySelector<HTMLElement>('.tb')!
+      bar.addEventListener('pointerdown', e => {
+        const r = win.getBoundingClientRect(), rr = root.getBoundingClientRect(), ox = e.clientX - r.left, oy = e.clientY - r.top
+        bar.setPointerCapture(e.pointerId)
+        const move = (m: PointerEvent) => {
+          win.style.left = Math.max(0, Math.min(rr.width - r.width, m.clientX - rr.left - ox)) + 'px'
+          win.style.top = Math.max(0, Math.min(rr.height - 34 - r.height, m.clientY - rr.top - oy)) + 'px'
+        }
+        const up = () => { bar.removeEventListener('pointermove', move); bar.removeEventListener('pointerup', up) }
+        bar.addEventListener('pointermove', move)
+        bar.addEventListener('pointerup', up)
+      })
+    })
+    const clock = root.querySelector('.clock')!
+    const t = () => (clock.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }))
+    t(); setInterval(t, 20000)
+  })
+</script>

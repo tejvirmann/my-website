@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projects · Tejvir S. Mann</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css"></head><body>
+<main class="wrap">
+<div class="pagehead"><h1>Projects</h1><p>Works, ideas, imaginations, and other contributions.</p></div>
+<section style="margin-top:0" data-section="project-filters"><div class="filters" id="filters"></div></section>
+<section style="margin-top:0" data-section="project-results"><div class="summary" id="summary"></div><div id="results"></div><div class="more" id="more"></div>
+<p class="mute" id="perf" style="text-align:center;font-size:12.5px;margin-top:12px"></p></section>
+</main>
+<script src="data.js"></script><script src="repos.js"></script><script src="logs.js"></script><script src="site.js"></script><script>
+chrome('projects')
+const {art,sw}=allItems(),ALL=[...art,...sw],PAGE=S.get('pageSize')
+const years=[...new Set(ALL.map(i=>i.year))].sort()
+const st={q:'',view:'grid',sort:'new',type:'all',kinds:new Set(),years:new Set(),shown:PAGE};{const k=new URLSearchParams(location.search).get('kind');if(k)st.kinds.add(k)}
+const cnt=(f)=>ALL.filter(f).length
+const toggle=(set,v)=>{set.has(v)?set.delete(v):set.add(v);st.shown=PAGE;render()}
+window.T=toggle
+// ---- fuzzy search: every word must match something; typos, partial words and word order are fine ----
+const norm=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]+/g,' ')
+function subseq(t,w){let i=0;for(const c of w){if(c===t[i])i++;if(i===t.length)return w[0]===t[0]}return false}
+function lev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let p=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const c=[i];let m=i;for(let j=1;j<=b.length;j++){const v=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));c[j]=v;if(v<m)m=v}if(m>max)return max+1;p=c}return p[b.length]}
+const FIELDS=it=>{if(it._f)return it._f;const L=LOGS.find(l=>l.slug===it.id),kinds=it.kinds.map(k=>KINDS[k][0]).join(' ');return it._f=[[norm(it.title),6],[norm(kinds+' '+(it.lang||'')+' '+it.year+' '+(it.type==='sw'?'software code github repo':'')),4],[norm(it.desc||''),2],[norm(L?(L.tags.join(' ')+' '+(L.text||[]).join(' ')):''),1]]}
+function tokScore(tok,it){let best=0;for(const[txt,w]of FIELDS(it)){if(!txt)continue;if(txt.includes(tok)){best=Math.max(best,w*(txt.split(' ').includes(tok)?3:2));continue}const words=txt.split(' ');for(const wd of words){if(!wd)continue;if(wd.startsWith(tok)){best=Math.max(best,w*2);continue}if(tok.length>=3&&tok.length<=5&&wd.length<=tok.length+3&&subseq(tok,wd)){best=Math.max(best,w*1.1);continue}if(tok.length>=4&&lev(tok,wd.slice(0,tok.length+1),tok.length>=7?2:1)<=(tok.length>=7?2:1))best=Math.max(best,w*1.4)}}return best}
+function scoreItem(it,q){const toks=norm(q).split(' ').filter(Boolean);if(!toks.length)return 1;let tot=0;for(const t of toks){const s=tokScore(t,it);if(!s)return 0;tot+=s}return tot}
+function pass(it){
+  if(st.type==='art'&&it.type!=='art')return false;if(st.type==='sw'&&it.type!=='sw')return false
+  if(st.q&&!(it._s=scoreItem(it,st.q)))return false
+  if(st.kinds.size&&![...st.kinds].some(k=>k==='favorite'?featured().has(it.id):it.kinds.includes(k)))return false
+  if(st.years.size&&!st.years.has(it.year))return false
+  return true}
+function sorted(l){const a=[...l];if(st.q)return a.sort((x,y)=>(y._s||0)-(x._s||0)||y.date.localeCompare(x.date));if(st.sort==='old')a.sort((x,y)=>x.date.localeCompare(y.date));else if(st.sort==='az')a.sort((x,y)=>x.title.toLowerCase().localeCompare(y.title.toLowerCase()));else{a.sort((x,y)=>y.date.localeCompare(x.date));
+  // newest first, but spread software between art so the page is not a block of tiles
+  if(st.type==='all'){const A=a.filter(i=>i.type==='art'),S2=a.filter(i=>i.type==='sw'),o=[],e=Math.max(2,Math.round(A.length/(S2.length||1)*1.3));let k=0;A.forEach((x,n)=>{o.push(x);if((n+1)%e===0&&k<S2.length)o.push(S2[k++])});while(k<S2.length)o.push(S2[k++]);return o}}
+  return a}
+const KIND_LIST=['writing','drawing','uimodeling','painting','research','software','favorite']
+function filtersHTML(){
+  const hist=years.map(y=>{const n=cnt(i=>i.year===y);const mx=Math.max(...years.map(yy=>cnt(i=>i.year===yy)));return `<button class="${st.years.has(y)?'on':''}" onclick="T(st.years,'${y}')" title="${n} projects in ${y}"><i style="height:${Math.max(6,n/mx*58)}px"></i>${y.slice(2)}</button>`}).join('')
+  return `<div class="frow"><label>Search</label><div class="bar-in"><input type="search" placeholder="Search by title, kind, year, language or description" value="${st.q}" oninput="st.q=this.value.toLowerCase();st.shown=${PAGE};render(true)"><select onchange="st.sort=this.value;render()"><option value="new" ${st.sort==='new'?'selected':''}>Newest first</option><option value="old" ${st.sort==='old'?'selected':''}>Oldest first</option><option value="az" ${st.sort==='az'?'selected':''}>A to Z</option></select><div class="seg">${[['grid','Grid'],['timeline','Timeline'],['lanes','Lanes']].map(([k,l])=>`<button class="${st.view===k?'on':''}" onclick="st.view='${k}';render()">${l}</button>`).join('')}</div></div></div>
+  <div class="frow"><label>Show</label><div class="bar-in" style="gap:8px 18px;align-items:center;flex-wrap:nowrap"><div class="seg" style="flex:none">${[['all','All'],['art','Art & writing'],['sw','Software']].map(([k,l])=>`<button class="${st.type===k?'on':''}" onclick="st.type='${k}';st.shown=${PAGE};render()" style="padding:6px 11px">${l}</button>`).join('')}</div><div class="chips kinds" style="gap:5px;flex-wrap:wrap">${KIND_LIST.map(k=>`<button class="chip ${st.kinds.has(k)?'on':''}" onclick="T(st.kinds,'${k}')"><i class="dot" style="--c:${KINDS[k][1]}"></i>${KINDS[k][0]} <small>${cnt(i=>k==='favorite'?featured().has(i.id):i.kinds.includes(k))}</small></button>`).join('')}</div></div></div>
+  <div class="frow"><label>Year</label><div class="hist" role="group" aria-label="Projects per year">${hist}</div></div>`}
+function active(){const a=[];if(st.q)a.push('"'+st.q+'"');if(st.type!=='all')a.push(st.type==='art'?'Art & writing':'Software');st.kinds.forEach(k=>a.push(KINDS[k][0]));st.years.forEach(y=>a.push(y));return a}
+function render(keepFocus){
+  const fEl=document.getElementById('filters');if(!keepFocus)fEl.innerHTML=filtersHTML();else{ /* keep the search box focused while typing */ const sel=fEl.querySelector('input');const pos=sel.selectionStart;fEl.innerHTML=filtersHTML();const n=fEl.querySelector('input');n.focus();n.setSelectionRange(pos,pos)}
+  const list=sorted(ALL.filter(pass)),a=active()
+  summary.innerHTML=`<span><b>${list.length}</b> of ${ALL.length} projects</span>${a.map(x=>`<span class="pill">${x}</span>`).join('')}${a.length?'<button class="btn sm ghost" onclick="location.reload()">Clear all</button>':''}`
+  const host=results;host.innerHTML=''
+  if(!list.length){host.innerHTML='<p class="mute" style="padding:40px 0;text-align:center">Nothing matches. Try removing a filter.</p>';more.innerHTML='';perf.textContent='';return}
+  const gap=innerWidth<600?4:6
+  if(st.view==='lanes'){lanes(list);more.innerHTML='';perf.textContent='Lanes view: art shown as thumbnails, software as dots.';return}
+  const slice=list.slice(0,st.shown)
+  if(st.view==='grid'){host.innerHTML='<div class="grid" id="g"></div>';watchGrid(document.getElementById('g'),slice,gap)}
+  else{const ys=[...new Set(slice.map(i=>i.year))].sort((a,b)=>st.sort==='old'?a-b:b-a);host.innerHTML=ys.map(y=>`<div class="yrgroup"><h3>${y}</h3><div class="grid" data-y="${y}"></div></div>`).join('');host.querySelectorAll('[data-y]').forEach(h=>watchGrid(h,slice.filter(i=>i.year===h.dataset.y),gap))}
+  const left=list.length-slice.length
+  more.innerHTML=left>0?`<button class="btn" onclick="st.shown+=${PAGE};render()">Show ${Math.min(PAGE,left)} more · ${left} remaining</button>`:''
+  const imgs=slice.filter(i=>i.type==='art').length
+  perf.textContent=`Showing ${slice.length} of ${list.length}. Only the ${imgs} pieces on screen so far are loaded; more load as you reveal them (${PAGE} at a time).`}
+const grids=new Map()
+function watchGrid(h,items,gap){const draw=()=>justifyRows(h,items,{gap});draw();let t;new ResizeObserver(()=>{clearTimeout(t);t=setTimeout(draw,80)}).observe(h)}
+function lanes(list){
+  const rows=['drawing','painting','writing','uimodeling','software'],dates=list.map(i=>+new Date(i.date)),mn=Math.min(...dates),mx=Math.max(...dates),span=Math.max(1,mx-mn)
+  const pos=d=>((+new Date(d)-mn)/span*92)
+  results.innerHTML=`<div class="lanes">${rows.map(k=>{const l=list.filter(i=>i.kinds.includes(k)&&(k!=='drawing'||true));return `<div class="lane"><span>${KINDS[k][0]}</span>${l.map(i=>i.type==='art'?`<a href="#" data-lb="${i.id}" title="${i.title}, ${i.year}" style="left:${pos(i.date)}%;width:${Math.round(48*i.ar)}px">${pic(i.c,{sizes:'60px'})}</a>`:`<a href="${i.r.url}" target="_blank" rel="noopener" title="${i.title}, ${i.year}" style="left:${pos(i.date)}%;width:10px;height:10px;top:27px;border-radius:50%;background:${LANGS[i.lang]||'#9a9890'}"></a>`).join('')}</div>`}).join('')}</div><div class="axis"><span>${new Date(mn).getFullYear()}</span><span>${new Date(mx).getFullYear()}</span></div>`}
+bindLightbox(CARDS);render()
+</script></body></html>

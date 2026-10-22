@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Log · Tejvir S. Mann</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css"></head><body>
+<main class="wrap"><p class="crumb" id="crumb"></p><div class="lp" id="lp"></div><div class="pn" id="pn"></div></main>
+<div id="lbx" class="modal"><div class="box" style="grid-template-columns:1fr;max-width:1000px"><div class="pic" style="padding:12px"><img id="lbimg" alt="" style="max-height:80vh;width:auto;height:auto;max-width:100%"></div></div></div>
+<script src="data.js"></script><script src="repos.js"></script><script src="logs.js"></script><script src="site.js"></script><script>
+chrome('logs')
+// small markdown renderer: headings, paragraphs, lists, quotes, rules, bold, italic, links (the same markdown files the site is built from)
+const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+const inl=t=>esc(t).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/(^|[\s(])\*([^*\n]+)\*/g,'$1<em>$2</em>').replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2">$1</a>').replace(/&lt;br&gt;/g,'<br>')
+function md(src){const out=[];let list=null;const flush=()=>{if(list){out.push('<'+list.t+'>'+list.i.map(x=>'<li>'+inl(x)+'</li>').join('')+'</'+list.t+'>');list=null}}
+ for(const block of src.split(/\n\s*\n/)){const lines=block.split('\n').filter(l=>l.trim());if(!lines.length)continue
+  if(/^\s*---+\s*$/.test(block)){flush();out.push('<hr>');continue}
+  const h=lines[0].match(/^(#{1,4})\s+(.*)$/);if(h&&lines.length===1){flush();const n=Math.min(4,Math.max(2,h[1].length+1));out.push('<h'+n+'>'+inl(h[2])+'</h'+n+'>');continue}
+  if(lines.every(l=>/^\s*[-*]\s+/.test(l))){flush();out.push('<ul>'+lines.map(l=>'<li>'+inl(l.replace(/^\s*[-*]\s+/,''))+'</li>').join('')+'</ul>');continue}
+  if(lines.every(l=>/^\s*\d+\.\s+/.test(l))){flush();out.push('<ol>'+lines.map(l=>'<li>'+inl(l.replace(/^\s*\d+\.\s+/,''))+'</li>').join('')+'</ol>');continue}
+  if(lines.every(l=>/^>/.test(l))){flush();out.push('<blockquote>'+inl(lines.map(l=>l.replace(/^>\s?/,'')).join(' '))+'</blockquote>');continue}
+  if(h){flush();const n=Math.min(4,Math.max(2,h[1].length+1));out.push('<h'+n+'>'+inl(h[2])+'</h'+n+'>');lines.shift()}
+  flush();out.push('<p>'+inl(lines.join(' '))+'</p>')}
+ flush();return out.join('')}
+const slug=new URLSearchParams(location.search).get('slug')||'pinkpen'
+const L=LOGS.find(l=>l.slug===slug)||LOGS[0],C=CARDS.find(c=>c.slug===L.slug),P=shopGet().find(p=>p.slug===L.slug&&p.active)
+// every picture: the optimized cover first, then the pictures embedded in the log body (these stay on Firebase for now)
+const pics=[...(C?[{src:IMG+C.l,t:IMG+C.t,w:C.w,h:C.h}]:[]),...(L.imgs||[]).map(u=>({src:u,t:u}))]
+let cur=0
+const idx=LOGS.findIndex(l=>l.slug===L.slug),newer=LOGS[idx-1],older=LOGS[idx+1]
+document.title=L.title+' · Tejvir S. Mann'
+crumb.innerHTML='<a href="logs.html">Logs</a> / '+L.title
+lp.innerHTML=`<div class="gal"><div class="main" id="mn" title="Click to enlarge"></div><div class="th" id="th"></div><div class="cnt" id="cn"></div></div>
+<div class="info"><h1>${L.title}</h1><div class="meta">${fmtDate(L.date)}${C?' · '+sortKinds(C.kinds).filter(k=>k!=='favorite').map(kindLabel).join(', '):''}</div>
+<div class="md">${L.md?md(L.md):`<p>${L.desc}</p>`}</div>
+<dl class="spec"><dt>Year</dt><dd>${yr(L.date)}</dd><dt>Medium</dt><dd>${C&&C.kinds.includes('painting')?'Paint':C&&C.kinds.includes('drawing')?'Drawing':C&&C.kinds.includes('writing')?'Text':'—'}</dd><dt>Pictures</dt><dd>${pics.length}</dd></dl>
+${P?`<div class="buy" id="buy"><div class="price" id="pr">$${P.price}</div><div class="stock">${P.stock>0?(P.stock<=3?'Only '+P.stock+' left':'In stock'):'Sold out'} · shipping calculated at checkout</div><div class="opt" id="opt">${P.sizes.map((s,i)=>`<button class="${i?'':'on'}" data-i="${i}">${s}</button>`).join('')}</div><a class="btn solid" href="#" id="co">Buy with Stripe →</a><p class="mute" style="font-size:12px;margin-top:12px">Payment happens on Stripe's hosted page. Card details never touch this site.</p></div>`:''}
+<div class="tags">${L.tags.map(t=>`<a href="logs.html">${t}</a>`).join('')}</div></div>`
+function paint(){const p=pics[cur];mn.innerHTML=p?`<img src="${p.src}" ${p.w?`width="${p.w}" height="${p.h}"`:''} alt="${L.title}, picture ${cur+1}">`:'<span class="mute">No picture</span>';th.innerHTML=pics.length>1?pics.map((q,i)=>`<button class="${i===cur?'on':''}" onclick="cur=${i};paint()" aria-label="Picture ${i+1}"><img src="${q.t}" loading="lazy" alt=""></button>`).join(''):'';cn.textContent=pics.length>1?`${cur+1} of ${pics.length} pictures`:''}
+paint();mn.onclick=()=>{lbimg.src=pics[cur].src;lbx.classList.add('on')};lbx.onclick=()=>lbx.classList.remove('on')
+if(P){opt.onclick=e=>{const b=e.target.closest('button');if(b){opt.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))}};co.onclick=e=>{e.preventDefault();toast('Mockup: opens Stripe Checkout for '+P.title+', '+opt.querySelector('.on').textContent)}}
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&pics.length){cur=(cur+1)%pics.length;paint()}if(e.key==='ArrowLeft'&&pics.length){cur=(cur-1+pics.length)%pics.length;paint()}})
+pn.innerHTML=(newer?`<a href="log.html?slug=${newer.slug}"><small>← Newer</small>${newer.title}</a>`:'<span></span>')+(older?`<a href="log.html?slug=${older.slug}" style="text-align:right"><small>Older →</small>${older.title}</a>`:'')
+</script></body></html>

@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Logs · Tejvir S. Mann</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css"></head><body>
+<main class="wrap">
+<div class="pagehead"><h1>Logs</h1><p>Tejvir's logs</p></div>
+<section style="margin-top:0" data-section="log-list"><div class="seg" style="margin-bottom:22px"><a href="logs.html" class="on" style="padding:8px 14px;font-size:13px;display:inline-block;color:var(--bg);background:var(--fg)">Latest</a><a href="archive.html" class="" style="padding:8px 14px;font-size:13px;display:inline-block;color:var(--mute);background:transparent">Archive</a></div><div class="chips" id="tags" style="margin-bottom:18px"></div><div class="llist" id="list"></div><div class="pager" id="pager"></div></section>
+</main>
+<script src="data.js"></script><script src="repos.js"></script><script src="logs.js"></script><script src="site.js"></script><script>
+chrome('logs')
+const PER=10;let page=1,tag=''
+const tags=[...new Set(LOGS.flatMap(l=>l.tags))].sort((a,b)=>LOGS.filter(l=>l.tags.includes(b)).length-LOGS.filter(l=>l.tags.includes(a)).length)
+function draw(){
+  tags.length&&(document.getElementById('tags').innerHTML=`<button class="chip ${!tag?'on':''}" onclick="tag='';page=1;draw()">All <small>${LOGS.length}</small></button>`+tags.map(t=>`<button class="chip ${tag===t?'on':''}" onclick="tag='${t}';page=1;draw()">${t} <small>${LOGS.filter(l=>l.tags.includes(t)).length}</small></button>`).join(''))
+  const l=LOGS.filter(x=>!tag||x.tags.includes(tag)),pages=Math.ceil(l.length/PER),s=l.slice((page-1)*PER,page*PER)
+  document.getElementById('list').innerHTML=s.map(x=>{const c=CARDS.find(c=>c.slug===x.slug);return `<a href="log.html?slug=${x.slug}"><span class="d">${fmtDate(x.date)}</span><span><b>${x.title}</b><span class="ds">${x.desc||''}</span></span><span class="tg">${x.tags.map(t=>`<span>${t}</span>`).join('')}</span><span class="th">${c?`<img src="${IMG}${c.t}" width="${c.w}" height="${c.h}" loading="lazy" decoding="async" alt="">`:''}</span></a>`}).join('')
+  document.getElementById('pager').innerHTML=pages>1?Array.from({length:pages},(_,i)=>`<button class="${i+1===page?'on':''}" onclick="page=${i+1};draw();scrollTo(0,0)">${i+1}</button>`).join('')+(page<pages?`<button onclick="page++;draw();scrollTo(0,0)" style="padding:0 12px">Older →</button>`:''):''}
+draw()
+</script></body></html>

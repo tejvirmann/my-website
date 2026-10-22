@@ -1,0 +1,136 @@
+/* Design tokens, base styles and the shared pieces used on every page. Page-specific styles live next to their components. */
+:root {
+  --bg: #fff;
+  --fg: #111;
+  --mute: #6b6b66;
+  --line: #e4e2dc;
+  --soft: #f5f4f0;
+  --sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gut: clamp(16px, 3vw, 32px);
+  --max: 1240px;
+}
+:root[data-theme='dark'] {
+  --bg: #0e0e0d;
+  --fg: #ecebe6;
+  --mute: #8d8b83;
+  --line: #282826;
+  --soft: #171716;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0e0e0d;
+    --fg: #ecebe6;
+    --mute: #8d8b83;
+    --line: #282826;
+    --soft: #171716;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100% }
+body { background: var(--bg); color: var(--fg); font: 400 14.5px/1.55 var(--sans); font-feature-settings: 'tnum' 1, 'cv11' 1; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column }
+main { flex: 1 }
+a { color: inherit; text-decoration: none }
+button, input, select, textarea { font: inherit; color: inherit }
+button { background: none; border: 0; cursor: pointer }
+img { display: block; max-width: 100% }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px }
+.wrap { max-width: var(--max); margin-inline: auto; padding: 0 var(--gut); width: 100% }
+.mute { color: var(--mute) }
+section { margin-top: 56px }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); flex: none }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+
+/* page heading */
+.pagehead { margin: 40px 0 24px }
+.pagehead h1 { font: 600 clamp(28px, 4vw, 40px) / 1.1 var(--sans); letter-spacing: -.02em }
+.pagehead p { color: var(--mute); margin-top: 8px; max-width: 62ch }
+
+/* section header */
+.sh { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 14px }
+.sh h2 { font: 600 15px var(--sans) }
+.sh span, .sh a { font-size: 13px; color: var(--mute) }
+.sh a:hover { color: var(--fg) }
+
+/* chips, buttons */
+.chips { display: flex; flex-wrap: wrap; gap: 6px }
+.chip { padding: 5px 12px; border-radius: 99px; font-size: 13px; color: var(--mute); border: 1px solid var(--line); display: inline-flex; gap: 7px; align-items: center; white-space: nowrap }
+.chip:hover { color: var(--fg); border-color: var(--mute) }
+.chip.on { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.chip small { opacity: .6; font-size: 11.5px }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; border-radius: 8px; border: 1px solid var(--fg); font-size: 14px; font-weight: 500; cursor: pointer }
+.btn:hover { background: var(--fg); color: var(--bg) }
+.btn.solid { background: var(--fg); color: var(--bg) }
+.btn.solid:hover { opacity: .85 }
+.btn.ghost { border-color: var(--line) }
+.btn[disabled], .btn[aria-disabled='true'] { opacity: .4; pointer-events: none }
+.btn.point { background: var(--fg); color: var(--bg); border: 0; border-radius: 0; padding: 12px 36px 12px 20px; clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%); transition: padding .18s ease, opacity .15s }
+.btn.point:hover { padding-right: 44px; opacity: .92 }
+.more { display: flex; justify-content: center; margin-top: 28px }
+
+/* top tab bar */
+.bar { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(10px) }
+.bar .wrap { height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 16px }
+.bar .logo { display: inline-flex; align-items: center; gap: 12px }
+.bar .logo img { height: 30px; width: auto }
+:root[data-theme='dark'] .bar .logo img { filter: invert(1) }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .bar .logo img { filter: invert(1) } }
+.bar .logo b { font-weight: 600; font-size: 15px }
+.tabs { display: flex; gap: 6px }
+.tabs a { padding: 8px 12px; font-size: 14px; color: var(--mute) }
+.tabs a:hover { color: var(--fg) }
+.tabs a[aria-current='page'] { color: var(--fg); font-weight: 500; box-shadow: inset 0 -2px 0 var(--fg) }
+#menuBtn { display: none; width: 40px; height: 40px; border-radius: 8px; align-items: center; justify-content: center }
+#menuBtn span, #menuBtn span::before, #menuBtn span::after { display: block; width: 18px; height: 1.5px; background: var(--fg); position: relative; content: '' }
+#menuBtn span::before { position: absolute; top: -6px }
+#menuBtn span::after { position: absolute; top: 6px }
+#menu { display: none }
+@media (max-width: 700px) {
+  .tabs { display: none }
+  #menuBtn { display: flex }
+  #menu.on { display: flex; flex-direction: column; position: absolute; left: 0; right: 0; top: 58px; background: var(--bg); border-bottom: 1px solid var(--line); padding: 6px var(--gut) 14px }
+  #menu a { padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 16px }
+  #menu a:last-child { border: 0 }
+}
+
+/* footer */
+.site-footer { margin-top: 84px; padding: 22px 0 56px; border-top: 1px solid var(--line); color: var(--mute); font-size: 13px; display: flex; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap }
+.site-footer a:hover, .site-footer button:hover { color: var(--fg) }
+.site-footer nav { display: flex; gap: 6px 14px; flex-wrap: wrap }
+
+/* project grid: capped justified rows (layout computed in src/scripts/rows.ts) */
+.grid { display: flex; flex-direction: column; gap: 6px }
+.jr { display: flex }
+.t { position: relative; display: block; flex: none; overflow: hidden; background: var(--col, var(--soft)) }
+.t img { width: 100%; height: 100%; object-fit: cover; display: block }
+.t .ov { position: absolute; inset: auto 0 0 0; padding: 26px 10px 8px; background: linear-gradient(transparent, rgba(0, 0, 0, .62)); color: #fff; font-size: 12.5px; line-height: 1.3; opacity: 0; transition: opacity .2s }
+.t:hover .ov, .t:focus-visible .ov { opacity: 1 }
+.t .ov b { font-weight: 600; display: block }
+@media (hover: none) { .t .ov { display: none } }
+.tile { position: relative; display: block; flex: none; overflow: hidden; background: color-mix(in srgb, var(--k) 11%, var(--bg)); border: 1px solid color-mix(in srgb, var(--k) 28%, var(--line)) }
+.tile svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55 }
+.tile .tb { position: absolute; inset: auto 0 0 0; padding: 28px 12px 10px; background: linear-gradient(transparent, var(--bg) 42%); display: flex; flex-direction: column; gap: 2px }
+.tile b { font-weight: 600; font-size: 13.5px; line-height: 1.25; word-break: break-word }
+.tile .td { color: var(--mute); font-size: 12px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.tile .tm { display: flex; gap: 6px; align-items: center; font-size: 11.5px; color: var(--mute); margin-top: 2px }
+.tile:hover { border-color: var(--k) }
+.tile.type { background: var(--soft) }
+@media (max-width: 560px) {
+  .tile .td { display: none }
+  .tile b { font-size: 12.5px; word-break: normal }
+  .tile .tm { font-size: 11px }
+  .tile .tb { padding: 18px 9px 7px }
+}
+
+/* markdown body of a log */
+.md { font-size: 15.5px; line-height: 1.7 }
+.md :where(p, ul, ol, blockquote) { margin-bottom: 12px; max-width: 62ch }
+.md :where(h2, h3, h4) { font: 600 16px var(--sans); margin: 20px 0 6px }
+.md a { color: var(--fg); border-bottom: 1px solid var(--mute) }
+.md a:hover { border-color: var(--fg) }
+.md :where(ul, ol) { padding-left: 20px }
+.md hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0 }
+.md blockquote { border-left: 2px solid var(--line); padding-left: 12px; color: var(--mute) }
+.md pre { overflow-x: auto; background: var(--soft); padding: 12px; font-size: 13px; margin-bottom: 12px }
+.md code { font-size: .92em }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important } }

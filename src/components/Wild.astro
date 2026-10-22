@@ -1,0 +1,123 @@
+---
+// Loud sections that can be dropped between the calm ones (see "placements" in src/data/site.json).
+// Each kind swaps its own colors, so the rest of the page is untouched. All motion is CSS or a small lazy script,
+// and everything is static when the visitor prefers reduced motion.
+import { getImage } from 'astro:assets'
+import { getCollection } from 'astro:content'
+import Ink from './wild/Ink.astro'
+import Curves from './wild/Curves.astro'
+import Desktop from './wild/Desktop.astro'
+import Terminal from './wild/Terminal.astro'
+import type { Placement } from '../lib/wild'
+
+// one placement from src/data/site.json (see src/lib/wild.ts for the options of each kind)
+type Props = Placement
+const { kind, art = [], text, text2, palette, curve, title } = Astro.props
+
+// small seeded random so the layout is stable between builds
+let seed = 3
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+
+let pieces: { src: string; style: string }[] = []
+if (kind === 'collage') {
+  const logs = (await getCollection('logs')).filter(l => l.data.image && l.data.onSite && (!art.length || art.includes(l.id)))
+  const picked = logs.sort(() => rnd() - 0.5).slice(0, 14)
+  pieces = await Promise.all(
+    picked.map(async (l, i) => {
+      const img = await getImage({ src: l.data.image!, width: 320, format: 'webp', quality: 70 })
+      const w = 110 + rnd() * 150
+      return { src: img.src, style: `left:${(rnd() * 86).toFixed(1)}%;top:${(14 + rnd() * 62).toFixed(1)}%;width:${w.toFixed(0)}px;height:${(w * (0.75 + rnd() * 0.6)).toFixed(0)}px;rotate:${((rnd() - 0.5) * 34).toFixed(1)}deg;z-index:${1 + (i % 4)};--d:${(5 + rnd() * 6).toFixed(1)}s` }
+    })
+  )
+}
+const line = (t: string, n: number) => t.repeat(n)
+---
+
+{kind === 'collage' && (
+  <section class="wild collage" aria-label="Collage of selected work">
+    <div class="band t"><span>{line('Tejvir S. Mann ✺ Drawing ✺ AI ✺ Brain architectures ✺ Stories ✺ ', 6)}</span></div>
+    {pieces.map(p => <div class="piece" style={p.style}><img src={p.src} alt="" loading="lazy" decoding="async" /></div>)}
+    <div class="band b"><span>{line('Selected work ✺ Scroll ✺ Look closer ✺ ', 8)}</span></div>
+  </section>
+)}
+
+{kind === 'marquee' && (
+  <section class="wild marq" aria-hidden="true">
+    <div class="band"><span>{line(`${text || 'Drawing ✺ AI ✺ Brain architectures ✺ Stories'} ✺ `, 10)}</span></div>
+    <div class="band rev"><span>{line(`${text2 || 'Selected work ✺ New pieces ✺ Look closer'} ✺ `, 10)}</span></div>
+  </section>
+)}
+
+{kind === 'ink' && <Ink palette={palette} />}
+{kind === 'math' && <Curves curve={curve} />}
+{kind === 'desktop' && <Desktop title={title} />}
+{kind === 'terminal' && <Terminal />}
+
+{kind === 'vine' && (
+  <section class="wild vine" aria-hidden="true">
+    <svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMax slice">
+      {['M120,540 C90,430 220,400 200,300 S120,200 240,120 S380,60 360,-10', 'M600,540 C640,450 520,400 560,320 S700,240 660,150 S560,80 620,-10', 'M1060,540 C1020,440 1140,390 1110,300 S1000,200 1090,110 S1190,40 1150,-10', 'M240,120 C310,100 360,150 340,210 S300,260 350,300', 'M660,150 C730,140 790,190 770,250 S720,300 780,340', 'M1110,300 C1050,290 1010,340 1030,390 S1060,440 1010,470'].map((d, i) => <path class="v" d={d} fill="none" stroke="#6fbf73" stroke-width={i < 3 ? 5 : 3} stroke-linecap="round" />)}
+      <g class="lv"></g>
+    </svg>
+  </section>
+)}
+
+<style is:global>
+  .wild { position: relative; overflow: hidden; isolation: isolate; margin-top: 56px; width: 100%; --bg: #f4ff3a; --fg: #0b0b0b; --soft: #fff; background: var(--bg); color: var(--fg); min-height: min(80vh, 680px) }
+  .wild .band { position: absolute; left: -5%; width: 110%; overflow: hidden; white-space: nowrap; background: var(--fg); color: var(--bg); font: 700 clamp(22px, 4vw, 48px) / 1 var(--sans); letter-spacing: -.02em; text-transform: uppercase; padding: .35em 0; z-index: 5 }
+  .wild .band.t { top: 5%; transform: rotate(-2.2deg) }
+  .wild .band.b { bottom: 5%; transform: rotate(1.6deg) }
+  .wild .band span { display: inline-block; padding-right: 1.5em; animation: marq 22s linear infinite }
+  .wild .band.b span, .wild .band.rev span { animation-direction: reverse }
+  @keyframes marq { to { transform: translateX(-50%) } }
+  .wild .piece { position: absolute; box-shadow: 6px 6px 0 var(--fg); border: 3px solid var(--fg); background: var(--soft); animation: bob var(--d, 7s) ease-in-out infinite alternate }
+  .wild .piece img { width: 100%; height: 100%; object-fit: cover }
+  @keyframes bob { from { translate: 0 -8px } to { translate: 0 10px } }
+  .wild.marq { --bg: #111; --fg: #fff; min-height: 0; padding: 30px 0 }
+  .wild.marq .band { position: static; transform: none; width: auto; margin: 10px 0 }
+  .wild.vine { --bg: #0f1a12; --fg: #d9f2c4; min-height: min(64vh, 520px) }
+  .wild.vine svg { position: absolute; inset: 0; width: 100%; height: 100% }
+  @media (max-width: 560px) { .wild { min-height: 440px } .wild .piece { box-shadow: 4px 4px 0 var(--fg); border-width: 2px } }
+</style>
+
+<script>
+  // vine: the paths draw themselves (and sprout leaves) the first time the section scrolls into view
+  const vine = document.querySelector<SVGSVGElement>('.wild.vine svg')
+  if (vine) {
+    const paths = [...vine.querySelectorAll<SVGPathElement>('path.v')]
+    const lv = vine.querySelector('.lv')!
+    const len = paths.map(p => p.getTotalLength())
+    const leaves: { e: SVGPathElement; i: number; at: number; x: number; y: number; ang: number }[] = []
+    paths.forEach((p, i) => {
+      p.style.strokeDasharray = String(len[i])
+      p.style.strokeDashoffset = String(len[i])
+      const n = 9 + i
+      for (let k = 1; k <= n; k++) {
+        const at = k / (n + 1)
+        const a = p.getPointAtLength(len[i] * at), b = p.getPointAtLength(Math.min(len[i], len[i] * at + 2))
+        const ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + (k % 2 ? 70 : -70)
+        const e = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        e.setAttribute('d', 'M0,0 C6,-12 20,-12 28,0 C20,12 6,12 0,0')
+        e.setAttribute('fill', k % 3 ? '#8fd694' : '#b6e8a8')
+        e.setAttribute('transform', `translate(${a.x},${a.y}) rotate(${ang}) scale(0)`)
+        lv.append(e)
+        leaves.push({ e, i, at, x: a.x, y: a.y, ang })
+      }
+    })
+    const set = (q: number) => {
+      paths.forEach((p, i) => (p.style.strokeDashoffset = String(len[i] * (1 - Math.max(0, Math.min(1, q * 1.25 - i * 0.04))))))
+      leaves.forEach(l => {
+        const lp = Math.max(0, Math.min(1, q * 1.25 - l.i * 0.04))
+        l.e.setAttribute('transform', `translate(${l.x},${l.y}) rotate(${l.ang}) scale(${Math.max(0, Math.min(1, (lp - l.at) * 6))})`)
+      })
+    }
+    new IntersectionObserver((es, o) => {
+      if (!es[0].isIntersecting) return
+      o.disconnect()
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return set(1)
+      const t0 = performance.now()
+      const tick = (now: number) => { const p = Math.min(1, (now - t0) / 5200); set(1 - Math.pow(1 - p, 3)); if (p < 1) requestAnimationFrame(tick) }
+      requestAnimationFrame(tick)
+    }, { threshold: 0.3 }).observe(vine)
+  }
+</script>

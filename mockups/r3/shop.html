@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop · Tejvir S. Mann</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css"></head><body>
+<main class="wrap">
+<div class="pagehead"><h1>Shop</h1><p>Prints and originals. Choose a size, then check out securely with Stripe.</p></div>
+<div class="note" style="margin-top:0">Every listing is a log with a price. Each item opens that log's page (all its pictures) with a Buy with Stripe box. To sell a log, open it in the control plane (Logs tab) and switch on Sell this log.</div>
+<section style="margin-top:0" data-section="shop-grid"><div class="shopgrid" id="sg"></div></section>
+
+</main>
+<script src="data.js"></script><script src="repos.js"></script><script src="logs.js"></script><script src="site.js"></script><script>
+chrome('shop')
+const P=shopGet().filter(p=>p.active)
+sg.innerHTML=P.map((p,i)=>{const cv=coverOf(p.slug);return `<a class="prod" href="log.html?slug=${p.slug}#buy"><div class="m">${p.badge?`<span class="badge">${p.badge}</span>`:''}${p.stock<=0?'<span class="badge" style="left:auto;right:10px">Sold out</span>':''}${cv.local?pic(cv.c,{sizes:'250px'}):(cv.src?`<img src="${cv.src}" loading="lazy" alt="${p.title}">`:'')}</div><div class="pr"><b>${p.title}</b><span>$${p.price}</span></div><span class="mute" style="font-size:12.5px">${p.stock>0?(p.stock<=3?`Only ${p.stock} left`:'In stock'):'Sold out'}</span></a>`}).join('')
+
+</script></body></html>

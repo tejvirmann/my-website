@@ -1,0 +1,28 @@
+{
+  "ghUser": "tejvirmann",
+  "nameMode": "footer",
+  "accent": "#2ea043",
+  "cap": 12,
+  "pageSize": 24,
+  "showFavorites": false,
+  "tiles": "gen",
+  "sections": [
+    {
+      "id": "hero",
+      "enabled": true
+    },
+    {
+      "id": "activity",
+      "enabled": true
+    },
+    {
+      "id": "latest",
+      "enabled": true
+    },
+    {
+      "id": "projects",
+      "enabled": true
+    }
+  ],
+  "placements": {}
+}

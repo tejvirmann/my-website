@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro'
+import Hero from '../components/Hero.astro'
+import Activity from '../components/Activity.astro'
+import Latest from '../components/Latest.astro'
+import Projects from '../components/Projects.astro'
+import Wild from '../components/Wild.astro'
+import { settings } from '../lib/site'
+import type { Placement } from '../lib/wild'
+
+// section order and visibility come from src/data/site.json
+const parts = { hero: Hero, activity: Activity, latest: Latest, projects: Projects } as const
+const stack = settings.sections.filter(s => s.enabled && s.id in parts)
+const slotAfter: Record<string, string> = { hero: 'after-hero', activity: 'after-activity', latest: 'after-latest', projects: 'after-projects' }
+const placements = settings.placements as Record<string, Placement>
+---
+
+<Base>
+  <div class="wrap" style="padding:0">
+    {stack.map(s => {
+      const Part = parts[s.id as keyof typeof parts]
+      const wild = placements[slotAfter[s.id]]
+      return (
+        <>
+          {s.id === 'hero' ? <div class="wrap"><Part /></div> : <Part />}
+          {wild && <Wild {...wild} />}
+        </>
+      )
+    })}
+  </div>
+</Base>

@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import { allLogs, logUrl } from '../lib/logs'
+import { listings, shopCurrency } from '../lib/site'
+
+// a listing is a log with a price: title and picture come from the log
+const logs = new Map((await allLogs()).map(l => [l.id, l]))
+const products = listings().flatMap(p => (logs.get(p.slug) ? [{ ...p, log: logs.get(p.slug)! }] : []))
+const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: shopCurrency.toUpperCase(), maximumFractionDigits: 0 })
+---
+
+<Base title="Shop" description="Prints and originals by Tejvir S. Mann." active="shop">
+  <div class="wrap">
+    <div class="pagehead"><h1>Shop</h1><p>Prints and originals. Choose a size, then check out securely with Stripe.</p></div>
+    <section style="margin-top:0">
+      {products.length === 0 && <p class="mute">Nothing for sale right now.</p>}
+      <div class="shopgrid">
+        {products.map(p => (
+          <a class="prod" href={logUrl(p.log) + '#buy'}>
+            <div class="m">
+              {p.badge && <span class="badge">{p.badge}</span>}
+              {p.stock <= 0 && <span class="badge r">Sold out</span>}
+              {p.log.data.image && <Image src={p.log.data.image} alt={p.log.data.title} width={480} format="webp" quality={72} loading="lazy" />}
+            </div>
+            <div class="pr"><b>{p.log.data.title}</b><span>{money.format(p.price)}</span></div>
+            <span class="mute st">{p.stock <= 0 ? 'Sold out' : p.stock <= 3 ? `Only ${p.stock} left` : 'In stock'}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .shopgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 26px 18px }
+  .prod { display: block }
+  .m { aspect-ratio: 4 / 5; background: var(--soft); display: flex; align-items: center; justify-content: center; padding: 11%; position: relative }
+  .m :global(img) { max-width: 100%; max-height: 100%; width: auto; height: auto; box-shadow: 0 10px 24px -12px rgba(0, 0, 0, .4) }
+  .pr { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px }
+  .pr b { font-weight: 600 }
+  .prod:hover b { text-decoration: underline }
+  .st { font-size: 12.5px }
+  .badge { position: absolute; left: 10px; top: 10px; font-size: 11px; background: var(--bg); padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line) }
+  .badge.r { left: auto; right: 10px }
+  @media (max-width: 560px) { .shopgrid { grid-template-columns: 1fr 1fr; gap: 20px 12px } .m { padding: 8% } }
+</style>

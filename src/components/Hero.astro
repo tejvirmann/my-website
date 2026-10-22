@@ -1,0 +1,74 @@
+---
+import { getImage } from 'astro:assets'
+import forest from '../assets/hero-forestlang.jpg'
+import { settings } from '../lib/site'
+
+const brain = await getImage({ src: forest, width: 900, format: 'webp', quality: 76 })
+const slides = [
+  { src: '/img/home/cluster.gif', w: 600, h: 600, bg: '#fff', alt: 'Cluster of colored polyhedra' }, // animated gif, served as is
+  { src: brain.src, w: forest.width, h: forest.height, bg: '#000', alt: 'Colored brain scan' },
+]
+---
+
+<section class="wheel" id="wheel" aria-roledescription="carousel" aria-label="Featured images. Tap to see the next one." title="Tap for the next image">
+  {slides.map((s, i) => (
+    <div class:list={['sl', i === 0 && 'on']} style={`background:${s.bg}`}>
+      <img src={s.src} width={s.w} height={s.h} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
+    </div>
+  ))}
+  <div class="ui">
+    {slides.map((_, i) => <button class:list={[i === 0 && 'on']} aria-label={`Show image ${i + 1}`} data-i={i}></button>)}
+    <span id="wn">01 / 0{slides.length}</span>
+  </div>
+  {settings.nameMode === 'hero' && <div class="nm">Tejvir S. Mann</div>}
+</section>
+
+<style>
+  .wheel { position: relative; height: clamp(260px, 48vh, 500px); overflow: hidden; cursor: pointer; user-select: none; touch-action: pan-y; margin-top: 20px; -webkit-tap-highlight-color: transparent }
+  .sl { position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease }
+  .sl.on { opacity: 1 }
+  .sl img { width: 100%; height: 100%; object-fit: contain; transition: transform 9s ease-out }
+  .sl.on img { transform: scale(1.045) }
+  .ui { position: absolute; left: 14px; bottom: 12px; display: flex; gap: 7px; z-index: 3; align-items: center; mix-blend-mode: difference; color: #fff; font-size: 12px }
+  .ui button { width: 26px; height: 22px; background: none; position: relative }
+  .ui button::after { content: ''; position: absolute; left: 0; right: 0; top: 10px; height: 3px; background: #fff; opacity: .35; border-radius: 2px }
+  .ui button.on::after { opacity: 1 }
+  .ui span { margin-left: 8px }
+  .nm { position: absolute; right: 16px; bottom: 10px; z-index: 3; mix-blend-mode: difference; color: #fff; font-weight: 600; font-size: 15px }
+  @media (max-width: 560px) { .wheel { margin-top: 12px; height: clamp(240px, 42vh, 360px) } }
+</style>
+
+<script>
+  const wheel = document.getElementById('wheel')!
+  const slides = [...wheel.querySelectorAll<HTMLElement>('.sl')]
+  const dots = [...wheel.querySelectorAll<HTMLElement>('.ui button')]
+  const label = document.getElementById('wn')!
+  let i = 0
+  let timer: number | undefined
+  const go = (n: number) => {
+    i = (n + slides.length) % slides.length
+    slides.forEach((s, j) => s.classList.toggle('on', j === i))
+    dots.forEach((d, j) => d.classList.toggle('on', j === i))
+    label.textContent = `0${i + 1} / 0${slides.length}`
+  }
+  const play = () => {
+    clearInterval(timer)
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = window.setInterval(() => go(i + 1), 5200)
+  }
+  play()
+  wheel.addEventListener('mouseenter', () => clearInterval(timer))
+  wheel.addEventListener('mouseleave', play)
+  // tap or click = next image; swipe = previous / next
+  let sx: number | null = null
+  wheel.addEventListener('pointerdown', e => { sx = e.clientX })
+  wheel.addEventListener('pointerup', e => {
+    if (sx === null) return
+    const d = e.clientX - sx
+    sx = null
+    const dot = (e.target as HTMLElement).closest<HTMLElement>('.ui button')
+    if (dot) go(Number(dot.dataset.i))
+    else go(Math.abs(d) > 40 ? i + (d < 0 ? 1 : -1) : i + 1)
+    play()
+  })
+  wheel.addEventListener('pointercancel', () => { sx = null })
+</script>

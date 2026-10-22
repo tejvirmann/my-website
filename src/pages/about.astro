@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import portrait from '../assets/tejvir.jpg'
+
+const links = [
+  ['GitHub', 'https://github.com/tejvirmann'],
+  ['X', 'https://twitter.com/TejvirMann'],
+  ['LinkedIn', 'https://www.linkedin.com/in/tejvir-s-mann/'],
+  ['Slack', 'https://tejvir.slack.com'],
+  ['Email', 'mailto:tejvir@utexas.edu'],
+]
+---
+
+<Base title="About" description="About Tejvir S. Mann" active="about">
+  <div class="ab">
+    <section class="intro">
+      <div>
+        <h1>Tejvir Singh Mann</h1>
+        <p class="meta"><i>Interests:</i> <a class="l" href="/projects?kind=drawing">drawing</a>, <a class="l" href="/projects?kind=research">AI</a>, <a class="l" href="/projects?kind=research">brain architectures</a>, and <a class="l" href="/projects?kind=writing">stories</a></p>
+        <p>I make things. By day I build AI agent workflows and observability tooling as a Senior Software Engineer at Target. I'm also finishing a master's in Artificial Intelligence at UT Austin, and my research looks at what genomic language models learn about DNA.</p>
+        <p>Before that I studied computer science at UW&ndash;Madison, co-founded Gallify (3D AR assets for iOS) and led the front end for CODAworx, a platform for artists. Away from work I draw, paint and write.</p>
+        <p>This website is the official place for my <a class="l" href="/projects">works, ideas, imaginations, and other contributions</a>. The <a class="l" href="/logs">logs</a> have the story behind each piece.</p>
+      </div>
+      <Image class="ph" src={portrait} width={400} height={400} position="top" format="webp" quality={80} alt="Tejvir S. Mann" loading="eager" />
+    </section>
+    <p class="links">{links.map(([l, h]) => <a href={h}>{l}</a>)}</p>
+  </div>
+</Base>
+
+<style>
+  .ab { max-width: 780px; margin: 0 auto; padding: 0 20px }
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 28px; align-items: start; margin-top: 44px }
+  h1 { font: 600 clamp(30px, 4.6vw, 40px) / 1.1 var(--sans); letter-spacing: -.02em; margin-bottom: 12px }
+  .meta { font-size: 14.5px; font-weight: 300; margin-bottom: 14px }
+  .meta i { font-style: normal; color: var(--mute) }
+  p { font-size: 15px; font-weight: 300; line-height: 1.7; margin-bottom: 12px; max-width: 56ch }
+  .l { border-bottom: 1px solid var(--line) }
+  .l:hover { border-color: var(--fg) }
+  .intro :global(.ph) { width: 200px; height: 200px; object-fit: cover; object-position: 50% 0; border: 1px solid var(--line) }
+  .links { text-align: center; margin: 30px auto 0; font-size: 15px; max-width: none; padding-top: 24px; border-top: 1px solid var(--line) }
+  .links a { border-bottom: 1px solid var(--line) }
+  .links a:hover { border-color: var(--fg) }
+  .links a + a::before { content: '•'; color: var(--mute); margin: 0 10px; display: inline-block }
+  @media (max-width: 620px) {
+    .intro { grid-template-columns: 1fr; margin-top: 28px }
+    .intro :global(.ph) { order: -1; width: 132px; height: 132px }
+    .links { line-height: 2.2 }
+  }
+</style>

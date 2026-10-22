@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About · Tejvir S. Mann</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css">
+<style>
+.ab{max-width:780px;margin:0 auto;padding:0 20px}
+.ab .intro{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:28px;align-items:start;margin-top:44px}
+.ab h1{font:600 clamp(30px,4.6vw,40px)/1.1 var(--sans);letter-spacing:-.02em;margin-bottom:12px}
+.ab .meta{font-size:14.5px;font-weight:300;margin-bottom:14px;color:var(--fg)}.ab .meta i{font-style:normal;color:var(--mute)}
+.ab p{font-size:15px;font-weight:300;line-height:1.7;margin-bottom:12px;max-width:56ch}.ab a.l{color:var(--fg);border-bottom:1px solid var(--line)}.ab a.l:hover{border-color:var(--fg)}
+.ab .ph{width:200px;aspect-ratio:1;object-fit:cover;object-position:50% 0%;border:1px solid var(--line)}
+.ab .links{text-align:center;margin:30px 0 8px;font-size:15px}.ab .links a{border-bottom:1px solid var(--line)}.ab .links a:hover{border-color:var(--fg)}.ab .links a+a::before{content:"•";color:var(--mute);margin:0 10px;display:inline-block;border:0}
+.ab hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+@media(max-width:620px){.ab .intro{grid-template-columns:1fr;margin-top:28px}.ab .ph{order:-1;width:132px}}
+</style></head><body>
+<main class="ab" data-section="about">
+<section class="intro" style="margin-top:44px"><div><h1>Tejvir Singh Mann</h1>
+<p class="meta"><i>Interests:</i> <a class="l" href="projects.html?kind=drawing">drawing</a>, <a class="l" href="projects.html?kind=research">AI</a>, <a class="l" href="projects.html?kind=research">brain architectures</a>, and <a class="l" href="projects.html?kind=writing">stories</a></p>
+<p>I make things. By day I build AI agent workflows and observability tooling as a Senior Software Engineer at Target. I'm also finishing a master's in Artificial Intelligence at UT Austin, and my research looks at what genomic language models learn about DNA.</p>
+<p>Before that I studied computer science at UW&ndash;Madison, co-founded Gallify (3D AR assets for iOS) and led the front end for CODAworx, a platform for artists. Away from work I draw, paint and write.</p>
+<p>This website is the official place for my <a class="l" href="projects.html">works, ideas, imaginations, and other contributions</a>. The <a class="l" href="logs.html">logs</a> have the story behind each piece.</p></div>
+<img class="ph" src="../r2/img/portrait.webp" alt="Tejvir S. Mann" width="200" height="200"></section>
+<p class="links"><a href="https://github.com/tejvirmann">GitHub</a><a href="https://twitter.com/TejvirMann">X</a><a href="https://www.linkedin.com/in/tejvir-s-mann/">LinkedIn</a><a href="https://tejvir.slack.com">Slack</a><a href="#">Email</a></p>
+<hr>
+<section data-section="about-cv" style="margin-top:0"><p class="mute" style="font-size:13px;max-width:none">CV: an optional section on this page. The control plane turns it on or off (off for now).</p></section>
+</main>
+<script src="data.js"></script><script src="repos.js"></script><script src="logs.js"></script><script src="site.js"></script><script>chrome('about')</script></body></html>
