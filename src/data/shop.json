@@ -1,0 +1,13 @@
+{
+  "currency": "usd",
+  "listings": [
+    { "slug": "dishwasher", "price": 40, "stock": 8, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true },
+    { "slug": "pinkpen", "price": 35, "stock": 12, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true },
+    { "slug": "forestlanguage", "price": 45, "stock": 5, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true },
+    { "slug": "lastsupper", "price": 50, "stock": 3, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "Original", "active": true },
+    { "slug": "shinsakaino", "price": 35, "stock": 10, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true },
+    { "slug": "purpledragon", "price": 60, "stock": 4, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true },
+    { "slug": "pinkskyrocks", "price": 35, "stock": 9, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true },
+    { "slug": "depspirit", "price": 45, "stock": 6, "sizes": ["8×10 in", "11×14 in", "16×20 in"], "badge": "", "active": true }
+  ]
+}

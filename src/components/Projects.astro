@@ -1,0 +1,92 @@
+---
+import { projectItems } from '../lib/logs'
+import { FILTER_KINDS, KINDS } from '../lib/kinds'
+import { settings } from '../lib/site'
+
+const items = await projectItems()
+const counts = Object.fromEntries(FILTER_KINDS.map(k => [k, items.filter(i => i.kinds.includes(k)).length]))
+---
+
+<section class="wrap" id="projects" aria-label="Projects" data-cap={settings.cap} data-fav={settings.showFavorites ? '1' : ''} data-tiles={settings.tiles}>
+  <div class="sh"><h2>Projects</h2><a href="/projects" id="all1">View all {items.length} →</a></div>
+  <div id="feat"></div>
+  <div class="chips" id="hchips">
+    <button class="chip on" data-k="">All <small>{items.length}</small></button>
+    {FILTER_KINDS.map(k => <button class="chip" data-k={k}>{KINDS[k].label} <small>{counts[k]}</small></button>)}
+  </div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+  <div class="more" id="more"></div>
+  <noscript>
+    <ul>{items.map(i => <li><a href={i.url}>{i.title}</a></li>)}</ul>
+  </noscript>
+  <script type="application/json" id="items" set:html={JSON.stringify(items)} />
+</section>
+
+<style>
+  #hchips { margin: 18px 0 14px }
+  #feat:empty { display: none }
+  #feat h3 { font: 500 15px var(--sans); color: var(--mute); margin: 4px 0 12px }
+  :global(.empty) { padding: 26px 0 }
+  @media (max-width: 560px) { #hchips { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scrollbar-width: none } #hchips::-webkit-scrollbar { display: none } }
+</style>
+
+<script>
+  import { justifyRows, watch, withRatio, type Tile } from '../scripts/rows'
+  import type { Item } from '../lib/logs'
+
+  const root = document.getElementById('projects')!
+  const all: Item[] = JSON.parse(document.getElementById('items')!.textContent!)
+  const cap = Number(root.dataset.cap)
+  const showFav = !!root.dataset.fav
+  document.documentElement.dataset.tiles = root.dataset.tiles!
+  const grid = document.getElementById('grid')!
+  const feat = document.getElementById('feat')!
+  const more = document.getElementById('more')!
+  const all1 = document.getElementById('all1') as HTMLAnchorElement
+  const chips = [...document.querySelectorAll<HTMLElement>('#hchips .chip')]
+  let kind = ''
+
+  const byDate = (a: Item, b: Item) => b.date.localeCompare(a.date)
+  /** software tiles spread between the art instead of sitting in one block */
+  function spread(list: Item[]) {
+    const art = list.filter(i => i.type === 'art')
+    const sw = list.filter(i => i.type === 'sw')
+    if (!sw.length) return art
+    const every = Math.max(2, Math.round(art.length / sw.length))
+    const out: Item[] = []
+    let k = 0
+    art.forEach((a, n) => { out.push(a); if ((n + 1) % every === 0 && k < sw.length) out.push(sw[k++]) })
+    while (k < sw.length) out.push(sw[k++])
+    return out
+  }
+  const favorites = showFav ? all.filter(i => i.fav).sort(byDate) : []
+
+  function list() {
+    if (kind) return all.filter(i => i.kinds.includes(kind as never)).sort(byDate)
+    return spread(all.filter(i => !favorites.includes(i)).sort(byDate))
+  }
+
+  function draw() {
+    if (favorites.length && !kind) {
+      if (!feat.firstChild) feat.innerHTML = '<h3>Favorites</h3><div class="grid" id="fgrid"></div>'
+      const f = document.getElementById('fgrid')!
+      justifyRows(f, withRatio(favorites), { target: innerWidth < 600 ? 130 : Math.min(260, f.clientWidth / 4.2) })
+    } else feat.innerHTML = ''
+    const l = list()
+    const shown = l.slice(0, cap)
+    if (!l.length) grid.innerHTML = `<p class="mute empty">No ${kind || ''} projects yet.</p>`
+    else justifyRows(grid, withRatio(shown) as Tile[])
+    const left = l.length - shown.length
+    const href = '/projects' + (kind ? `?kind=${kind}` : '')
+    more.innerHTML = left > 0 ? `<a class="btn point" href="${href}">View all ${l.length}${kind ? ' ' + kind : ''} projects</a>` : ''
+    all1.href = href
+    all1.textContent = left > 0 ? `View all ${l.length} →` : 'Open projects →'
+  }
+
+  chips.forEach(c => c.addEventListener('click', () => {
+    kind = c.dataset.k!
+    chips.forEach(x => x.classList.toggle('on', x === c))
+    draw()
+  }))
+  watch(grid, draw)
+</script>

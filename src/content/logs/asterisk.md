@@ -1,0 +1,34 @@
+---
+title: "Asterisk"
+date: 2021-01-25
+description: "(*) (*) (*) (*) (*) (*) (*)."
+tags: [Projects, Artwork, Painting]
+image: ../../assets/art/asterisk.jpg
+kinds: [painting]
+onSite: true
+---
+Four paintings I made while I was at the UW Art Club. Also, (*). 
+
+### T(*)ger
+
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2F3.jpg?alt=media&token=e26f6af8-6c8c-4bac-920c-bbee5929eabd)
+
+### F(*)ght
+This was the first painting I ever sold.
+
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2F4.jpg?alt=media&token=16419e2c-431a-4549-9b5c-669406e2a7de)
+
+### F(*)t
+
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2F2.jpg?alt=media&token=4d589d32-ac09-4527-84ef-3ce87226d576)
+
+### Cubik(*)ll
+
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2F1.jpg?alt=media&token=232e8601-bd56-43df-927e-3db9e4316b50)
+
+### UW Art Club 2020 Spring Gallery
+I got the chance to show this art UW Art Clubs 2020 gallery. Here's a picture with me and my friends who showed up for support!
+
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/(*)%2Fgallery.jpg?alt=media&token=439cfce6-c615-48b6-8f06-395a47a97e67)
+
+

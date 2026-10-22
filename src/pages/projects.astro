@@ -1,0 +1,224 @@
+---
+import Base from '../layouts/Base.astro'
+import { allLogs, projectItems } from '../lib/logs'
+import { FILTER_KINDS, KINDS } from '../lib/kinds'
+import { settings } from '../lib/site'
+
+const items = await projectItems()
+const logs = new Map((await allLogs()).map(l => [l.id, l]))
+// search text per project: kinds + year + type, then tags and the opening of the log
+const docs = Object.fromEntries(
+  items.map(i => {
+    const l = logs.get(i.id)!
+    const extra = [l.data.tags.join(' '), (l.body ?? '').replace(/!\[[^\]]*\]\([^)]*\)|\([^)]*\)|[#*>_`[\]]/g, ' ').slice(0, 700)].join(' ')
+    const meta = [i.kinds.map(k => KINDS[k].label).join(' '), i.year, i.type === 'sw' ? `software code github ${i.lang ?? ''}` : ''].join(' ')
+    return [i.id, { extra, meta }]
+  })
+)
+const years = [...new Set(items.map(i => i.year))].sort()
+const kinds = [...FILTER_KINDS, 'favorite' as const]
+---
+
+<Base title="Projects" description="Works, ideas, imaginations, and other contributions." active="projects">
+  <div class="wrap">
+    <div class="pagehead"><h1>Projects</h1><p>Works, ideas, imaginations, and other contributions.</p></div>
+
+    <section class="filters" id="filters" style="margin-top:0" data-size={settings.pageSize} data-tiles={settings.tiles}>
+      <div class="frow">
+        <label for="q">Search</label>
+        <div class="bar-in">
+          <input id="q" type="search" placeholder="Search by title, kind, year, language or description" autocomplete="off" />
+          <select id="sort" aria-label="Sort">
+            <option value="new">Newest first</option>
+            <option value="old">Oldest first</option>
+            <option value="az">A to Z</option>
+          </select>
+          <div class="seg" id="views" role="group" aria-label="View">
+            <button class="on" data-v="grid">Grid</button><button data-v="timeline">Timeline</button><button data-v="lanes">Lanes</button>
+          </div>
+        </div>
+      </div>
+      <div class="frow">
+        <label>Show</label>
+        <div class="bar-in show">
+          <div class="seg" id="types" role="group" aria-label="Type">
+            <button class="on" data-t="all">All</button><button data-t="art">Art &amp; writing</button><button data-t="sw">Software</button>
+          </div>
+          <div class="chips kinds" id="kinds">
+            {kinds.map(k => <button class="chip" data-k={k}><i class="dot" style={`--c:${KINDS[k].color}`}></i>{KINDS[k].label} <small data-n={k}></small></button>)}
+          </div>
+        </div>
+      </div>
+      <div class="frow">
+        <label>Year</label>
+        <div class="hist" id="hist" role="group" aria-label="Projects per year">
+          {years.map(y => <button data-y={y} title={`${y}`}><i></i>{y.slice(2)}</button>)}
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:0">
+      <div class="summary" id="summary"></div>
+      <div id="results"></div>
+      <div class="more" id="more"></div>
+      <p class="mute perf" id="perf"></p>
+    </section>
+  </div>
+  <script type="application/json" id="items" set:html={JSON.stringify(items)} />
+  <script type="application/json" id="docs" set:html={JSON.stringify(docs)} />
+</Base>
+
+<style>
+  .filters { border: 1px solid var(--line); padding: 18px; display: grid; gap: 18px; margin-bottom: 22px }
+  .frow { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: start }
+  .frow > label { font-size: 12px; color: var(--mute); padding-top: 9px; text-transform: uppercase; letter-spacing: .05em }
+  .bar-in { display: flex; gap: 10px; flex-wrap: wrap }
+  .bar-in.show { gap: 8px 18px; align-items: center; flex-wrap: nowrap }
+  input[type='search'], select { padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); min-width: 0 }
+  input[type='search'] { flex: 1; min-width: 180px }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex: none }
+  .seg button { padding: 7px 12px; font-size: 13px; color: var(--mute) }
+  .seg button.on { background: var(--fg); color: var(--bg) }
+  .kinds { gap: 5px }
+  .kinds .chip { padding: 4px 10px; font-size: 12.5px }
+  .hist { display: flex; align-items: flex-end; gap: 5px; height: 84px; width: 100% }
+  .hist button { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; height: 100%; font-size: 11px; color: var(--mute) }
+  .hist i { display: block; width: 100%; background: var(--line); min-height: 3px; border-radius: 2px 2px 0 0; transition: background .15s }
+  .hist button:hover i { background: var(--mute) }
+  .hist button.on i { background: var(--fg) }
+  .hist button.on { color: var(--fg) }
+  .summary { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 16px; font-size: 13px; color: var(--mute) }
+  .summary b { color: var(--fg) }
+  .pill { font-size: 11.5px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--line) }
+  .perf { text-align: center; font-size: 12.5px; margin-top: 12px }
+  :global(.yrgroup) { display: grid; grid-template-columns: 70px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line) }
+  :global(.yrgroup h3) { font: 600 15px var(--sans) }
+  :global(.lanes) { position: relative; border: 1px solid var(--line); padding: 8px 0 }
+  :global(.lane) { position: relative; height: 64px; border-bottom: 1px dashed var(--line); margin-left: 92px }
+  :global(.lane:last-child) { border: 0 }
+  :global(.lane > span) { position: absolute; left: -92px; top: 20px; font-size: 12px; color: var(--mute) }
+  :global(.lane a) { position: absolute; top: 8px; height: 48px; display: block; border-radius: 3px; overflow: hidden }
+  :global(.lane a img) { height: 100%; width: auto }
+  :global(.axis) { display: flex; justify-content: space-between; margin-left: 92px; font-size: 11.5px; color: var(--mute); padding: 6px 0 }
+  @media (max-width: 900px) { .bar-in.show { flex-wrap: wrap } }
+  @media (max-width: 700px) {
+    .filters { padding: 14px; gap: 14px }
+    .frow { grid-template-columns: 1fr; gap: 6px }
+    .frow > label { padding-top: 0 }
+    input[type='search'] { flex-basis: 100% }
+    :global(.yrgroup) { grid-template-columns: 1fr; gap: 8px }
+    :global(.lane) { margin-left: 0 } :global(.lane > span) { position: static; display: block; padding-left: 8px; height: 0 } :global(.axis) { margin-left: 0 }
+  }
+</style>
+
+<script>
+  import { justifyRows, watch, withRatio } from '../scripts/rows'
+  import { score, type Doc } from '../scripts/search'
+  import type { Item } from '../lib/logs'
+
+  const items: Item[] = JSON.parse(document.getElementById('items')!.textContent!)
+  const docs: Record<string, { extra: string; meta: string }> = JSON.parse(document.getElementById('docs')!.textContent!)
+  const root = document.getElementById('filters')!
+  const PAGE = Number(root.dataset.size)
+  document.documentElement.dataset.tiles = root.dataset.tiles!
+  const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!
+  const results = $('#results'), more = $('#more'), summary = $('#summary'), perf = $('#perf')
+  const q = $<HTMLInputElement>('#q'), sortEl = $<HTMLSelectElement>('#sort')
+  const KIND_LABEL: Record<string, string> = Object.fromEntries([...document.querySelectorAll<HTMLElement>('#kinds .chip')].map(c => [c.dataset.k!, c.textContent!.replace(/\d+$/, '').trim()]))
+
+  const st = { q: '', view: 'grid', sort: 'new', type: 'all', kinds: new Set<string>(), years: new Set<string>(), shown: PAGE }
+  const init = new URLSearchParams(location.search).get('kind')
+  if (init) st.kinds.add(init)
+
+  const doc = (i: Item): Doc & { score?: number } => ({ title: i.title, desc: i.desc, meta: docs[i.id].meta, extra: docs[i.id].extra })
+  const scores = new Map<string, number>()
+  const pass = (i: Item) => {
+    if (st.type !== 'all' && i.type !== st.type) return false
+    if (st.kinds.size && ![...st.kinds].some(k => i.kinds.includes(k as never))) return false
+    if (st.years.size && !st.years.has(i.year)) return false
+    if (st.q) { const s = score(doc(i), st.q); if (!s) return false; scores.set(i.id, s) }
+    return true
+  }
+  function ordered(list: Item[]) {
+    const a = [...list]
+    if (st.q) return a.sort((x, y) => (scores.get(y.id)! - scores.get(x.id)!) || y.date.localeCompare(x.date))
+    if (st.sort === 'old') return a.sort((x, y) => x.date.localeCompare(y.date))
+    if (st.sort === 'az') return a.sort((x, y) => x.title.toLowerCase().localeCompare(y.title.toLowerCase()))
+    a.sort((x, y) => y.date.localeCompare(x.date))
+    // newest first, with software spread between the art
+    if (st.type === 'all') {
+      const art = a.filter(i => i.type === 'art'), sw = a.filter(i => i.type === 'sw')
+      if (!sw.length) return a
+      const every = Math.max(2, Math.round((art.length / sw.length) * 1.3))
+      const out: Item[] = []
+      let k = 0
+      art.forEach((x, n) => { out.push(x); if ((n + 1) % every === 0 && k < sw.length) out.push(sw[k++]) })
+      while (k < sw.length) out.push(sw[k++])
+      return out
+    }
+    return a
+  }
+
+  const count = (f: (i: Item) => boolean) => items.filter(f).length
+  function chrome() {
+    document.querySelectorAll<HTMLElement>('#kinds .chip').forEach(c => {
+      const k = c.dataset.k!
+      c.classList.toggle('on', st.kinds.has(k))
+      c.querySelector('small')!.textContent = String(count(i => i.kinds.includes(k as never)))
+    })
+    document.querySelectorAll<HTMLElement>('#types button').forEach(b => b.classList.toggle('on', b.dataset.t === st.type))
+    document.querySelectorAll<HTMLElement>('#views button').forEach(b => b.classList.toggle('on', b.dataset.v === st.view))
+    const per = Object.fromEntries([...new Set(items.map(i => i.year))].map(y => [y, count(i => i.year === y)]))
+    const mx = Math.max(...Object.values(per))
+    document.querySelectorAll<HTMLElement>('#hist button').forEach(b => {
+      const y = b.dataset.y!
+      b.classList.toggle('on', st.years.has(y))
+      b.title = `${per[y]} project${per[y] === 1 ? '' : 's'} in ${y}`
+      b.querySelector('i')!.style.height = `${Math.max(6, (per[y] / mx) * 58)}px`
+    })
+  }
+
+  function render() {
+    chrome()
+    const list = ordered(items.filter(pass))
+    const tags = [st.q && `“${st.q}”`, st.type !== 'all' && (st.type === 'art' ? 'Art & writing' : 'Software'), ...[...st.kinds].map(k => KIND_LABEL[k]), ...st.years].filter(Boolean) as string[]
+    summary.innerHTML = `<span><b>${list.length}</b> of ${items.length} projects</span>${tags.map(t => `<span class="pill">${t}</span>`).join('')}${tags.length ? '<button class="btn ghost" style="padding:4px 10px;font-size:12.5px" id="clear">Clear all</button>' : ''}`
+    document.getElementById('clear')?.addEventListener('click', () => { st.q = ''; q.value = ''; st.type = 'all'; st.kinds.clear(); st.years.clear(); st.shown = PAGE; render() })
+    results.innerHTML = ''
+    if (!list.length) { results.innerHTML = '<p class="mute" style="padding:40px 0;text-align:center">Nothing matches. Try removing a filter.</p>'; more.innerHTML = ''; perf.textContent = ''; return }
+    if (st.view === 'lanes') { lanes(list); more.innerHTML = ''; perf.textContent = 'Lanes view: art as thumbnails, software as dots.'; return }
+    const slice = list.slice(0, st.shown)
+    if (st.view === 'grid') {
+      results.innerHTML = '<div class="grid" id="g"></div>'
+      const g = document.getElementById('g')!
+      watch(g, () => justifyRows(g, withRatio(slice)))
+    } else {
+      const ys = [...new Set(slice.map(i => i.year))].sort((a, b) => (st.sort === 'old' ? +a - +b : +b - +a))
+      results.innerHTML = ys.map(y => `<div class="yrgroup"><h3>${y}</h3><div class="grid" data-y="${y}"></div></div>`).join('')
+      results.querySelectorAll<HTMLElement>('[data-y]').forEach(h => watch(h, () => justifyRows(h, withRatio(slice.filter(i => i.year === h.dataset.y)))))
+    }
+    const left = list.length - slice.length
+    more.innerHTML = left > 0 ? `<button class="btn" id="more1">Show ${Math.min(PAGE, left)} more · ${left} remaining</button>` : ''
+    document.getElementById('more1')?.addEventListener('click', () => { st.shown += PAGE; render() })
+    const pics = slice.filter(i => i.type === 'art').length
+    perf.textContent = `Showing ${slice.length} of ${list.length}. Only the ${pics} pieces revealed so far are loaded; more load ${PAGE} at a time.`
+  }
+
+  function lanes(list: Item[]) {
+    const rows = ['drawing', 'painting', 'writing', 'uimodeling', 'research', 'software']
+    const dates = list.map(i => +new Date(i.date)), mn = Math.min(...dates), mx = Math.max(...dates), span = Math.max(1, mx - mn)
+    const pos = (d: string) => ((+new Date(d) - mn) / span) * 92
+    results.innerHTML = `<div class="lanes">${rows.map(k => `<div class="lane"><span>${KIND_LABEL[k] ?? k}</span>${list.filter(i => i.kinds.includes(k as never)).map(i => i.type === 'art'
+      ? `<a href="${i.url}" title="${i.title}, ${i.year}" style="left:${pos(i.date)}%;width:${Math.round(48 * (i.ar ?? 1))}px"><img src="${i.thumb}" width="${i.w}" height="${i.h}" alt="${i.title}" loading="lazy" decoding="async"></a>`
+      : `<a href="${i.url}" title="${i.title}, ${i.year}" style="left:${pos(i.date)}%;width:10px;height:10px;top:27px;border-radius:50%;background:#7321ee"></a>`).join('')}</div>`).join('')}</div><div class="axis"><span>${new Date(mn).getUTCFullYear()}</span><span>${new Date(mx).getUTCFullYear()}</span></div>`
+  }
+
+  const reset = () => { st.shown = PAGE; render() }
+  q.addEventListener('input', () => { st.q = q.value; reset() })
+  sortEl.addEventListener('change', () => { st.sort = sortEl.value; render() })
+  document.getElementById('views')!.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLElement>('button'); if (b) { st.view = b.dataset.v!; render() } })
+  document.getElementById('types')!.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLElement>('button'); if (b) { st.type = b.dataset.t!; reset() } })
+  document.getElementById('kinds')!.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLElement>('.chip'); if (b) { const k = b.dataset.k!; st.kinds.has(k) ? st.kinds.delete(k) : st.kinds.add(k); reset() } })
+  document.getElementById('hist')!.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLElement>('button'); if (b) { const y = b.dataset.y!; st.years.has(y) ? st.years.delete(y) : st.years.add(y); reset() } })
+  render()
+</script>

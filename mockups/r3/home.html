@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tejvir S. Mann</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css"></head><body>
+<main class="wrap">
+<section class="wheel" id="wheel" data-section="hero-wheel" aria-label="Featured images. Tap to see the next one." title="Tap for the next image"></section>
+<section data-section="github-heatmap" style="margin-top:30px"><div id="gh"></div></section>
+<section data-section="latest-logs"><div class="sh"><h2>Latest</h2><a href="logs.html">All logs →</a></div>
+<div class="lw"><a class="frame" id="frame" href="#" title="Open this log"></a><button class="ar l" id="pv" aria-label="Previous">←</button><button class="ar r" id="nx" aria-label="Next">→</button></div><div class="cap"><div id="cap"></div><span class="n"><span id="num"></span> &nbsp; <a href="#" id="vl" style="color:var(--fg);font-weight:500;border-bottom:1px solid var(--fg)">View this log →</a></span></div><div class="strip" id="strip"></div></section>
+<section data-section="projects"><div class="sh"><h2>Projects</h2><a href="projects.html" id="all1">View all →</a></div><div id="feat"></div><div class="chips" id="hchips" style="margin:22px 0 14px"></div><div class="grid" id="grid"></div><div class="more" id="more"></div></section>
+</main>
+<script src="data.js"></script><script src="repos.js"></script><script src="logs.js"></script><script src="site.js"></script><script>
+chrome('home',{wild:true});wildPanel(document.getElementById('wheel'))
+// hero wheel: the usual two images
+const SL=[{src:IMG+'cluster.gif',w:600,h:600,bg:'#fff',alt:'Polyhedra cluster'},{src:IMG+'hero-forest.webp',w:771,h:900,bg:'#000',alt:'Brain scan, colored'}]
+wheel.innerHTML=SL.map((s,i)=>`<div class="sl ${i?'':'on'}" style="background:${s.bg}"><img src="${s.src}" width="${s.w}" height="${s.h}" alt="${s.alt}" ${i?'loading="lazy"':''} decoding="async"></div>`).join('')+`<div class="ui" id="wui">${SL.map((_,i)=>`<button class="${i?'':'on'}" aria-label="Image ${i+1}"></button>`).join('')}<span id="wn">01 / 02</span></div>`+(S.get('nameMode')==='hero'?'<div class="nm">Tejvir S. Mann</div>':'')
+let wi=0,wt;const go=n=>{wi=(n+SL.length)%SL.length;[...wheel.querySelectorAll('.sl')].forEach((e,j)=>e.classList.toggle('on',j===wi));[...wui.querySelectorAll('button')].forEach((e,j)=>e.classList.toggle('on',j===wi));wn.textContent='0'+(wi+1)+' / 0'+SL.length}
+const play=()=>{clearInterval(wt);if(!matchMedia('(prefers-reduced-motion:reduce)').matches)wt=setInterval(()=>go(wi+1),5200)};play()
+wheel.onmouseenter=()=>clearInterval(wt);wheel.onmouseleave=play;wui.onclick=e=>{const b=e.target.closest('button');if(b){go([...wui.querySelectorAll('button')].indexOf(b));play()}}
+let sx=null;wheel.onpointerdown=e=>{sx=e.clientX};addEventListener('pointerup',e=>{if(sx===null)return;const d=e.clientX-sx;sx=null;if(e.target.closest&&e.target.closest('#wui'))return;if(Math.abs(d)>40){go(wi+(d<0?1:-1));play()}else if(e.target.closest&&e.target.closest('#wheel')){go(wi+1);play()}})
+ghCenter(gh)
+// latest viewer: click the picture (or "View this log") to open that log; arrows and thumbnails browse the three newest
+const L=LATEST;let i=0
+function show(n){i=(n+L.length)%L.length;const p=L[i],href='log.html?slug='+p.slug;frame.href=href;vl.href=href;frame.innerHTML=pic(p,{big:true,eager:true});document.getElementById('cap').innerHTML='<a href="'+href+'"><b>'+p.title+'</b></a>'+yr(p)+' · '+sortKinds(p.kinds).filter(k=>k!=='favorite').map(kindLabel).join(', ')+'<br><span class="mute">'+p.desc+'</span>';num.textContent='0'+(i+1)+' / 0'+L.length;[...strip.children].forEach((e,j)=>e.classList.toggle('on',j===i))}
+strip.innerHTML=L.map((p,j)=>'<img src="'+IMG+p.t+'" width="'+p.w+'" height="'+p.h+'" decoding="async" alt="" onclick="__s('+j+')">').join('');window.__s=show;pv.onclick=()=>show(i-1);nx.onclick=()=>show(i+1);show(0)
+// projects: only published items, filtered by kind, capped by the control plane; the full list lives on the projects page
+const {art,sw}=allItems(),CAP=S.get('cap'),ALL=[...art,...sw]
+let kind=''
+const KS=['writing','drawing','painting','uimodeling','research','software']
+function homeItems(){
+  const byDate=(a,b)=>b.date.localeCompare(a.date)
+  if(kind)return ALL.filter(i=>i.kinds.includes(kind)).sort(byDate)
+  const F=SHOWF?featured():new Set(),rest=art.filter(a=>!F.has(a.id)).sort(byDate),fs=sw.filter(a=>!F.has(a.id)).sort(byDate)
+  // featured items are shown in their own row above, so the grid holds everything else, with software spread between the art
+  const out=[],every=Math.max(2,Math.round(rest.length/(fs.length||1)));let k=0
+  rest.forEach((a,n)=>{out.push(a);if((n+1)%every===0&&k<fs.length)out.push(fs[k++])});while(k<fs.length)out.push(fs[k++])
+  return out
+}
+function _unused(){
+  return []
+}
+function chips(){hchips.innerHTML='<button class="chip '+(!kind?'on':'')+'" onclick="kind=\'\';chips();build()">All <small>'+ALL.length+'</small></button>'+KS.map(k=>'<button class="chip '+(kind===k?'on':'')+'" onclick="kind=\''+k+'\';chips();build()">'+KINDS[k][0]+' <small>'+ALL.filter(i=>i.kinds.includes(k)).length+'</small></button>').join('')}
+const SHOWF=S.get('showFeatured'),FEAT=SHOWF?[...ALL].filter(i=>featured().has(i.id))
+.sort((a,b)=>b.date.localeCompare(a.date)):[]
+function buildFeat(){if(!FEAT.length||kind){feat.innerHTML='';return}feat.innerHTML='<div class="sh" style="margin-top:4px"><h2 style="font-weight:500;color:var(--mute)">Featured</h2></div><div class="grid" id="fgrid"></div>';justifyRows(document.getElementById('fgrid'),FEAT,{gap:innerWidth<600?4:6,target:innerWidth<600?130:Math.min(260,document.getElementById('fgrid').clientWidth/4.2)})}
+function build(){buildFeat();const all=homeItems(),list=all.slice(0,CAP);justifyRows(grid,list,{gap:innerWidth<600?4:6})
+  if(!all.length){grid.innerHTML='<p class="mute" style="padding:26px 0">No '+(kind?KINDS[kind][0].toLowerCase()+' ':'')+'projects yet.</p>'}
+  const left=all.length-list.length,href='projects.html'+(kind?'?kind='+kind:'')
+  more.innerHTML=left>0?'<a class="btn point" href="'+href+'">View all '+all.length+(kind?' '+KINDS[kind][0].toLowerCase():'')+' projects</a>':'';all1.textContent=left>0?'View all '+all.length+' →':'';all1.href=href}
+chips();
+watchRows(grid,build);bindLightbox(CARDS);applyStack();applyPlacements()
+</script></body></html>

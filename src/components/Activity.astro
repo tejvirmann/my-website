@@ -1,0 +1,100 @@
+---
+import { settings } from '../lib/site'
+const user = settings.ghUser
+---
+
+<section id="activity" data-user={user} aria-label="GitHub activity" class="wrap">
+  <div class="gh" id="gh">
+    <div class="gh-head">
+      <a href={`https://github.com/${user}`} target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482 3.97-1.32 6.833-5.08 6.833-9.503C22 6.484 17.522 2 12 2z"></path></svg>
+        github.com/{user}
+      </a>
+      <span id="gh-sum"></span>
+    </div>
+    <div class="gh-grid" id="gh-grid" aria-hidden="true"></div>
+  </div>
+  <div class="gh-tip" id="gh-tip" role="status"></div>
+</section>
+
+<style is:global>
+  #activity { margin-top: 30px }
+  .gh { max-width: 820px; margin: 0 auto; min-height: 118px; --l0: #ecebe7; --l1: #d2d0c9; --l2: #a9a69d; --l3: #6c6a63; --l4: #1b1a18 }
+  :root[data-theme='dark'] .gh { --l0: #1e1e1c; --l1: #34332f; --l2: #58564f; --l3: #8e8b81; --l4: #ecebe6 }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .gh { --l0: #1e1e1c; --l1: #34332f; --l2: #58564f; --l3: #8e8b81; --l4: #ecebe6 } }
+  .gh-head { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 12px; font-size: 13px; color: var(--mute); text-align: center }
+  .gh-head a { display: inline-flex; align-items: center; gap: 7px; color: var(--fg); font-weight: 500 }
+  .gh-head a:hover { text-decoration: underline }
+  .gh-head svg { width: 16px; height: 16px; fill: currentColor }
+  .gh-head b { color: var(--fg); font-weight: 600 }
+  .gh-grid { display: grid; grid-template-rows: repeat(7, auto); grid-auto-flow: column; gap: 3px; width: 100% }
+  .gh-grid i { aspect-ratio: 1; border-radius: 2px; background: var(--l0) }
+  .gh-grid i[data-l='1'] { background: var(--l1) }
+  .gh-grid i[data-l='2'] { background: var(--l2) }
+  .gh-grid i[data-l='3'] { background: var(--l3) }
+  .gh-grid i[data-l='4'] { background: var(--l4) }
+  .gh-grid i:hover { outline: 1.5px solid var(--fg); outline-offset: 1px }
+  .gh-tip { position: fixed; z-index: 90; pointer-events: none; background: #111; color: #fff; font: 500 12px var(--sans); padding: 6px 9px; border-radius: 5px; white-space: nowrap; transform: translate(-50%, -130%); opacity: 0; transition: opacity .08s }
+  .gh-tip.on { opacity: 1 }
+</style>
+
+<script>
+  type Day = { date: string; count: number; level: number }
+  const root = document.getElementById('activity')!
+  const grid = document.getElementById('gh-grid')!
+  const sum = document.getElementById('gh-sum')!
+  const tip = document.getElementById('gh-tip')!
+  const user = root.dataset.user!
+  const ord = (n: number) => n + (n % 10 === 1 && n !== 11 ? 'st' : n % 10 === 2 && n !== 12 ? 'nd' : n % 10 === 3 && n !== 13 ? 'rd' : 'th')
+  const level = (c: number) => (c > 9 ? 4 : c > 6 ? 3 : c > 3 ? 2 : c > 0 ? 1 : 0)
+  let days: Day[] = []
+
+  function draw() {
+    const w = root.clientWidth
+    const weeks = w < 460 ? 22 : w < 640 ? 34 : w < 780 ? 45 : 53
+    const map = new Map(days.map(d => [d.date, d]))
+    const end = new Date(); end.setHours(0, 0, 0, 0)
+    const start = new Date(end); start.setDate(end.getDate() - (weeks - 1) * 7 - end.getDay())
+    let html = ''
+    for (const d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const k = d.toISOString().slice(0, 10)
+      const c = map.get(k)?.count ?? 0
+      const lvl = map.get(k)?.level ?? 0
+      const label = `${c ? `${c} contribution${c > 1 ? 's' : ''}` : 'No contributions'} on ${d.toLocaleDateString('en-US', { month: 'long' })} ${ord(d.getDate())}`
+      html += `<i data-l="${lvl}" data-t="${label}"></i>`
+    }
+    grid.style.gridTemplateColumns = 'none'
+    grid.style.gridAutoColumns = '1fr'
+    grid.innerHTML = html
+    grid.removeAttribute('aria-hidden')
+  }
+
+  function stats() {
+    let total = 0, longest = 0, run = 0
+    for (const d of days) { total += d.count; run = d.count ? run + 1 : 0; longest = Math.max(longest, run) }
+    sum.innerHTML = `<b>${total.toLocaleString()}</b> contributions in the last year · ${longest}-day longest streak`
+  }
+
+  const show = (el: HTMLElement) => {
+    const b = el.getBoundingClientRect()
+    tip.textContent = el.dataset.t!
+    tip.style.left = Math.min(Math.max(b.left + b.width / 2, 70), innerWidth - 70) + 'px'
+    tip.style.top = b.top + 'px'
+    tip.classList.add('on')
+  }
+  grid.addEventListener('mouseover', e => { const t = (e.target as HTMLElement).closest('i'); if (t) show(t) })
+  grid.addEventListener('click', e => { const t = (e.target as HTMLElement).closest('i'); if (t) show(t) })
+  grid.addEventListener('mouseleave', () => tip.classList.remove('on'))
+  addEventListener('scroll', () => tip.classList.remove('on'), { passive: true })
+
+  fetch(`https://gh-calendar.rschristian.dev/user/${user}`)
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then((d: { contributions: { date: string; count: number; intensity: string }[][] }) => {
+      days = d.contributions.flat().map(x => ({ date: x.date, count: x.count || 0, level: parseInt(x.intensity, 10) || level(x.count || 0) }))
+      stats()
+      draw()
+      let last = root.clientWidth, t: number
+      new ResizeObserver(() => { clearTimeout(t); t = window.setTimeout(() => { if (Math.abs(root.clientWidth - last) > 2) { last = root.clientWidth; draw() } }, 120) }).observe(root)
+    })
+    .catch(() => { sum.textContent = '' })
+</script>

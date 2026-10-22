@@ -1,0 +1,61 @@
+---
+// A tiny terminal for the site: help, ls, open, about, links, shop, clear
+import { allLogs, logUrl } from '../../lib/logs'
+import { KINDS } from '../../lib/kinds'
+
+const logs = (await allLogs()).filter(l => l.data.onSite)
+const data = logs.map(l => ({ id: l.id, t: l.data.cardTitle ?? l.data.title, y: l.data.date.getUTCFullYear(), k: l.data.kinds.filter(k => k !== 'favorite').map(k => KINDS[k].label).join(','), u: logUrl(l) }))
+---
+
+<section class="wild term" aria-label="Terminal" data-logs={JSON.stringify(data)}>
+  <div class="scr" role="log" aria-live="polite"></div>
+  <form class="in" autocomplete="off"><span>&gt;</span><input name="c" aria-label="Command" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="type help" /></form>
+  <div class="chips"><button type="button">help</button><button type="button">ls</button><button type="button">about</button><button type="button">links</button><button type="button">clear</button></div>
+</section>
+
+<style is:global>
+  .wild.term { --bg: #060a06; --fg: #7dff9a; min-height: 460px; font: 14px / 1.55 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 28px var(--gut) 20px; display: flex; flex-direction: column; gap: 10px }
+  .wild.term .scr { flex: 1; overflow: auto; max-height: 340px; white-space: pre-wrap; word-break: break-word }
+  .wild.term .scr a { color: #fff }
+  .wild.term .scr .dim { opacity: .55 }
+  .wild.term .in { display: flex; gap: 8px; border-top: 1px solid #1d3a22; padding-top: 10px }
+  .wild.term input { flex: 1; background: none; border: 0; outline: 0; color: #fff; font: inherit; min-width: 0 }
+  .wild.term .chips { display: flex; gap: 8px; flex-wrap: wrap }
+  .wild.term .chips button { background: none; border: 1px solid #1d3a22; color: var(--fg); font: inherit; font-size: 12px; padding: 3px 10px; border-radius: 999px; cursor: pointer }
+  .wild.term .chips button:hover { background: #12301a }
+</style>
+
+<script>
+  type L = { id: string; t: string; y: number; k: string; u: string }
+  document.querySelectorAll<HTMLElement>('.wild.term').forEach(root => {
+    const logs: L[] = JSON.parse(root.dataset.logs!)
+    const scr = root.querySelector<HTMLElement>('.scr')!
+    const form = root.querySelector('form')!
+    const input = form.c as HTMLInputElement
+    const out = (html: string) => { const d = document.createElement('div'); d.innerHTML = html; scr.append(d); scr.scrollTop = scr.scrollHeight }
+    const esc = (s: string) => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]!)
+    const find = (q: string) => logs.find((l, i) => String(i + 1) === q || l.id === q || l.t.toLowerCase().includes(q.toLowerCase()))
+    const cmds: Record<string, (a: string) => void> = {
+      help: () => out('help  ls [kind]  open &lt;n|name&gt;  about  links  shop  whoami  clear'),
+      ls: a => { const rows = logs.map((l, i) => ({ l, i })).filter(({ l }) => !a || l.k.toLowerCase().includes(a.toLowerCase())); out(rows.length ? rows.map(({ l, i }) => `${String(i + 1).padStart(2)}  ${l.y}  ${esc(l.t)} <span class="dim">${esc(l.k)}</span>`).join('\n') : 'nothing like that') },
+      open: a => { const l = a && find(a); if (l) { out(`opening ${esc(l.t)}...`); location.href = l.u } else out('open what? try: open 3') },
+      about: () => out('Tejvir S. Mann. Drawing, writing, software and research.\n<a href="/about">/about</a>'),
+      links: () => out('<a href="https://github.com/tejvirmann">github</a>  <a href="https://twitter.com/TejvirMann">x</a>  <a href="https://www.linkedin.com/in/tejvir-s-mann/">linkedin</a>'),
+      shop: () => { out('going to the shop...'); location.href = '/shop' },
+      whoami: () => out('a visitor. welcome.'),
+      clear: () => (scr.innerHTML = ''),
+    }
+    const run = (line: string) => {
+      const [c, ...r] = line.trim().split(/\s+/)
+      if (!c) return
+      out(`<span class="dim">&gt; ${esc(line)}</span>`)
+      const f = cmds[c.toLowerCase()]
+      f ? f(r.join(' ')) : out(`command not found: ${esc(c)} (try help)`)
+    }
+    form.addEventListener('submit', e => { e.preventDefault(); run(input.value); input.value = '' })
+    root.querySelectorAll('.chips button').forEach(b => b.addEventListener('click', () => run(b.textContent!)))
+    const intro = ['tejvir.sh 1.0', `${logs.length} projects loaded. type help.`]
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
+    intro.forEach((t, i) => (calm ? out(t) : setTimeout(() => out(t), 400 + i * 500)))
+  })
+</script>

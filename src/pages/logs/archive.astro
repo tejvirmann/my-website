@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro'
+import { allLogs, logUrl } from '../../lib/logs'
+
+const logs = await allLogs()
+const years = [...new Set(logs.map(l => l.data.date.getUTCFullYear()))].sort((a, b) => b - a)
+const short = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
+---
+
+<Base title="Archive" description="Every log, by year." active="logs">
+  <div class="wrap">
+    <div class="pagehead"><h1>Archive</h1><p>Every log, by year.</p></div>
+    <section style="margin-top:0">
+      <div class="seg" role="group" aria-label="Logs view"><a href="/logs">Latest</a><a class="on" href="/logs/archive">Archive</a></div>
+      <div class="chips yrnav">{years.map(y => <a class="chip" href={`#y${y}`}>{y} <small>{logs.filter(l => l.data.date.getUTCFullYear() === y).length}</small></a>)}</div>
+      <div class="arch">
+        {years.map(y => (
+          <div id={`y${y}`}>
+            <h3>{y}</h3>
+            <ul>{logs.filter(l => l.data.date.getUTCFullYear() === y).map(l => <li><span>{short(l.data.date)}</span><a href={logUrl(l)}>{l.data.title}</a></li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 22px }
+  .seg a { padding: 8px 14px; font-size: 13px; color: var(--mute) }
+  .seg a.on { background: var(--fg); color: var(--bg) }
+  .yrnav { margin-bottom: 28px }
+  .arch { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 34px 36px }
+  h3 { font: 600 22px var(--sans); margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--line) }
+  ul { list-style: none }
+  li { padding: 5px 0; font-size: 14px; display: grid; grid-template-columns: 62px 1fr; gap: 10px }
+  li span { color: var(--mute); font-size: 12.5px; padding-top: 1px }
+  li a:hover { text-decoration: underline }
+  [id^='y'] { scroll-margin-top: 80px }
+</style>

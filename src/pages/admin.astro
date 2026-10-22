@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro'
+import { KINDS } from '../lib/kinds'
+import { SLOTS, WILD } from '../lib/wild'
+
+// The control plane. This page is static and holds nothing private: it asks /api/admin/* for everything, and that API checks the login.
+const reg = JSON.stringify({ kinds: Object.fromEntries(Object.entries(KINDS).map(([k, v]) => [k, v.label])), wild: WILD, slots: SLOTS })
+---
+
+<Base title="Control plane" noindex>
+  <div class="wrap adm" id="adm" data-reg={reg}>
+    <h1>Control plane</h1>
+    <div id="gate"><p class="mute">Loading…</p></div>
+    <div id="app" hidden>
+      <nav class="tabs" id="tabs" aria-label="Control plane sections"></nav>
+      <div id="panel"></div>
+      <div class="savebar" id="savebar" hidden>
+        <span id="dirty"></span>
+        <span class="sp"></span>
+        <button class="btn" id="discard">Discard</button>
+        <button class="btn solid" id="publish">Publish</button>
+      </div>
+      <p class="mute msg" id="msg" role="status"></p>
+    </div>
+  </div>
+</Base>
+
+<style is:global>
+  .adm { padding-bottom: 120px }
+  .adm h1 { font-size: 22px; font-weight: 600; letter-spacing: -.01em; margin: 32px 0 18px }
+  .adm h2 { font-size: 15px; font-weight: 600; margin: 28px 0 10px }
+  .adm .tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin-bottom: 22px }
+  .adm .tabs button { background: none; border: 0; padding: 9px 12px; font: inherit; font-size: 14px; color: var(--mute); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px }
+  .adm .tabs button.on { color: var(--fg); border-color: var(--fg) }
+  .adm .card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 10px; background: var(--soft) }
+  .adm .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px }
+  .adm label { display: grid; gap: 4px; font-size: 12px; color: var(--mute) }
+  .adm label.row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--fg) }
+  .adm input:not([type='checkbox']):not([type='range']), .adm select, .adm textarea { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; min-width: 0; width: 100% }
+  .adm textarea { resize: vertical; min-height: 70px }
+  .adm textarea.body { min-height: 320px; font: 13px / 1.5 ui-monospace, SFMono-Regular, Menlo, monospace }
+  .adm .line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap }
+  .adm .sp { flex: 1 }
+  .adm .btn { font: inherit; font-size: 13px; padding: 6px 12px; cursor: pointer }
+  .adm .btn.solid { background: var(--fg); color: var(--bg) }
+  .adm .btn.danger { color: #c0392b }
+  .adm .chip.on { background: var(--fg); color: var(--bg) }
+  .adm .chips { display: flex; gap: 6px; flex-wrap: wrap }
+  .adm .row-i { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); flex-wrap: wrap }
+  .adm .row-i:first-child { border-top: 0 }
+  .adm .row-i .t { flex: 1; min-width: 160px; font-size: 14px }
+  .adm .row-i .t small { display: block; color: var(--mute); font-size: 12px }
+  .adm .row-i input[type='number'] { width: 80px }
+  .adm .checks { display: flex; flex-wrap: wrap; gap: 4px 14px; max-height: 190px; overflow: auto; padding: 4px 0; font-size: 13px }
+  .adm .checks label { display: flex; flex-direction: row; align-items: center; gap: 6px; color: var(--fg); font-size: 13px }
+  .adm .savebar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--bg); border-top: 1px solid var(--line); padding: 10px var(--gut); display: flex; align-items: center; gap: 10px; z-index: 40 }
+  .adm .msg { margin-top: 14px; min-height: 1.4em }
+  .adm .msg.err { color: #c0392b }
+  .adm .login { max-width: 340px; display: grid; gap: 10px }
+  .adm .count { color: var(--mute); font-size: 13px }
+</style>
+
+<script>
+  import './../scripts/admin'
+</script>

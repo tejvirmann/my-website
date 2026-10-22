@@ -1,0 +1,67 @@
+---
+// Curves drawn from two whole numbers; the sliders change the numbers, and the curve keeps drifting
+interface Props { curve?: string }
+const { curve = 'lissajous' } = Astro.props
+---
+
+<section class="wild math" data-curve={curve} aria-label="Animated math curves">
+  <svg viewBox="-110 -110 220 220" preserveAspectRatio="xMidYMid meet">
+    <path class="c c0" /><path class="c c1" /><path class="c c2" />
+  </svg>
+  <div class="ctl">
+    <code class="eq"></code>
+    <label>a <input type="range" min="1" max="9" step="1" value="3" data-k="a" /></label>
+    <label>b <input type="range" min="1" max="9" step="1" value="2" data-k="b" /></label>
+  </div>
+</section>
+
+<style is:global>
+  .wild.math { --bg: #0a0f1c; --fg: #cfe9ff; min-height: min(78vh, 660px) }
+  .wild.math svg { position: absolute; inset: 0; width: 100%; height: 100%; padding: 20px }
+  .wild.math .c { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
+  .wild.math .c0 { stroke: #7df9ff; stroke-width: 2 }
+  .wild.math .c1 { stroke: #ff7ad9; stroke-width: 1.4; opacity: .85 }
+  .wild.math .c2 { stroke: #fff; stroke-width: 1; opacity: .5 }
+  .wild.math .ctl { position: absolute; left: var(--gut); bottom: 16px; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 13px }
+  .wild.math .eq { font: 12px / 1 ui-monospace, SFMono-Regular, Menlo, monospace; opacity: .8 }
+  .wild.math label { display: flex; gap: 8px; align-items: center; text-transform: lowercase }
+  .wild.math input { accent-color: #7df9ff; width: 110px }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.wild.math').forEach(root => {
+    const curve = root.dataset.curve ?? 'lissajous'
+    const paths = [...root.querySelectorAll<SVGPathElement>('.c')]
+    const eq = root.querySelector('.eq')!
+    const v = { a: 3, b: 2 }
+    root.querySelectorAll<HTMLInputElement>('input').forEach(i => i.addEventListener('input', () => { v[i.dataset.k as 'a' | 'b'] = +i.value; frame(ph) }))
+    const pt = (t: number, ph: number): [number, number] => {
+      if (curve === 'rose') { const r = 92 * Math.cos((v.a / v.b) * t + ph); return [r * Math.cos(t), r * Math.sin(t)] }
+      if (curve === 'spiro') { const R = 60 + v.a * 4, r = 18 + v.b * 3, d = 40 + 6 * Math.sin(ph); const k = (R - r) / r; return [((R - r) * Math.cos(t) + d * Math.cos(k * t)) * 0.62, ((R - r) * Math.sin(t) - d * Math.sin(k * t)) * 0.62] }
+      return [96 * Math.sin(v.a * t + ph), 96 * Math.sin(v.b * t)]
+    }
+    const label = () => curve === 'rose' ? `r = cos(${v.a}/${v.b} θ + φ)` : curve === 'spiro' ? `hypotrochoid  R=${60 + v.a * 4}  r=${18 + v.b * 3}` : `x = sin(${v.a}t + φ), y = sin(${v.b}t)`
+    const span = curve === 'rose' ? Math.PI * 2 * v.b : Math.PI * 2 * 12
+    let ph = 0, visible = false
+    const frame = (p: number) => {
+      const turns = curve === 'lissajous' ? Math.PI * 2 : curve === 'rose' ? Math.PI * 2 * v.b : Math.PI * 2 * (18 + v.b * 3) / gcd(60 + v.a * 4, 18 + v.b * 3)
+      paths.forEach((el, i) => {
+        let d = ''
+        for (let k = 0; k <= 520; k++) { const [x, y] = pt((k / 520) * turns, p + i * 0.35); d += (k ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1) }
+        el.setAttribute('d', d)
+      })
+      eq.textContent = label()
+    }
+    const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a)
+    void span
+    frame(0)
+    new IntersectionObserver(es => { visible = es[0].isIntersecting }, { rootMargin: '60px' }).observe(root)
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let last = 0
+    const tick = (now: number) => {
+      if (visible && now - last > 33) { last = now; ph += 0.012; frame(ph) }
+      requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  })
+</script>

@@ -1,7 +1,26 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm start",
   "installCommand": "npm install",
-  "framework": null
+  "buildCommand": "npm run build",
+  "redirects": [
+    {
+      "source": "/logs/tags",
+      "destination": "/logs",
+      "permanent": true
+    },
+    {
+      "source": "/logs/tags/:path*",
+      "destination": "/logs",
+      "permanent": true
+    },
+    {
+      "source": "/logs/page/:n",
+      "destination": "/logs",
+      "permanent": true
+    },
+    {
+      "source": "/contribute",
+      "destination": "/about",
+      "permanent": true
+    }
+  ]
 }
-
