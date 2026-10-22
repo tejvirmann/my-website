@@ -22,6 +22,7 @@ const tabs = [
   ['shop', 'Shop', '/shop'],
 ] as const
 const showName = settings.nameMode === 'beside'
+const accent = /^#[0-9a-f]{6}$/i.test(settings.accent ?? '') ? settings.accent : '#2ea043'
 ---
 
 <!doctype html>
@@ -29,16 +30,18 @@ const showName = settings.nameMode === 'beside'
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>{full}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={full} />
     <meta property="og:description" content={description} />
     <meta name="twitter:card" content="summary" />
     {noindex && <meta name="robots" content="noindex" />}
+    <style set:html={`:root{--accent:${accent}}`}></style>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script is:inline>
-      try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+      try { var t = sessionStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}
     </script>
   </head>
   <body>
@@ -78,7 +81,7 @@ const showName = settings.nameMode === 'beside'
       document.getElementById('themeBtn')!.addEventListener('click', () => {
         const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
         root.dataset.theme = dark ? 'light' : 'dark'
-        try { localStorage.setItem('theme', root.dataset.theme) } catch {}
+        try { sessionStorage.setItem('theme', root.dataset.theme) } catch {}
       })
     </script>
   </body>

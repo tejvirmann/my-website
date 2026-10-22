@@ -19,9 +19,8 @@ const user = settings.ghUser
 
 <style is:global>
   #activity { margin-top: 30px }
-  .gh { max-width: 820px; margin: 0 auto; min-height: 118px; --l0: #ecebe7; --l1: #d2d0c9; --l2: #a9a69d; --l3: #6c6a63; --l4: #1b1a18 }
-  :root[data-theme='dark'] .gh { --l0: #1e1e1c; --l1: #34332f; --l2: #58564f; --l3: #8e8b81; --l4: #ecebe6 }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .gh { --l0: #1e1e1c; --l1: #34332f; --l2: #58564f; --l3: #8e8b81; --l4: #ecebe6 } }
+  /* every level mixes the accent color (control plane > Home > Accent color) into the page background */
+  .gh { max-width: 820px; margin: 0 auto; min-height: 118px; --l0: color-mix(in srgb, var(--fg) 9%, var(--bg)); --l1: color-mix(in srgb, var(--accent) 52%, var(--bg)); --l2: color-mix(in srgb, var(--accent) 74%, var(--bg)); --l3: color-mix(in srgb, var(--accent) 90%, var(--bg)); --l4: var(--accent) }
   .gh-head { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 12px; font-size: 13px; color: var(--mute); text-align: center }
   .gh-head a { display: inline-flex; align-items: center; gap: 7px; color: var(--fg); font-weight: 500 }
   .gh-head a:hover { text-decoration: underline }

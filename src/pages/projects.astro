@@ -144,19 +144,7 @@ const kinds = [...FILTER_KINDS, 'favorite' as const]
     if (st.q) return a.sort((x, y) => (scores.get(y.id)! - scores.get(x.id)!) || y.date.localeCompare(x.date))
     if (st.sort === 'old') return a.sort((x, y) => x.date.localeCompare(y.date))
     if (st.sort === 'az') return a.sort((x, y) => x.title.toLowerCase().localeCompare(y.title.toLowerCase()))
-    a.sort((x, y) => y.date.localeCompare(x.date))
-    // newest first, with software spread between the art
-    if (st.type === 'all') {
-      const art = a.filter(i => i.type === 'art'), sw = a.filter(i => i.type === 'sw')
-      if (!sw.length) return a
-      const every = Math.max(2, Math.round((art.length / sw.length) * 1.3))
-      const out: Item[] = []
-      let k = 0
-      art.forEach((x, n) => { out.push(x); if ((n + 1) % every === 0 && k < sw.length) out.push(sw[k++]) })
-      while (k < sw.length) out.push(sw[k++])
-      return out
-    }
-    return a
+    return a.sort((x, y) => y.date.localeCompare(x.date))
   }
 
   const count = (f: (i: Item) => boolean) => items.filter(f).length

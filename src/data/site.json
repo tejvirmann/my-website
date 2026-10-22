@@ -1,6 +1,7 @@
 {
   "ghUser": "tejvirmann",
   "nameMode": "footer",
+  "accent": "#2ea043",
   "cap": 12,
   "pageSize": 24,
   "showFavorites": false,

@@ -3,7 +3,7 @@ import { create, parse, patch, withBody, type Val } from '../lib/frontmatter'
 type Reg = { kinds: Record<string, string>; wild: Record<string, { label: string; fields: { key: string; label: string; type: string; options?: string[] }[] }>; slots: Record<string, string> }
 type Rec = { id: string; raw: string; orig: string; isNew?: boolean; deleted?: boolean }
 type Listing = { slug: string; price: number; stock: number; sizes: string[]; badge: string; active: boolean }
-type Site = { ghUser: string; nameMode: string; cap: number; pageSize: number; showFavorites: boolean; tiles: string; sections: { id: string; enabled: boolean }[]; placements: Record<string, Record<string, unknown> & { kind: string }> }
+type Site = { ghUser: string; nameMode: string; accent: string; cap: number; pageSize: number; showFavorites: boolean; tiles: string; sections: { id: string; enabled: boolean }[]; placements: Record<string, Record<string, unknown> & { kind: string }> }
 type Shop = { currency: string; listings: Listing[] }
 
 const root = document.getElementById('adm')!
@@ -97,6 +97,7 @@ function home() {
     <label>Projects on the home page (cap)<input type="number" min="3" max="60" data-site="cap" value="${s.cap}"></label>
     <label>Projects loaded at a time<input type="number" min="6" max="100" data-site="pageSize" value="${s.pageSize}"></label>
     <label>Tiles for projects without a picture<select data-site="tiles">${[['gen', 'Generated pattern'], ['type', 'Type only']].map(([v, l]) => opt(v, s.tiles, l)).join('')}</select></label>
+    <label>Accent color (GitHub activity and highlights)<span class="line"><input type="color" data-site="accent" value="${esc(s.accent || '#2ea043')}" style="width:56px;height:36px;padding:2px"><input data-site="accent" value="${esc(s.accent || '#2ea043')}" maxlength="7" style="max-width:110px"></span></label>
     <label>GitHub user (activity + repos)<input data-site="ghUser" value="${esc(s.ghUser)}"></label>
     <label class="row"><input type="checkbox" data-site="showFavorites" ${s.showFavorites ? 'checked' : ''}> Show a Favorites row on the home page</label>
   </div>`
@@ -243,7 +244,8 @@ panel.addEventListener('input', e => {
 panel.addEventListener('change', async e => {
   const el = e.target as HTMLInputElement
   const d = el.dataset, s = S.site
-  if (d.site) { (s as unknown as Record<string, unknown>)[d.site] = el.type === 'checkbox' ? el.checked : el.type === 'number' ? Number(el.value) : el.value }
+  if (d.site === 'accent' && !/^#[0-9a-f]{6}$/i.test(el.value)) return
+  if (d.site) { (s as unknown as Record<string, unknown>)[d.site] = el.type === 'checkbox' ? el.checked : el.type === 'number' ? Number(el.value) : el.value; if (d.site === 'accent') { refreshBar(); return render() } }
   else if (d.sec) s.sections[Number(d.sec)].enabled = el.checked
   else if (d.log) {
     const l = S.logs.find(x => x.id === d.id)!
