@@ -77,7 +77,9 @@ const user = settings.ghUser
   const show = (el: HTMLElement) => {
     const b = el.getBoundingClientRect()
     tip.textContent = el.dataset.t!
-    tip.style.left = Math.min(Math.max(b.left + b.width / 2, 70), innerWidth - 70) + 'px'
+    // keep the whole label on screen: clamp its center by half its own width
+    const half = tip.offsetWidth / 2 + 8
+    tip.style.left = Math.min(Math.max(b.left + b.width / 2, half), innerWidth - half) + 'px'
     tip.style.top = b.top + 'px'
     tip.classList.add('on')
   }

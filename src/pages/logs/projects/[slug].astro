@@ -87,7 +87,8 @@ const medium = d.kinds.includes('painting') ? 'Paint' : d.kinds.includes('drawin
   .crumb a:hover { color: var(--fg) }
   .lp { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); margin-top: 36px; align-items: start }
   .main { width: 100%; background: var(--soft); display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3.4; padding: 4%; cursor: zoom-in }
-  .main img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 14px 30px -18px rgba(0, 0, 0, .45) }
+  .main :global(img) { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; box-shadow: 0 14px 30px -18px rgba(0, 0, 0, .45) }
+  .gal, .info { min-width: 0 }
   .th { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 4px }
   .th button { flex: none; width: 72px; height: 72px; background: var(--soft); display: flex; align-items: center; justify-content: center; border: 1.5px solid transparent; padding: 3px; opacity: .6 }
   .th button.on, .th button:hover { opacity: 1; border-color: var(--fg) }
@@ -116,7 +117,7 @@ const medium = d.kinds.includes('painting') ? 'Paint' : d.kinds.includes('drawin
   .lbx { position: fixed; inset: 0; z-index: 200; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 16px; cursor: zoom-out }
   .lbx[hidden] { display: none }
   .lbx img { max-width: 100%; max-height: 100%; object-fit: contain }
-  @media (max-width: 820px) { .lp { grid-template-columns: 1fr; margin-top: 20px } .info { position: static } .main { aspect-ratio: 1 / 1 } }
+  @media (max-width: 820px) { .lp { grid-template-columns: minmax(0, 1fr); margin-top: 20px } .info { position: static } .main { aspect-ratio: 1 / 1 } }
 </style>
 
 <script>
