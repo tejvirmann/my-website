@@ -13,3 +13,6 @@ mockups/*
 mockups/r2/*
 !mockups/r2/img/
 !mockups/mockup-plan.md
+
+# firebase service account keys
+*-firebase-adminsdk-*.json
