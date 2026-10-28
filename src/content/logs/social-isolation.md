@@ -12,4 +12,4 @@ onSite: true
 
 ![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/social-isolation%2Fsocial-isolation-2.webp?alt=media&token=83ebafaa-ded6-4608-bd73-dfa8e21ea73b)
 
-![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/social-isolation%2Fsocial-isolation-3.webp?alt=media&token=e1576cc5-f27e-4c8e-a300-2f8a912b952e)
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/social-isolation%2Fsocial-isolation-3.webp?alt=media&token=dbd86201-3d3c-44fe-b282-cecad0eb9215)
