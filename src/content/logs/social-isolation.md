@@ -1,6 +1,6 @@
 ---
 title: "Social Isolation"
-date: 2026-10-28
+date: 2026-03-11
 description: "A drawing series."
 tags: [Projects, Artwork, Drawing]
 image: ../../assets/art/social-isolation-1.webp
