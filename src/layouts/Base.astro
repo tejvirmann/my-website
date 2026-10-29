@@ -63,6 +63,7 @@ const accent = /^#[0-9a-f]{6}$/i.test(settings.accent ?? '') ? settings.accent :
     <main><slot /></main>
     <div class="wrap">
       <footer class="site-footer">
+        <span class="fence" aria-hidden="true"></span>
         <span>© {new Date().getFullYear()}{settings.nameMode === 'footer' ? ' Tejvir S. Mann' : ''}</span>
         <nav aria-label="Footer">
           <a href="/logs/archive">Archive</a>
