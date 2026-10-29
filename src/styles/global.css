@@ -93,7 +93,10 @@ section { margin-top: 56px }
 }
 
 /* footer */
-.site-footer { margin-top: 84px; padding: 22px 0 56px; border-top: 1px solid var(--line); color: var(--mute); font-size: 13px; display: flex; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap }
+.site-footer { margin-top: 84px; padding: 36px 0 56px; border-top: 1px solid var(--line); color: var(--mute); font-size: 13px; display: flex; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap }
+.site-footer { position: relative }
+/* the wall line of the drawing sits on the footer border, heads above it and the hanging figure below; drawn as a mask so it takes the muted text color in light and dark */
+.fence { position: absolute; left: 0; top: 0; width: 170px; aspect-ratio: 2268 / 586; margin-top: -12px; background: var(--mute); opacity: .85; -webkit-mask: url(/img/fence.svg) no-repeat left top / contain; mask: url(/img/fence.svg) no-repeat left top / contain; pointer-events: none }
 .site-footer a:hover, .site-footer button:hover { color: var(--fg) }
 .site-footer nav { display: flex; gap: 6px 14px; flex-wrap: wrap }
 
