@@ -2,7 +2,7 @@
 title: "To Earn Your Stripes."
 date: 2019-12-27
 description: "A short poem about a tiger and its stripes."
-tags: [Projects, Writing, Poem]
+tags: [Projects, Writing]
 image: ../../assets/art/to-earn-your-stripes.webp
 kinds: [writing]
 onSite: true
