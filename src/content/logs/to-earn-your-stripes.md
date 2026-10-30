@@ -19,4 +19,3 @@ The tiger felt lighter. He looked back to the stream and caught his reflection. 
 
 *Written December 27, 2019. Edited October 30, 2026.*
 
-![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/to-earn-your-stripes%2Fto-earn-your-stripes-card.webp?alt=media&token=f67f19fc-de79-48d5-a700-964e00ca72e4)
