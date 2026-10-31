@@ -10,4 +10,4 @@ onSite: true
 
 ### pnjaúggi
 
-![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/pnjauggi%2Fpnjauggi.webp?alt=media&token=52d0e884-2752-4b0b-a420-5f7fd418face)
+![](https://firebasestorage.googleapis.com/v0/b/tejvir-website.appspot.com/o/pnjauggi%2Fpnjauggi.webp?alt=media&token=eba488b2-fc12-487c-a19f-23fa5225a045)
