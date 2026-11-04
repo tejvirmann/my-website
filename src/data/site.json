@@ -24,5 +24,10 @@
       "enabled": true
     }
   ],
-  "placements": {}
+  "placements": {
+    "after-projects": {
+      "kind": "cursorhead",
+      "palette": "neon"
+    }
+  }
 }

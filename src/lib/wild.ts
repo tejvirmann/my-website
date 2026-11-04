@@ -9,6 +9,7 @@ export const WILD = {
   math: { label: 'Math curves', fields: [{ key: 'curve', label: 'Curve', type: 'select', options: ['lissajous', 'rose', 'spiro'] }] },
   desktop: { label: 'Retro desktop', fields: [{ key: 'title', label: 'Window title', type: 'text' }] },
   terminal: { label: 'Terminal', fields: [] },
+  cursorhead: { label: 'Head + cursor trail', fields: [{ key: 'palette', label: 'Palette', type: 'select', options: ['neon', 'pastel', 'mono'] }] },
 } satisfies Record<string, { label: string; fields: Field[] }>
 
 export type WildKind = keyof typeof WILD

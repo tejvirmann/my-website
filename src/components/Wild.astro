@@ -8,6 +8,7 @@ import Ink from './wild/Ink.astro'
 import Curves from './wild/Curves.astro'
 import Desktop from './wild/Desktop.astro'
 import Terminal from './wild/Terminal.astro'
+import CursorHead from './wild/CursorHead.astro'
 import type { Placement } from '../lib/wild'
 
 // one placement from src/data/site.json (see src/lib/wild.ts for the options of each kind)
@@ -52,6 +53,7 @@ const line = (t: string, n: number) => t.repeat(n)
 {kind === 'math' && <Curves curve={curve} />}
 {kind === 'desktop' && <Desktop title={title} />}
 {kind === 'terminal' && <Terminal />}
+{kind === 'cursorhead' && <CursorHead palette={palette} />}
 
 {kind === 'vine' && (
   <section class="wild vine" aria-hidden="true">
