@@ -88,14 +88,42 @@ const user = settings.ghUser
   grid.addEventListener('mouseleave', () => tip.classList.remove('on'))
   addEventListener('scroll', () => tip.classList.remove('on'), { passive: true })
 
-  fetch(`https://gh-calendar.rschristian.dev/user/${user}`)
-    .then(r => (r.ok ? r.json() : Promise.reject()))
-    .then((d: { contributions: { date: string; count: number; intensity: string }[][] }) => {
-      days = d.contributions.flat().map(x => ({ date: x.date, count: x.count || 0, level: parseInt(x.intensity, 10) || level(x.count || 0) }))
+  const KEY = `gh-cal:${user}`
+  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
+  const ok = (d: Day[]) => (d.length ? d : Promise.reject())
+
+  // sources, in order: our own daily JSON (official GitHub API, see .github/workflows/contributions.yml),
+  // then two free third-party proxies, then the last good copy saved in this browser
+  const sources: (() => Promise<Day[]>)[] = [
+    () => fetch('/contributions.json').then(r => (r.ok ? r.json() : Promise.reject())).then((d: { days: Day[] }) => ok(d.days || [])),
+    () => fetch(`https://github-contributions-api.jogruber.de/v4/${user}?y=last`).then(r => (r.ok ? r.json() : Promise.reject()))
+      .then((d: { contributions: { date: string; count: number; level: number }[] }) => ok(d.contributions.map(x => ({ date: x.date, count: x.count || 0, level: x.level || level(x.count || 0) })))),
+    () => fetch(`https://gh-calendar.rschristian.dev/user/${user}`).then(r => (r.ok ? r.json() : Promise.reject()))
+      .then((d: { contributions: { date: string; count: number; intensity: string }[][] }) => ok(d.contributions.flat().map(x => ({ date: x.date, count: x.count || 0, level: parseInt(x.intensity, 10) || level(x.count || 0) })))),
+  ]
+
+  async function load(): Promise<Day[]> {
+    for (let round = 0; round < 2; round++) {
+      for (const src of sources) {
+        try {
+          const d = await src()
+          try { localStorage.setItem(KEY, JSON.stringify(d)) } catch {}
+          return d
+        } catch {}
+      }
+      await sleep(800)
+    }
+    try { const c = localStorage.getItem(KEY); if (c) return JSON.parse(c) } catch {}
+    throw new Error('no data')
+  }
+
+  load()
+    .then(d => {
+      days = d
       stats()
       draw()
       let last = root.clientWidth, t: number
       new ResizeObserver(() => { clearTimeout(t); t = window.setTimeout(() => { if (Math.abs(root.clientWidth - last) > 2) { last = root.clientWidth; draw() } }, 120) }).observe(root)
     })
-    .catch(() => { sum.textContent = '' })
+    .catch(() => { sum.textContent = 'Contribution graph unavailable right now' })
 </script>
